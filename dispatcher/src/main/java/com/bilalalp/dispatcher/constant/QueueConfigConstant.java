@@ -1,8 +1,8 @@
 package com.bilalalp.dispatcher.constant;
 
-public final class ConfigConstant {
+public final class QueueConfigConstant {
 
-    private ConfigConstant() {
+    private QueueConfigConstant() {
         // Constant Class
     }
 

@@ -1,7 +1,6 @@
 package com.bilalalp.dispatcher.config;
 
 import com.bilalalp.dispatcher.webservice.DispatcherWebService;
-import com.bilalalp.dispatcher.webservice.DispatcherWebServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
@@ -48,9 +47,7 @@ public class WebServiceConfig {
 
     @Bean
     public JacksonJsonProvider jsonProvider() {
-        final JacksonJaxbJsonProvider provider = new JacksonJaxbJsonProvider();
-        provider.setMapper(new ObjectMapper());
-        return provider;
+        return new JacksonJaxbJsonProvider(new ObjectMapper(), JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS);
     }
 
     @Bean

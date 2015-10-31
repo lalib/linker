@@ -3,7 +3,7 @@ package com.bilalalp.dispatcher.config;
 import com.bilalalp.dispatcher.amqp.DispatcherRequestErrorListener;
 import com.bilalalp.dispatcher.amqp.DispatcherRequestListener;
 import com.bilalalp.dispatcher.dto.QueueConfigurationDto;
-import com.bilalalp.dispatcher.constant.ConfigConstant;
+import com.bilalalp.dispatcher.constant.QueueConfigConstant;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
@@ -43,11 +43,11 @@ public class QueueConfig {
     @Bean
     public ConnectionFactory rabbitConnectionFactory() {
         final CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-        cachingConnectionFactory.setHost(environment.getProperty(ConfigConstant.AMQP_HOST));
-        cachingConnectionFactory.setPort(environment.getProperty(ConfigConstant.AMQP_PORT, Integer.class));
-        cachingConnectionFactory.setUsername(environment.getProperty(ConfigConstant.AMQP_USERNAME));
-        cachingConnectionFactory.setPassword(environment.getProperty(ConfigConstant.AMQP_PASSWORD));
-        cachingConnectionFactory.setConnectionTimeout(environment.getProperty(ConfigConstant.AMQP_CONNECTION_TIMEOUT, Integer.class));
+        cachingConnectionFactory.setHost(environment.getProperty(QueueConfigConstant.AMQP_HOST));
+        cachingConnectionFactory.setPort(environment.getProperty(QueueConfigConstant.AMQP_PORT, Integer.class));
+        cachingConnectionFactory.setUsername(environment.getProperty(QueueConfigConstant.AMQP_USERNAME));
+        cachingConnectionFactory.setPassword(environment.getProperty(QueueConfigConstant.AMQP_PASSWORD));
+        cachingConnectionFactory.setConnectionTimeout(environment.getProperty(QueueConfigConstant.AMQP_CONNECTION_TIMEOUT, Integer.class));
         return cachingConnectionFactory;
     }
 
@@ -59,7 +59,7 @@ public class QueueConfig {
     @Bean
     public AmqpTemplate rabbitTemplate() {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate();
-        rabbitTemplate.setChannelTransacted(environment.getProperty(ConfigConstant.AMQP_CHANNEL_TRANSACTED, Boolean.class));
+        rabbitTemplate.setChannelTransacted(environment.getProperty(QueueConfigConstant.AMQP_CHANNEL_TRANSACTED, Boolean.class));
         rabbitTemplate.setMessageConverter(messageConverter());
         rabbitTemplate.setConnectionFactory(rabbitConnectionFactory());
         return rabbitTemplate;
@@ -67,7 +67,7 @@ public class QueueConfig {
 
     @Bean
     public Exchange amqpDirectExchange() {
-        return new DirectExchange(environment.getProperty(ConfigConstant.AMQP_DIRECT_NAME));
+        return new DirectExchange(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
     }
 
     @Bean
@@ -117,9 +117,9 @@ public class QueueConfig {
     public QueueConfigurationDto dispatcherRequestQueueConfiguration() {
 
         final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
-        queueConfigurationDto.setExchangeName(environment.getProperty(ConfigConstant.AMQP_DIRECT_NAME));
-        queueConfigurationDto.setQueueKey(environment.getProperty(ConfigConstant.AMQP_DISPATCHER_REQUEST_QUEUE_KEY));
-        queueConfigurationDto.setQueueName(environment.getProperty(ConfigConstant.AMQP_DISPATCHER_REQUEST_QUEUE_NAME));
+        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
+        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_DISPATCHER_REQUEST_QUEUE_KEY));
+        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_DISPATCHER_REQUEST_QUEUE_NAME));
         return queueConfigurationDto;
     }
 
@@ -127,9 +127,9 @@ public class QueueConfig {
     @Bean
     public QueueConfigurationDto dispatcherRequestErrorQueueConfiguration() {
         final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
-        queueConfigurationDto.setExchangeName(environment.getProperty(ConfigConstant.AMQP_DIRECT_NAME));
-        queueConfigurationDto.setQueueKey(environment.getProperty(ConfigConstant.AMQP_DISPATCHER_REQUEST_ERROR_QUEUE_KEY));
-        queueConfigurationDto.setQueueName(environment.getProperty(ConfigConstant.AMQP_DISPATCHER_REQUEST_ERROR_QUEUE_NAME));
+        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
+        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_DISPATCHER_REQUEST_ERROR_QUEUE_KEY));
+        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_DISPATCHER_REQUEST_ERROR_QUEUE_NAME));
         return queueConfigurationDto;
     }
 }
