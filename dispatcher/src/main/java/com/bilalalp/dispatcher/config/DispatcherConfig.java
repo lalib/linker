@@ -1,5 +1,6 @@
 package com.bilalalp.dispatcher.config;
 
+import com.bilalalp.common.config.CommonConfig;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.cxf.transport.servlet.CXFServlet;
@@ -20,7 +21,7 @@ public class DispatcherConfig implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         final AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-        ctx.register(DispatcherConfig.class, WebServiceConfig.class, QueueConfig.class);
+        ctx.register(DispatcherConfig.class, WebServiceConfig.class, QueueConfig.class, CommonConfig.class);
         servletContext.addListener(new ContextLoaderListener(ctx));
 
         final ServletRegistration.Dynamic servlet = servletContext.addServlet("CXFServlet", new CXFServlet());

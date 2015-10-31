@@ -69,6 +69,12 @@
             <artifactId>jackson-jaxrs-json-provider</artifactId>
             <version>${jackson-jaxrs.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.bilalalp</groupId>
+            <artifactId>common</artifactId>
+            <version>${common.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
