@@ -34,7 +34,7 @@ public class WebServiceConfig {
     @Bean
     public Server restService() {
         final JAXRSServerFactoryBean endpoint = new JAXRSServerFactoryBean();
-        endpoint.setAddress("/hello");
+        endpoint.setAddress("/linker");
         endpoint.setBus(bus());
         endpoint.setProviders(Arrays.asList(jsonProvider(), jaxbElementProvider()));
         endpoint.setServiceBean(new DispatcherWebServiceImpl());

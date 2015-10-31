@@ -3,13 +3,20 @@ package com.bilalalp.dispatcher.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
+import java.util.List;
 
 @Getter
 @Setter
 @XmlRootElement
+@XmlAccessorType(value = XmlAccessType.FIELD)
 public class LinkSearchRequest {
 
-    private SiteInfoType siteInfoType;
+    @XmlElement(name = "siteInfoTypeList")
+    @XmlElementWrapper
+    private List<SiteInfoType> siteInfoTypeList;
 
+    @XmlElement(name = "keywordList")
+    @XmlElementWrapper
+    private List<String> keywordList;
 }

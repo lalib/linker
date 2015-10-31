@@ -13,7 +13,7 @@ public interface DispatcherWebService {
 
     @POST
     @Path("/search")
-    LinkSearchResponse getRes(final LinkSearchRequest linkSearchRequest);
+    LinkSearchResponse linkSearch(final LinkSearchRequest linkSearchRequest);
 
     @GET
     String state();

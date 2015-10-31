@@ -20,7 +20,7 @@ public class DispatcherConfig implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         final AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-        ctx.register(DispatcherConfig.class, WebServiceConfig.class);
+        ctx.register(DispatcherConfig.class, WebServiceConfig.class, QueueConfig.class);
         servletContext.addListener(new ContextLoaderListener(ctx));
 
         final ServletRegistration.Dynamic servlet = servletContext.addServlet("CXFServlet", new CXFServlet());

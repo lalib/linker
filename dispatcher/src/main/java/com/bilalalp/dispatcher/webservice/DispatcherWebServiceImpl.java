@@ -6,7 +6,7 @@ import com.bilalalp.dispatcher.dto.LinkSearchResponse;
 public class DispatcherWebServiceImpl implements DispatcherWebService {
 
     @Override
-    public LinkSearchResponse getRes(final LinkSearchRequest linkSearchRequest) {
+    public LinkSearchResponse linkSearch(final LinkSearchRequest linkSearchRequest) {
 
         final LinkSearchResponse linkSearchResponse = new LinkSearchResponse();
         linkSearchResponse.setMessage("hi!");
