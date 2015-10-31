@@ -96,7 +96,6 @@ public class DispatcherServiceImpl implements DispatcherService {
         }).collect(Collectors.toList());
     }
 
-
     private List<LinkSearchRequestKeywordInfo> createLinkSearchRequestKeywordInfoList(final LinkSearchRequestInfo linkSearchRequestInfo, final List<String> keywordList) {
         return keywordList.stream().map(k -> {
 
