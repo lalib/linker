@@ -1,4 +1,4 @@
-package com.bilalalp.dispatcher.config;
+package com.bilalalp.dispatcher.constant;
 
 public final class ConfigConstant {
 

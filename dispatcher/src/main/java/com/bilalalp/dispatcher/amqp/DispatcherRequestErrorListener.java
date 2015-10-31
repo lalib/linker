@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class DispatcherRequestErrorListener implements MessageListener {
 
     @Override
-    public void onMessage(Message message) {
+    public void onMessage(final Message message) {
 
     }
 }

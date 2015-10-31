@@ -1,4 +1,4 @@
-package com.bilalalp.dispatcher.amqp;
+package com.bilalalp.dispatcher.dto;
 
 import lombok.Getter;
 import lombok.Setter;

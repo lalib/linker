@@ -6,7 +6,7 @@ import com.bilalalp.dispatcher.dto.LinkSearchResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@Path("/linker")
+@Path("/dispatcher")
 @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 public interface DispatcherWebService {

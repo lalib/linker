@@ -2,7 +2,8 @@ package com.bilalalp.dispatcher.config;
 
 import com.bilalalp.dispatcher.amqp.DispatcherRequestErrorListener;
 import com.bilalalp.dispatcher.amqp.DispatcherRequestListener;
-import com.bilalalp.dispatcher.amqp.QueueConfigurationDto;
+import com.bilalalp.dispatcher.dto.QueueConfigurationDto;
+import com.bilalalp.dispatcher.constant.ConfigConstant;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;

@@ -1,5 +1,6 @@
 package com.bilalalp.dispatcher.config;
 
+import com.bilalalp.dispatcher.webservice.DispatcherWebService;
 import com.bilalalp.dispatcher.webservice.DispatcherWebServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
@@ -13,6 +14,7 @@ import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.provider.JAXBElementProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,6 +24,9 @@ import java.util.Arrays;
 @Setter
 @Configuration
 public class WebServiceConfig {
+
+    @Autowired
+    private DispatcherWebService dispatcherWebService;
 
     @Bean(name = "cxf")
     public Bus bus() {
@@ -37,7 +42,7 @@ public class WebServiceConfig {
         endpoint.setAddress("/linker");
         endpoint.setBus(bus());
         endpoint.setProviders(Arrays.asList(jsonProvider(), jaxbElementProvider()));
-        endpoint.setServiceBean(new DispatcherWebServiceImpl());
+        endpoint.setServiceBean(dispatcherWebService);
         return endpoint.create();
     }
 
