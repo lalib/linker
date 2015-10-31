@@ -1,7 +1,7 @@
 package com.bilalalp.dispatcher.config;
 
-import com.bilalalp.dispatcher.amqp.DispatcherRequestErrorListener;
-import com.bilalalp.dispatcher.amqp.DispatcherRequestListener;
+import com.bilalalp.dispatcher.amqp.DispatcherRequestErrorConsumer;
+import com.bilalalp.dispatcher.amqp.DispatcherRequestConsumer;
 import com.bilalalp.dispatcher.dto.QueueConfigurationDto;
 import com.bilalalp.dispatcher.constant.QueueConfigConstant;
 import org.springframework.amqp.core.*;
@@ -30,10 +30,10 @@ public class QueueConfig {
     private Environment environment;
 
     @Autowired
-    private DispatcherRequestListener dispatcherRequestListener;
+    private DispatcherRequestConsumer dispatcherRequestConsumer;
 
     @Autowired
-    private DispatcherRequestErrorListener dispatcherRequestErrorListener;
+    private DispatcherRequestErrorConsumer dispatcherRequestErrorConsumer;
 
     @Bean
     public Connection rabbitConnection() {
@@ -73,7 +73,6 @@ public class QueueConfig {
     @Bean
     public Binding dispatcherRequestQueueBinding() {
         final Queue dispatcherRequestQueue = new Queue(dispatcherRequestQueueConfiguration().getQueueName());
-
         return BindingBuilder.bind(dispatcherRequestQueue)
                 .to(amqpDirectExchange())
                 .with(dispatcherRequestQueueConfiguration().getQueueKey())
@@ -83,7 +82,6 @@ public class QueueConfig {
     @Bean
     public Binding dispatcherRequestErrorQueueBinding() {
         final Queue dispatcherRequestErrorQueue = new Queue(dispatcherRequestErrorQueueConfiguration().getQueueName());
-
         return BindingBuilder.bind(dispatcherRequestErrorQueue)
                 .to(amqpDirectExchange())
                 .with(dispatcherRequestErrorQueueConfiguration().getQueueKey())
@@ -96,7 +94,7 @@ public class QueueConfig {
         simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
         simpleMessageListenerContainer.setConcurrentConsumers(1);
         simpleMessageListenerContainer.setMessageConverter(messageConverter());
-        simpleMessageListenerContainer.setMessageListener(dispatcherRequestListener);
+        simpleMessageListenerContainer.setMessageListener(dispatcherRequestConsumer);
         simpleMessageListenerContainer.setQueueNames(dispatcherRequestQueueConfiguration().getQueueName());
         return simpleMessageListenerContainer;
     }
@@ -107,7 +105,7 @@ public class QueueConfig {
         simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
         simpleMessageListenerContainer.setConcurrentConsumers(1);
         simpleMessageListenerContainer.setMessageConverter(messageConverter());
-        simpleMessageListenerContainer.setMessageListener(dispatcherRequestErrorListener);
+        simpleMessageListenerContainer.setMessageListener(dispatcherRequestErrorConsumer);
         simpleMessageListenerContainer.setQueueNames(dispatcherRequestErrorQueueConfiguration().getQueueName());
         return simpleMessageListenerContainer;
     }
@@ -115,7 +113,6 @@ public class QueueConfig {
     @Qualifier(value = "dispatcherRequestQueueConfiguration")
     @Bean
     public QueueConfigurationDto dispatcherRequestQueueConfiguration() {
-
         final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
         queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
         queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_DISPATCHER_REQUEST_QUEUE_KEY));

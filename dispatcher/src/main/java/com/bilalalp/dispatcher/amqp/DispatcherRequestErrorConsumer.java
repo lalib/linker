@@ -5,11 +5,10 @@ import org.springframework.amqp.core.MessageListener;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DispatcherRequestListener implements MessageListener {
+public class DispatcherRequestErrorConsumer implements MessageListener {
 
     @Override
     public void onMessage(final Message message) {
-        System.out.println("GELDÝ");
-        System.out.printf(message.toString());
+
     }
 }
