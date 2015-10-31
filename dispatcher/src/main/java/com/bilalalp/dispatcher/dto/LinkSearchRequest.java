@@ -13,11 +13,11 @@ import java.util.List;
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class LinkSearchRequest {
 
-    @XmlElement(name = "siteInfoTypeList")
+    @XmlElement(name = "siteInfoType")
     @XmlElementWrapper
     private List<SiteInfoType> siteInfoTypeList;
 
-    @XmlElement(name = "keywordList")
+    @XmlElement(name = "keyword")
     @XmlElementWrapper
     private List<String> keywordList;
 }

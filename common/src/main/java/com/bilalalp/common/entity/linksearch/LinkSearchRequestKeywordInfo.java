@@ -24,7 +24,7 @@ public class LinkSearchRequestKeywordInfo extends AbstractEntity {
     @Column(name = "C_KEYWORD")
     private String keyword;
 
-    @ManyToOne(targetEntity = LinkSearchRequestKeywordInfo.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = LinkSearchRequestKeywordInfo.JOIN_COLUMN)
-    private LinkSearchRequestKeywordInfo linkSearchRequestKeywordInfo;
+    @ManyToOne(targetEntity = LinkSearchRequestInfo.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = LinkSearchRequestInfo.JOIN_COLUMN)
+    private LinkSearchRequestInfo linkSearchRequestInfo;
 }

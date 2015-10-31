@@ -16,6 +16,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
@@ -25,6 +26,7 @@ import java.util.Map;
 @ComponentScan(value = {"com.bilalalp.common"})
 @PropertySource(value = {"classpath:application.properties"})
 @Configuration
+@EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.bilalalp.common.repository")
 public class CommonConfig {
 

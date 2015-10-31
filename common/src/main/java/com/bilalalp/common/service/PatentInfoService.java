@@ -1,5 +1,8 @@
 package com.bilalalp.common.service;
 
-public interface PatentInfoService {
+import com.bilalalp.common.entity.PatentInfo;
+import com.bilalalp.common.service.base.BaseService;
+
+public interface PatentInfoService extends BaseService<PatentInfo> {
 
 }

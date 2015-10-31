@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${javax.persistence.version}</version>
+            <version>${javax-persistence.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>${spring.data.version}</version>
+            <version>${spring-data.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
