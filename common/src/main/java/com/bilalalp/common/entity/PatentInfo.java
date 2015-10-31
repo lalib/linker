@@ -1,5 +1,6 @@
 package com.bilalalp.common.entity;
 
+import com.bilalalp.common.entity.base.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 

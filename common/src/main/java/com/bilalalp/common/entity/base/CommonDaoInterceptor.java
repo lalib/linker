@@ -1,4 +1,4 @@
-package com.bilalalp.common.entity;
+package com.bilalalp.common.entity.base;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;

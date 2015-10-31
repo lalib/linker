@@ -43,7 +43,7 @@ public class CommonConfig {
     }
 
     @Bean
-    public JpaTransactionManager jpaTransactionManager() throws PropertyVetoException {
+    public JpaTransactionManager transactionManager() throws PropertyVetoException {
         final JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
         jpaTransactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return jpaTransactionManager;

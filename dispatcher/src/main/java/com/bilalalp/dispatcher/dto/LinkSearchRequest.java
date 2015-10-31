@@ -1,5 +1,6 @@
 package com.bilalalp.dispatcher.dto;
 
+import com.bilalalp.common.entity.site.SiteInfoType;
 import lombok.Getter;
 import lombok.Setter;
 

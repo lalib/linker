@@ -1,4 +1,4 @@
-package com.bilalalp.dispatcher.dto;
+package com.bilalalp.common.entity.site;
 
 public enum SiteInfoType {
 
