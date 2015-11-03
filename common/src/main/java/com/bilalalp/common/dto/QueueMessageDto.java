@@ -1,4 +1,4 @@
-package com.bilalalp.dispatcher.dto;
+package com.bilalalp.common.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

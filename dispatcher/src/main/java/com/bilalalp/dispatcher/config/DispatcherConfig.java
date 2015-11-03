@@ -4,7 +4,9 @@ import com.bilalalp.common.config.CommonConfig;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -13,6 +15,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
+@EnableTransactionManagement
+@ComponentScan(value = {"com.bilalalp.dispatcher"})
 @Getter
 @Setter
 @Configuration

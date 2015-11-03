@@ -30,4 +30,7 @@ public class LinkSearchRequestInfo extends AbstractEntity {
 
     @OneToMany(targetEntity = LinkSearchRequestKeywordInfo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "linkSearchRequestInfo")
     private List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList;
+
+    @OneToMany(targetEntity = LinkSearchPageInfo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "linkSearchRequestInfo")
+    private List<LinkSearchPageInfo> linkSearchPageInfoList;
 }

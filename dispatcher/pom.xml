@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -30,7 +30,6 @@
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
             <version>${cxf.version}</version>
         </dependency>
-
 
         <!-- Spring Dependencies -->
         <dependency>
@@ -73,13 +72,18 @@
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.2.1</version>
+            <version>${commons-collections.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.bilalalp</groupId>
             <artifactId>common</artifactId>
             <version>${common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bilalalp</groupId>
+            <artifactId>searcher</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

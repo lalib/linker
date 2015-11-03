@@ -100,27 +100,27 @@ public class CommonConfigHelper {
         return getIntProperty(CommonDatabaseConstant.HIBERNATE_DEFAULT_BATCH_FETCH_SIZE);
     }
 
-    public Integer getHibernateBatchSize(){
+    public Integer getHibernateBatchSize() {
         return getIntProperty(CommonDatabaseConstant.HIBERNATE_JDBC_BATCH_SIZE);
     }
 
-    public String getHibernateCacheRegionFactoryClass(){
+    public String getHibernateCacheRegionFactoryClass() {
         return getStringProperty(CommonDatabaseConstant.HIBERNATE_CACHE_REGION_FACTORY_CLASS);
     }
 
-    public Boolean getHibernateCacheUseQueryCache(){
+    public Boolean getHibernateCacheUseQueryCache() {
         return getBooleanProperty(CommonDatabaseConstant.HIBERNATE_CACHE_USE_QUERY_CACHE);
     }
 
-    public Boolean getHibernateCacheUseSecondLevelCache(){
+    public Boolean getHibernateCacheUseSecondLevelCache() {
         return getBooleanProperty(CommonDatabaseConstant.HIEBRNATE_CACHE_USE_SECOND_LEVEL_CACHE);
     }
 
-    public String getHibernateDefaultSchema(){
+    public String getHibernateDefaultSchema() {
         return environment.getProperty(CommonDatabaseConstant.HIBERNATE_DEFAULT_SCHEMA);
     }
 
-    public String getHibernateEjbInterceptor(){
+    public String getHibernateEjbInterceptor() {
         return environment.getProperty(CommonDatabaseConstant.HIBERNATE_EJB_INTERCEPTOR);
     }
 

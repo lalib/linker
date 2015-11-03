@@ -7,4 +7,6 @@ public interface BaseService<T> {
     void save(T t);
 
     void save(Collection<T> entityList);
+
+    T find(Long id);
 }

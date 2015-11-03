@@ -22,4 +22,10 @@ public abstract class AbstractService<T> implements BaseService<T> {
     public void save(final Collection<T> entityList) {
         getRepository().save(entityList);
     }
+
+    @Transactional
+    @Override
+    public T find(final Long id) {
+        return getRepository().findOne(id);
+    }
 }
