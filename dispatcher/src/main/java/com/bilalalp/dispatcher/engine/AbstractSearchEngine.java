@@ -6,10 +6,11 @@ import com.bilalalp.common.entity.linksearch.LinkSearchGeneratedLinkInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
+import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.LinkSearchGeneratedLinkInfoService;
 import com.bilalalp.common.service.LinkSearchPageInfoService;
 import com.bilalalp.dispatcher.amqp.MessageSender;
-import com.bilalalp.dispatcher.util.JSoapUtil;
+import com.bilalalp.common.util.JSoapUtil;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,6 +43,8 @@ public abstract class AbstractSearchEngine {
 
     protected abstract Integer getPerPageRecordCount();
 
+    protected abstract SiteInfoType getSiteInfoType();
+
     @Transactional
     public void crawlLink(final LinkSearchRequestInfo linkSearchRequestInfo) {
 
@@ -65,6 +68,7 @@ public abstract class AbstractSearchEngine {
         final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo = new LinkSearchGeneratedLinkInfo();
         linkSearchGeneratedLinkInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
         linkSearchGeneratedLinkInfo.setGeneratedLink(generatedLink);
+        linkSearchGeneratedLinkInfo.setSiteInfoType(getSiteInfoType());
         return linkSearchGeneratedLinkInfo;
     }
 
@@ -104,5 +108,4 @@ public abstract class AbstractSearchEngine {
         linkSearchPageInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
         return linkSearchPageInfo;
     }
-
 }

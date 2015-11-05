@@ -1,6 +1,7 @@
 package com.bilalalp.dispatcher.engine;
 
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
+import com.bilalalp.common.entity.site.SiteInfoType;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -59,5 +60,10 @@ public class PatentScopeSearchEngine extends AbstractSearchEngine implements Sea
     @Override
     protected Integer getPerPageRecordCount() {
         return PER_PAGE_RECORD_COUNT;
+    }
+
+    @Override
+    protected SiteInfoType getSiteInfoType() {
+        return SiteInfoType.PATENTSCOPE;
     }
 }

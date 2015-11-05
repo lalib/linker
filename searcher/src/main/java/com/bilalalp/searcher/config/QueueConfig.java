@@ -2,8 +2,8 @@ package com.bilalalp.searcher.config;
 
 import com.bilalalp.common.constant.QueueConfigConstant;
 import com.bilalalp.common.dto.QueueConfigurationDto;
+import com.bilalalp.searcher.consumer.FoundLinkConsumer;
 import com.bilalalp.searcher.consumer.LinkSearcherConsumer;
-import com.bilalalp.searcher.consumer.LinkSearcherErrorConsumer;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
@@ -35,7 +35,7 @@ public class QueueConfig {
     private LinkSearcherConsumer linkSearcherConsumer;
 
     @Autowired
-    private LinkSearcherErrorConsumer linkSearcherErrorConsumer;
+    private FoundLinkConsumer foundLinkConsumer;
 
     @Bean
     public Connection rabbitConnection() {
@@ -81,32 +81,21 @@ public class QueueConfig {
     }
 
     @Bean
-    public Binding linkSearcherErrorQueueBinding() {
-        return BindingBuilder.bind(linkSearcherErrorQueue())
+    public Binding foundLinkQueueBinding() {
+        return BindingBuilder.bind(foundLinkQueue())
                 .to(amqpDirectExchange())
-                .with(linkSearcherErrorQueueConfiguration().getQueueKey())
+                .with(foundLinkQueueConfiguration().getQueueKey())
                 .noargs();
+    }
+
+    @Bean
+    public Queue foundLinkQueue() {
+        return new Queue(foundLinkQueueConfiguration().getQueueName());
     }
 
     @Bean
     public Queue linkSearcherQueue() {
         return new Queue(linkSearcherQueueConfiguration().getQueueName());
-    }
-
-    @Bean
-    public Queue linkSearcherErrorQueue() {
-        return new Queue(linkSearcherErrorQueueConfiguration().getQueueName());
-    }
-
-    @Bean
-    public MessageListenerContainer linkSearcherErrorQueueContainer() {
-        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
-        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
-        simpleMessageListenerContainer.setConcurrentConsumers(1);
-        simpleMessageListenerContainer.setMessageConverter(messageConverter());
-        simpleMessageListenerContainer.setMessageListener(linkSearcherErrorConsumer);
-        simpleMessageListenerContainer.setQueueNames(linkSearcherErrorQueueConfiguration().getQueueName());
-        return simpleMessageListenerContainer;
     }
 
     @Bean
@@ -120,6 +109,16 @@ public class QueueConfig {
         return simpleMessageListenerContainer;
     }
 
+    @Qualifier(value = "foundLinkQueueConfiguration")
+    @Bean
+    public QueueConfigurationDto foundLinkQueueConfiguration() {
+        final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
+        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
+        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_FOUND_LINK_QUEUE_KEY));
+        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_FOUND_LINK_QUEUE_NAME));
+        return queueConfigurationDto;
+    }
+
     @Qualifier(value = "linkSearcherQueueConfiguration")
     @Bean
     public QueueConfigurationDto linkSearcherQueueConfiguration() {
@@ -127,16 +126,6 @@ public class QueueConfig {
         queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
         queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_LINK_SEARCHER_QUEUE_KEY));
         queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_LINK_SEARCHER_QUEUE_NAME));
-        return queueConfigurationDto;
-    }
-
-    @Qualifier(value = "linkSearcherErrorQueueConfiguration")
-    @Bean
-    public QueueConfigurationDto linkSearcherErrorQueueConfiguration() {
-        final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
-        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
-        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_LINK_SEARCHER_ERROR_QUEUE_KEY));
-        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_LINK_SEARCHER_ERROR_QUEUE_NAME));
         return queueConfigurationDto;
     }
 }

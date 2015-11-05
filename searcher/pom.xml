@@ -10,7 +10,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>searcher1</artifactId>
+    <artifactId>searcher</artifactId>
 
     <dependencies>
         <dependency>
