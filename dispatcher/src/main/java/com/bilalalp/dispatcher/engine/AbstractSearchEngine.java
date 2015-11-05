@@ -2,9 +2,11 @@ package com.bilalalp.dispatcher.engine;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
+import com.bilalalp.common.entity.linksearch.LinkSearchGeneratedLinkInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
+import com.bilalalp.common.service.LinkSearchGeneratedLinkInfoService;
 import com.bilalalp.common.service.LinkSearchPageInfoService;
 import com.bilalalp.dispatcher.amqp.MessageSender;
 import com.bilalalp.dispatcher.util.JSoapUtil;
@@ -15,13 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractSearchEngine {
 
-    private static final Integer SLICE_PAGE = 50;
+    private static final Integer SLICE_COUNT = 10;
 
     @Autowired
     private LinkSearchPageInfoService linkSearchPageInfoService;
+
+    @Autowired
+    private LinkSearchGeneratedLinkInfoService linkSearchGeneratedLinkInfoService;
 
     @Autowired
     private MessageSender messageSender;
@@ -34,42 +40,53 @@ public abstract class AbstractSearchEngine {
 
     protected abstract Integer getPageCount(Element element);
 
+    protected abstract Integer getPerPageRecordCount();
+
     @Transactional
     public void crawlLink(final LinkSearchRequestInfo linkSearchRequestInfo) {
 
         final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList = linkSearchRequestInfo.getLinkSearchRequestKeywordInfoList();
 
         final String generatedLink = generateLink((linkSearchRequestKeywordInfoList));
+        final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo = createLinkSearchGeneratedLinkInfo(linkSearchRequestInfo, generatedLink);
+        linkSearchGeneratedLinkInfoService.save(linkSearchGeneratedLinkInfo);
 
         final Element body = JSoapUtil.getBody(generatedLink);
         final Integer totalPageCount = getPageCount(body);
 
-        System.out.println(totalPageCount);
         final List<LinkSearchPageInfo> linkSearchPageInfoList = getLinkSearchPageInfoList(linkSearchRequestInfo, totalPageCount);
-
         linkSearchPageInfoService.save(linkSearchPageInfoList);
 
         final List<QueueMessageDto> queueMessageDtoList = convertEntitiesToMessages(linkSearchPageInfoList);
         messageSender.sendMessage(queueConfigurationDto, queueMessageDtoList);
     }
 
-    private List<LinkSearchPageInfo> getLinkSearchPageInfoList(LinkSearchRequestInfo linkSearchRequestInfo, Integer totalPageCount) {
+    private LinkSearchGeneratedLinkInfo createLinkSearchGeneratedLinkInfo(final LinkSearchRequestInfo linkSearchRequestInfo, final String generatedLink) {
+        final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo = new LinkSearchGeneratedLinkInfo();
+        linkSearchGeneratedLinkInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
+        linkSearchGeneratedLinkInfo.setGeneratedLink(generatedLink);
+        return linkSearchGeneratedLinkInfo;
+    }
+
+    private List<LinkSearchPageInfo> getLinkSearchPageInfoList(LinkSearchRequestInfo linkSearchRequestInfo, Integer totalRecordCount) {
         final List<LinkSearchPageInfo> linkSearchPageInfoList = new ArrayList<>();
 
-        final Integer leftPageCount = totalPageCount % SLICE_PAGE;
+        final Integer totalPageCount = (int) Math.ceil(totalRecordCount.floatValue() / getPerPageRecordCount().floatValue());
+        final Integer leftPageCount = totalPageCount % SLICE_COUNT;
+
         final Integer fullPageCount = totalPageCount - leftPageCount;
 
-        for (int i = 0; i < fullPageCount / SLICE_PAGE; i++) {
+        for (int i = 0; i < fullPageCount / SLICE_COUNT; i++) {
 
-            final int startPage = SLICE_PAGE * i;
-            final int endPage = startPage + SLICE_PAGE;
+            final int startPage = SLICE_COUNT * i;
+            final int endPage = startPage + SLICE_COUNT;
 
             final LinkSearchPageInfo linkSearchPageInfo = getLinkSearchPageInfo(linkSearchRequestInfo, startPage, endPage);
             linkSearchPageInfoList.add(linkSearchPageInfo);
         }
 
-        if (leftPageCount != 0) {
-            final LinkSearchPageInfo linkSearchPageInfo = getLinkSearchPageInfo(linkSearchRequestInfo, fullPageCount, leftPageCount);
+        if (totalPageCount != 0) {
+            final LinkSearchPageInfo linkSearchPageInfo = getLinkSearchPageInfo(linkSearchRequestInfo, fullPageCount, totalPageCount);
             linkSearchPageInfoList.add(linkSearchPageInfo);
         }
         return linkSearchPageInfoList;
@@ -77,13 +94,7 @@ public abstract class AbstractSearchEngine {
 
     private List<QueueMessageDto> convertEntitiesToMessages(final List<LinkSearchPageInfo> linkSearchPageInfoList) {
 
-        final List<QueueMessageDto> queueMessageDtoList = new ArrayList<>();
-
-        for (final LinkSearchPageInfo linkSearchPageInfo : linkSearchPageInfoList) {
-            queueMessageDtoList.add(new QueueMessageDto(linkSearchPageInfo.getId()));
-        }
-
-        return queueMessageDtoList;
+        return linkSearchPageInfoList.stream().map(linkSearchPageInfo -> new QueueMessageDto(linkSearchPageInfo.getId())).collect(Collectors.toList());
     }
 
     private LinkSearchPageInfo getLinkSearchPageInfo(LinkSearchRequestInfo linkSearchRequestInfo, int startPage, int endPage) {

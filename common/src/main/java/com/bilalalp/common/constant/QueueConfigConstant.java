@@ -1,4 +1,4 @@
-package com.bilalalp.dispatcher.constant;
+package com.bilalalp.common.constant;
 
 public final class QueueConfigConstant {
 

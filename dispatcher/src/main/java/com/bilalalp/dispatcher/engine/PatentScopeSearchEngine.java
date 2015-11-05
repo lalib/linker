@@ -10,6 +10,8 @@ import java.util.List;
 @Service
 public class PatentScopeSearchEngine extends AbstractSearchEngine implements SearchEngine {
 
+    private static final Integer PER_PAGE_RECORD_COUNT = 10;
+
     @Override
     public String generateLink(final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList) {
 
@@ -52,5 +54,10 @@ public class PatentScopeSearchEngine extends AbstractSearchEngine implements Sea
             return Integer.valueOf(elementsByAttributeValue.get(0).getElementsByTag("b").get(1).text().replace(",", ""));
         }
         return 0;
+    }
+
+    @Override
+    protected Integer getPerPageRecordCount() {
+        return PER_PAGE_RECORD_COUNT;
     }
 }

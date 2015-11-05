@@ -1,11 +1,9 @@
-package com.bilalalp.dispatcher.amqp;
+package com.bilalalp.searcher.consumer;
 
-import lombok.Setter;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.stereotype.Service;
 
-@Setter
 @Service
 public class LinkSearcherErrorConsumer implements MessageListener {
 

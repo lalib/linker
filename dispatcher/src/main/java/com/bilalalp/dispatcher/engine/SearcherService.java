@@ -1,6 +1,6 @@
 package com.bilalalp.dispatcher.engine;
 
-public interface MySearcher {
+public interface SearcherService {
 
     void search(final Long id);
 }

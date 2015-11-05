@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,10 @@ public class LinkSearchRequestInfo extends AbstractEntity {
 
     public static final String JOIN_COLUMN = "C_LSR_ID";
     public static final String TABLE_NAME = "T_LSR_INFO";
+
+    public LinkSearchRequestInfo() {
+        linkSearchGeneratedLinkInfoList = new ArrayList<>();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,4 +38,7 @@ public class LinkSearchRequestInfo extends AbstractEntity {
 
     @OneToMany(targetEntity = LinkSearchPageInfo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "linkSearchRequestInfo")
     private List<LinkSearchPageInfo> linkSearchPageInfoList;
+
+    @OneToMany(targetEntity = LinkSearchGeneratedLinkInfo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "linkSearchRequestInfo")
+    private List<LinkSearchGeneratedLinkInfo> linkSearchGeneratedLinkInfoList;
 }

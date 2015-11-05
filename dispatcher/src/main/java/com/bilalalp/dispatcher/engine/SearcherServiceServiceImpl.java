@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class Searcher implements MySearcher {
+public class SearcherServiceServiceImpl implements SearcherService {
 
     @Autowired
     private LinkSearchRequestInfoService linkSearchRequestInfoService;

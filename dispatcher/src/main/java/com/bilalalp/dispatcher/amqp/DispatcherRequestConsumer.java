@@ -1,7 +1,7 @@
 package com.bilalalp.dispatcher.amqp;
 
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.dispatcher.engine.MySearcher;
+import com.bilalalp.dispatcher.engine.SearcherService;
 import lombok.Setter;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
@@ -18,15 +18,12 @@ public class DispatcherRequestConsumer implements MessageListener {
     private MessageConverter messageConverter;
 
     @Autowired
-    private MySearcher mySearcher;
+    private SearcherService searcherService;
 
     @Transactional
     @Override
     public void onMessage(final Message message) {
         final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
-        System.out.println("GELDÝ");
-        System.out.println(queueMessageDto.getId().toString());
-
-        mySearcher.search(queueMessageDto.getId());
+        searcherService.search(queueMessageDto.getId());
     }
 }
