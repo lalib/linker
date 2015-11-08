@@ -11,13 +11,21 @@ public final class ProxySupplier {
     private static final List<ProxyDto> PROXY_LIST = new ArrayList<>();
 
     static {
-        PROXY_LIST.add(new ProxyDto("111.223.52.2", "3128"));
-        PROXY_LIST.add(new ProxyDto("203.98.181.145", "80"));
-        PROXY_LIST.add(new ProxyDto("218.200.66.199", "8080"));
+        PROXY_LIST.add(new ProxyDto("31.210.10.34", "8080"));
+        PROXY_LIST.add(new ProxyDto("91.106.42.22", "80"));
+        PROXY_LIST.add(new ProxyDto("37.221.210.97", "3128"));
     }
 
-    public static ProxyDto getRandomProxy(){
+    public static ProxyDto getRandomProxy() {
+        final int index = new Random().nextInt(PROXY_LIST.size());
+        return PROXY_LIST.get(index);
+    }
 
-        return null;
+    public static void applyRandomProxy() {
+        final ProxyDto randomProxy = getRandomProxy();
+        System.setProperty("http.proxyHost", randomProxy.getHost());
+        System.setProperty("http.proxyPort", randomProxy.getPort());
+        System.setProperty("https.proxyHost", randomProxy.getHost());
+        System.setProperty("https.proxyPort", randomProxy.getPort());
     }
 }
