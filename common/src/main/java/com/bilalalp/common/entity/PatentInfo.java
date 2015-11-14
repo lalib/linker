@@ -33,6 +33,10 @@ public class PatentInfo extends AbstractEntity {
     private String patentLink;
 
     @Lob
+    @Column(name = "C_BODY")
+    private String body;
+
+    @Lob
     @Column(name = "C_ABSTRACT_CONTENT")
     private String abstractContent;
 

@@ -26,6 +26,7 @@
         <javax-persistence.version>1.0.0.Final</javax-persistence.version>
         <c3p0.version>0.9.5.1</c3p0.version>
         <h2.version>1.4.190</h2.version>
+        <mysql.version>5.1.37</mysql.version>
 
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-lang.version>3.4</commons-lang.version>

@@ -32,6 +32,8 @@ public class PatentScopeSearcherService implements SearcherService {
     @Autowired
     private MessageSender messageSender;
 
+    private static String END_STR = "We are sorry but we experience a high volume traffic and we need to filter out the automatic queries form the legitimate human requests.";
+
     @Qualifier(value = "foundLinkQueueConfiguration")
     @Autowired
     private QueueConfigurationDto queueConfigurationDto;
@@ -58,6 +60,11 @@ public class PatentScopeSearcherService implements SearcherService {
 
                 final String link = generatedLink + pageNumber;
                 final Element body = JSoapUtil.getBody(link);
+
+                if (body.html().contains(END_STR)) {
+                    throw new RuntimeException("EOF Proxy Error.");
+                }
+
                 final Integer pageCount = getPageCount(body);
 
                 if (pageCount <= pageNumber * 10 || pageNumber.equals(endPage)) {
@@ -112,7 +119,7 @@ public class PatentScopeSearcherService implements SearcherService {
         }
 
         patentInfoService.save(patentInfoList);
-        messageSender.sendMessage(queueConfigurationDto,convertPatentInfoToQueueMessageDto(patentInfoList));
+        messageSender.sendMessage(queueConfigurationDto, convertPatentInfoToQueueMessageDto(patentInfoList));
     }
 
     private List<QueueMessageDto> convertPatentInfoToQueueMessageDto(final List<PatentInfo> patentInfoList) {
@@ -174,9 +181,14 @@ public class PatentScopeSearcherService implements SearcherService {
     private Integer getPageCount(Element element) {
 
         final Elements elementsByAttributeValue = element.getElementsByAttributeValue("class", "topResultFormCol1");
-        if (elementsByAttributeValue != null) {
-            return Integer.valueOf(elementsByAttributeValue.get(0).getElementsByTag("b").get(1).text().replace(",", ""));
+        try {
+            if (elementsByAttributeValue != null) {
+                return Integer.valueOf(elementsByAttributeValue.get(0).getElementsByTag("b").get(1).text().replace(",", ""));
+            }
+            return 0;
+        } catch (final Exception ex) {
+            ex.printStackTrace();
+            throw ex;
         }
-        return 0;
     }
 }
