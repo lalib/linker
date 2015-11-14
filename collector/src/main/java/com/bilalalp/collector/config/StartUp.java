@@ -1,4 +1,4 @@
-package com.bilalalp.searcher.config;
+package com.bilalalp.collector.config;
 
 import com.bilalalp.common.config.CommonConfig;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

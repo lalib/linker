@@ -3,13 +3,13 @@ package com.bilalalp.common.util;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
-public final class JSoapUtil {
+public final class JSoupUtil {
 
     private static final Integer TIMEOUT = 20000;
     private static final Integer FAULT_COUNT = 100;
     private static final int MILLIS = 1000;
 
-    private JSoapUtil() {
+    private JSoupUtil() {
         // Util Class
     }
 

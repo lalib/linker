@@ -10,7 +10,7 @@ import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.LinkSearchGeneratedLinkInfoService;
 import com.bilalalp.common.service.LinkSearchPageInfoService;
 import com.bilalalp.dispatcher.amqp.MessageSender;
-import com.bilalalp.common.util.JSoapUtil;
+import com.bilalalp.common.util.JSoupUtil;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,7 +54,7 @@ public abstract class AbstractSearchEngine {
         final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo = createLinkSearchGeneratedLinkInfo(linkSearchRequestInfo, generatedLink);
         linkSearchGeneratedLinkInfoService.save(linkSearchGeneratedLinkInfo);
 
-        final Element body = JSoapUtil.getBody(generatedLink);
+        final Element body = JSoupUtil.getBody(generatedLink);
         final Integer totalPageCount = getPageCount(body);
 
         final List<LinkSearchPageInfo> linkSearchPageInfoList = getLinkSearchPageInfoList(linkSearchRequestInfo, totalPageCount);

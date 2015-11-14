@@ -44,6 +44,7 @@
         <module>dispatcher</module>
         <module>common</module>
         <module>searcher</module>
+        <module>collector</module>
     </modules>
 
     <dependencies>

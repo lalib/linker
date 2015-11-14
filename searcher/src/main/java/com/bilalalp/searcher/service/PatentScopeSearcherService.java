@@ -8,7 +8,7 @@ import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.PatentInfoService;
-import com.bilalalp.common.util.JSoapUtil;
+import com.bilalalp.common.util.JSoupUtil;
 import com.bilalalp.searcher.amqp.MessageSender;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -57,7 +57,7 @@ public class PatentScopeSearcherService implements SearcherService {
             try {
 
                 final String link = generatedLink + pageNumber;
-                final Element body = JSoapUtil.getBody(link);
+                final Element body = JSoupUtil.getBody(link);
 
                 final String endStr = "We are sorry but we experience a high volume traffic and we need to filter out the automatic queries form the legitimate human requests.";
                 if (body.html().contains(endStr)) {
@@ -113,7 +113,7 @@ public class PatentScopeSearcherService implements SearcherService {
                     break;
                 }
 
-                JSoapUtil.sleep();
+                JSoupUtil.sleep();
             }
         }
 
