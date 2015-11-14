@@ -32,8 +32,6 @@ public class PatentScopeSearcherService implements SearcherService {
     @Autowired
     private MessageSender messageSender;
 
-    private static String END_STR = "We are sorry but we experience a high volume traffic and we need to filter out the automatic queries form the legitimate human requests.";
-
     @Qualifier(value = "foundLinkQueueConfiguration")
     @Autowired
     private QueueConfigurationDto queueConfigurationDto;
@@ -61,7 +59,8 @@ public class PatentScopeSearcherService implements SearcherService {
                 final String link = generatedLink + pageNumber;
                 final Element body = JSoapUtil.getBody(link);
 
-                if (body.html().contains(END_STR)) {
+                final String endStr = "We are sorry but we experience a high volume traffic and we need to filter out the automatic queries form the legitimate human requests.";
+                if (body.html().contains(endStr)) {
                     throw new RuntimeException("EOF Proxy Error.");
                 }
 
