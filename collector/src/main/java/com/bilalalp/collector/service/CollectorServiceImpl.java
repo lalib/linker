@@ -30,10 +30,12 @@ public class CollectorServiceImpl implements CollectorService {
     @Override
     public void collect(final PatentInfo patentInfo) {
 
+//        final Element body2 = JSoupUtil.getBody("https://patentscope.wipo.int/search/mobile/detail.jsf;jsessionid=806B8208F8CFD37169046605982C143F.wapp1nC?docId=WO2015145684&recNum=275&office=&queryString=&prevFilter=&sortOption=Pub+Date+Desc&maxRec=2720138");
         final Element body = JSoupUtil.getBody(patentInfo.getPatentLink());
 
         final String endStr = "We are sorry but we experience a high volume traffic and we need to filter out the automatic queries form the legitimate human requests.";
-        if (body == null || body.html().contains(endStr)) {
+        if (body == null || body.html().contains(endStr) || body.html().contains("null. (nullnull) ")) {
+            System.out.println("EOF Proxy Error.");
             throw new RuntimeException("EOF Proxy Error.");
         }
 

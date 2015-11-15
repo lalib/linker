@@ -125,4 +125,13 @@ public class QueueConfig {
         simpleMessageListenerContainer.setQueueNames(foundLinkQueueConfiguration().getQueueName());
         return simpleMessageListenerContainer;
     }
+
+    @Bean
+    public MessageListenerContainer collectorQueueContainer() {
+        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        simpleMessageListenerContainer.setMessageConverter(messageConverter());
+        simpleMessageListenerContainer.setQueueNames(collectorQueueConfiguration().getQueueName());
+        return simpleMessageListenerContainer;
+    }
 }
