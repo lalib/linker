@@ -100,6 +100,7 @@ public abstract class AbstractSearchEngine implements SearchEngine{
 
     private LinkSearchPageInfo getLinkSearchPageInfo(LinkSearchRequestInfo linkSearchRequestInfo, int startPage, int endPage) {
         final LinkSearchPageInfo linkSearchPageInfo = new LinkSearchPageInfo();
+        linkSearchPageInfo.setSiteInfoType(getSiteInfoType());
         linkSearchPageInfo.setStartPage(startPage);
         linkSearchPageInfo.setEndPage(endPage);
         linkSearchPageInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);

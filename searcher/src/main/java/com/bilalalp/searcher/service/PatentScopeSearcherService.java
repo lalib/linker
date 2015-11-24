@@ -121,6 +121,11 @@ public class PatentScopeSearcherService implements SearcherService {
         messageSender.sendMessage(queueConfigurationDto, convertPatentInfoToQueueMessageDto(patentInfoList));
     }
 
+    @Override
+    public SiteInfoType getSiteInfoType() {
+        return SiteInfoType.PATENTSCOPE;
+    }
+
     private List<QueueMessageDto> convertPatentInfoToQueueMessageDto(final List<PatentInfo> patentInfoList) {
 
         final List<QueueMessageDto> queueMessageDtoList = new ArrayList<>();

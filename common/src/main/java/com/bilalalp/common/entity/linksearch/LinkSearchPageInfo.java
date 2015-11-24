@@ -1,6 +1,7 @@
 package com.bilalalp.common.entity.linksearch;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
+import com.bilalalp.common.entity.site.SiteInfoType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,4 +30,8 @@ public class LinkSearchPageInfo extends AbstractEntity {
     @ManyToOne(targetEntity = LinkSearchRequestInfo.class, fetch = FetchType.LAZY)
     @JoinColumn(name = LinkSearchRequestInfo.JOIN_COLUMN)
     private LinkSearchRequestInfo linkSearchRequestInfo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "C_SITE_INFO_TYPE")
+    private SiteInfoType siteInfoType;
 }
