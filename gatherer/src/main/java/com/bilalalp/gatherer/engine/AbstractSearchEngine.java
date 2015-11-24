@@ -1,4 +1,4 @@
-package com.bilalalp.dispatcher.engine;
+package com.bilalalp.gatherer.engine;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
@@ -6,11 +6,10 @@ import com.bilalalp.common.entity.linksearch.LinkSearchGeneratedLinkInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
-import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.LinkSearchGeneratedLinkInfoService;
 import com.bilalalp.common.service.LinkSearchPageInfoService;
-import com.bilalalp.dispatcher.amqp.MessageSender;
 import com.bilalalp.common.util.JSoupUtil;
+import com.bilalalp.gatherer.amqp.MessageSender;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractSearchEngine {
+public abstract class AbstractSearchEngine implements SearchEngine{
 
     private static final Integer SLICE_COUNT = 10;
 
@@ -43,14 +42,12 @@ public abstract class AbstractSearchEngine {
 
     protected abstract Integer getPerPageRecordCount();
 
-    protected abstract SiteInfoType getSiteInfoType();
-
     @Transactional
     public void crawlLink(final LinkSearchRequestInfo linkSearchRequestInfo) {
 
         final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList = linkSearchRequestInfo.getLinkSearchRequestKeywordInfoList();
 
-        final String generatedLink = generateLink((linkSearchRequestKeywordInfoList));
+        final String generatedLink = generateLink(linkSearchRequestKeywordInfoList);
         final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo = createLinkSearchGeneratedLinkInfo(linkSearchRequestInfo, generatedLink);
         linkSearchGeneratedLinkInfoService.save(linkSearchGeneratedLinkInfo);
 

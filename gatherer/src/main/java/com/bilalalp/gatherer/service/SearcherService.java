@@ -1,4 +1,4 @@
-package com.bilalalp.dispatcher.engine;
+package com.bilalalp.gatherer.service;
 
 public interface SearcherService {
 

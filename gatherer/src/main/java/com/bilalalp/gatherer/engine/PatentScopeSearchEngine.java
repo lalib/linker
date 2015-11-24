@@ -1,4 +1,4 @@
-package com.bilalalp.dispatcher.engine;
+package com.bilalalp.gatherer.engine;
 
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
@@ -63,7 +63,7 @@ public class PatentScopeSearchEngine extends AbstractSearchEngine implements Sea
     }
 
     @Override
-    protected SiteInfoType getSiteInfoType() {
+    public SiteInfoType getSiteInfoType() {
         return SiteInfoType.PATENTSCOPE;
     }
 }

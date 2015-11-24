@@ -45,6 +45,7 @@
         <module>common</module>
         <module>searcher</module>
         <module>collector</module>
+        <module>gatherer</module>
     </modules>
 
     <dependencies>

@@ -1,7 +1,7 @@
-package com.bilalalp.dispatcher.amqp;
+package com.bilalalp.gatherer.amqp;
 
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.dispatcher.engine.SearcherService;
+import com.bilalalp.gatherer.service.SearcherService;
 import lombok.Setter;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;

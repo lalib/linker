@@ -24,6 +24,7 @@ public class LinkSearchGeneratedLinkInfo {
     @Column(name = "C_SITE_TYPE")
     private SiteInfoType siteInfoType;
 
+    @Lob
     @Column(name = "C_GENERATED_LINK")
     private String generatedLink;
 

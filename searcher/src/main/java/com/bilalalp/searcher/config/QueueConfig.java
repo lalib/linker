@@ -124,4 +124,6 @@ public class QueueConfig {
         simpleMessageListenerContainer.setQueueNames(linkSearcherQueueConfiguration().getQueueName());
         return simpleMessageListenerContainer;
     }
+
+
 }
