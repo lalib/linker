@@ -60,7 +60,7 @@ public class PatentScopeSearcherService implements SearcherService {
                 final Element body = JSoupUtil.getBody(link);
 
                 final String endStr = "We are sorry but we experience a high volume traffic and we need to filter out the automatic queries form the legitimate human requests.";
-                if (body.html().contains(endStr)) {
+                if (body == null || body.html().contains(endStr)) {
                     throw new RuntimeException("EOF Proxy Error.");
                 }
 
