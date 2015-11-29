@@ -15,14 +15,14 @@
         <source.java.version>1.8</source.java.version>
         <target.java.version>1.8</target.java.version>
 
-        <spring.version>4.2.2.RELEASE</spring.version>
-        <spring-amqp.version>1.5.1.RELEASE</spring-amqp.version>
-        <spring-data.version>1.9.0.RELEASE</spring-data.version>
+        <spring.version>4.2.3.RELEASE</spring.version>
+        <spring-amqp.version>1.5.2.RELEASE</spring-amqp.version>
+        <spring-data.version>1.9.1.RELEASE</spring-data.version>
 
-        <cxf.version>3.1.3</cxf.version>
+        <cxf.version>3.1.4</cxf.version>
         <jackson-jaxrs.version>2.6.3</jackson-jaxrs.version>
 
-        <hibernate.version>5.0.3.Final</hibernate.version>
+        <hibernate.version>5.0.4.Final</hibernate.version>
         <javax-persistence.version>1.0.0.Final</javax-persistence.version>
         <c3p0.version>0.9.5.1</c3p0.version>
         <h2.version>1.4.190</h2.version>
@@ -46,6 +46,7 @@
         <module>searcher</module>
         <module>collector</module>
         <module>gatherer</module>
+        <module>parser</module>
     </modules>
 
     <dependencies>
