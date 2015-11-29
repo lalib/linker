@@ -7,5 +7,7 @@ jdk:
 before_script:
   - pip install --user codecov
 
+before_install:
+  - pip install --user codecov
 after_success:
-  bash <(curl -s https://codecov.io/bash) -t 774f86c4-97c2-4902-915b-82c193a43892
+  - codecov
