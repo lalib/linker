@@ -13,17 +13,11 @@ public final class QueueConfigConstant {
     public static final String AMQP_DISPATCHER_REQUEST_QUEUE_NAME = "amqp.dispatcher.request.queue.name";
     public static final String AMQP_DISPATCHER_REQUEST_QUEUE_KEY = "amqp.dispatcher.request.queue.key";
 
-    public static final String AMQP_DISPATCHER_REQUEST_ERROR_QUEUE_NAME = "amqp.dispatcher.request.error.queue.name";
-    public static final String AMQP_DISPATCHER_REQUEST_ERROR_QUEUE_KEY = "amqp.dispatcher.request.error.queue.key";
-
     public static final String AMQP_LINK_SEARCHER_QUEUE_NAME = "amqp.link.searcher.queue.name";
     public static final String AMQP_LINK_SEARCHER_QUEUE_KEY = "amqp.link.searcher.queue.key";
 
     public static final String AMQP_COLLECTOR_QUEUE_NAME = "amqp.collector.queue.name";
     public static final String AMQP_COLLECTOR_QUEUE_KEY = "amqp.collector.queue.key";
-
-    public static final String AMQP_LINK_SEARCHER_ERROR_QUEUE_NAME = "amqp.link.searcher.error.queue.name";
-    public static final String AMQP_LINK_SEARCHER_ERROR_QUEUE_KEY = "amqp.link.searcher.error.queue.key";
 
     public static final String AMQP_FOUND_LINK_QUEUE_NAME = "amqp.found.link.queue.name";
     public static final String AMQP_FOUND_LINK_QUEUE_KEY = "amqp.found.link.queue.key";

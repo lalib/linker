@@ -80,6 +80,7 @@ public class UsptoSearcherService implements SearcherService {
                             patentInfo.setPatentLink(MAIN_URL + element1.attr("href"));
                             patentInfo.setPatentNumber(element1.text());
                             patentInfo.setPatentTitle(element2.text());
+                            patentInfo.setLinkSearchPageInfo(linkSearchPageInfo);
                             patentInfoList.add(patentInfo);
                         }
                     }

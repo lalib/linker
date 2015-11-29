@@ -1,6 +1,7 @@
 package com.bilalalp.common.entity;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
+import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +48,7 @@ public class PatentInfo extends AbstractEntity {
     @Column(name = "C_SEARCH_LINK")
     private String searchLink;
 
-    @ManyToOne(targetEntity = LinkSearchRequestInfo.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = LinkSearchRequestInfo.JOIN_COLUMN)
-    private LinkSearchRequestInfo linkSearchRequestInfo;
+    @ManyToOne(targetEntity = LinkSearchPageInfo.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = LinkSearchPageInfo.JOIN_COLUMN)
+    private LinkSearchPageInfo linkSearchPageInfo;
 }

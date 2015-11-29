@@ -94,7 +94,7 @@ public class PatentScopeSearcherService implements SearcherService {
                                 continue;
                             }
 
-                            patentInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
+                            patentInfo.setLinkSearchPageInfo(linkSearchPageInfo);
                             patentInfo.setSearchLink(link);
                             patentInfoList.add(patentInfo);
                         }
