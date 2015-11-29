@@ -116,10 +116,6 @@ public class CommonConfigHelper {
         return getBooleanProperty(CommonDatabaseConstant.HIEBRNATE_CACHE_USE_SECOND_LEVEL_CACHE);
     }
 
-    public String getHibernateDefaultSchema() {
-        return environment.getProperty(CommonDatabaseConstant.HIBERNATE_DEFAULT_SCHEMA);
-    }
-
     public String getHibernateEjbInterceptor() {
         return environment.getProperty(CommonDatabaseConstant.HIBERNATE_EJB_INTERCEPTOR);
     }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsptoSearcherService implements SearcherService {
@@ -45,7 +46,7 @@ public class UsptoSearcherService implements SearcherService {
 
         int tryCount = 0;
 
-        for (int i = startPage; i < endPage; i++) {
+        for (int i = startPage + 1; i < endPage + 1; i++) {
 
             try {
 
@@ -106,13 +107,7 @@ public class UsptoSearcherService implements SearcherService {
 
 
     private List<QueueMessageDto> convertPatentInfoToQueueMessageDto(final List<PatentInfo> patentInfoList) {
-
-        final List<QueueMessageDto> queueMessageDtoList = new ArrayList<>();
-
-        for (final PatentInfo patentInfo : patentInfoList) {
-            queueMessageDtoList.add(new QueueMessageDto(patentInfo.getId()));
-        }
-        return queueMessageDtoList;
+        return patentInfoList.stream().map(patentInfo -> new QueueMessageDto(patentInfo.getId())).collect(Collectors.toList());
     }
 
     private String getGeneratedLink(final LinkSearchRequestInfo linkSearchRequestInfo) {
@@ -122,7 +117,7 @@ public class UsptoSearcherService implements SearcherService {
 
             for (final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo : linkSearchGeneratedLinkInfoList) {
                 if (SiteInfoType.USPTO.equals(linkSearchGeneratedLinkInfo.getSiteInfoType())) {
-                    return linkSearchGeneratedLinkInfo.getGeneratedLink();
+                    return linkSearchGeneratedLinkInfo.getGeneratedLink().replace("p=1", "p=");
                 }
             }
         } catch (final Exception e) {

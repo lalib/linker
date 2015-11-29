@@ -46,4 +46,7 @@ public class CollectorServiceImpl implements CollectorService {
     private QueueMessageDto createQueueMessageDto(final PatentInfo patentInfo) {
         return new QueueMessageDto(patentInfo.getId());
     }
+
+
 }
+

@@ -21,6 +21,7 @@ public final class JSoupUtil {
             try {
                 return Jsoup.connect(patentLink).timeout(TIMEOUT).get().body();
             } catch (Exception e) {
+                System.out.println(e.getMessage());
                 faultCount++;
                 sleep();
             }
