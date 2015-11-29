@@ -18,10 +18,6 @@ public class LinkSearchRequestInfo extends AbstractEntity {
     public static final String JOIN_COLUMN = "C_LSR_ID";
     public static final String TABLE_NAME = "T_LSR_INFO";
 
-    public LinkSearchRequestInfo() {
-        linkSearchGeneratedLinkInfoList = new ArrayList<>();
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -40,5 +36,5 @@ public class LinkSearchRequestInfo extends AbstractEntity {
     private List<LinkSearchPageInfo> linkSearchPageInfoList;
 
     @OneToMany(targetEntity = LinkSearchGeneratedLinkInfo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "linkSearchRequestInfo")
-    private List<LinkSearchGeneratedLinkInfo> linkSearchGeneratedLinkInfoList;
+    private List<LinkSearchGeneratedLinkInfo> linkSearchGeneratedLinkInfoList = new ArrayList<>();
 }
