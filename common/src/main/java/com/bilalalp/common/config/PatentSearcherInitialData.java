@@ -20,8 +20,9 @@ public final class PatentSearcherInitialData {
 
         final SiteInfo patentScopeSite = getPatentScopeSiteInfo();
         final SiteInfo usptoPatentSite = getUSPTOSiteInfo();
+        final SiteInfo freePatentOnlineSiteInfo = getFreePatentOnlineSiteInfo();
 
-        siteInfoList.addAll(Arrays.asList(usptoPatentSite, patentScopeSite));
+        siteInfoList.addAll(Arrays.asList(usptoPatentSite, patentScopeSite, freePatentOnlineSiteInfo));
         return siteInfoList;
     }
 
@@ -38,6 +39,14 @@ public final class PatentSearcherInitialData {
         patentScopeSite.setSiteAddres("https://patentscope.wipo.int/search/en/");
         patentScopeSite.setSiteInfoType(SiteInfoType.PATENTSCOPE);
         patentScopeSite.setSiteName("Patent Scope");
+        return patentScopeSite;
+    }
+
+    public static SiteInfo getFreePatentOnlineSiteInfo() {
+        final SiteInfo patentScopeSite = new SiteInfo();
+        patentScopeSite.setSiteAddres("http://www.freepatentsonline.com");
+        patentScopeSite.setSiteInfoType(SiteInfoType.FPO);
+        patentScopeSite.setSiteName("Free Patent Online");
         return patentScopeSite;
     }
 }

@@ -4,5 +4,7 @@ public enum SiteInfoType {
 
     USPTO,
 
-    PATENTSCOPE
+    PATENTSCOPE,
+
+    FPO
 }
