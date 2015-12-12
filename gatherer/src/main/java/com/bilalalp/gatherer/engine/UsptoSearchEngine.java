@@ -43,6 +43,11 @@ public class UsptoSearchEngine extends AbstractSearchEngine {
     }
 
     @Override
+    protected List<String> generatedLinkList(List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList) {
+        return null;
+    }
+
+    @Override
     protected Integer getPageCount(final Element body) {
 
         final Elements elementsByTag = body.getElementsByTag("i");
@@ -60,6 +65,11 @@ public class UsptoSearchEngine extends AbstractSearchEngine {
     @Override
     protected Integer getPerPageRecordCount() {
         return PER_PAGE_RECORD_COUNT;
+    }
+
+    @Override
+    protected SearchType getSearchType() {
+        return SearchType.ALL;
     }
 
     @Override

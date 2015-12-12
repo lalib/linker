@@ -34,4 +34,8 @@ public class LinkSearchPageInfo extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "C_SITE_INFO_TYPE")
     private SiteInfoType siteInfoType;
+
+    @Lob
+    @Column(name = "C_GENERATED_LINK")
+    private String generatedLink;
 }

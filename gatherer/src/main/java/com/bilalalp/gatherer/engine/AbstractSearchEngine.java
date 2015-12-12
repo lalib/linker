@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractSearchEngine implements SearchEngine{
+public abstract class AbstractSearchEngine implements SearchEngine {
 
     private static final Integer SLICE_COUNT = 10;
 
@@ -38,15 +38,54 @@ public abstract class AbstractSearchEngine implements SearchEngine{
 
     protected abstract String generateLink(final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList);
 
+    protected abstract List<String> generatedLinkList(final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList);
+
     protected abstract Integer getPageCount(Element element);
 
     protected abstract Integer getPerPageRecordCount();
 
+    protected abstract SearchType getSearchType();
+
     @Transactional
     public void crawlLink(final LinkSearchRequestInfo linkSearchRequestInfo) {
 
-        final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList = linkSearchRequestInfo.getLinkSearchRequestKeywordInfoList();
+        switch (getSearchType()) {
+            case ALL:
+                processAllRecords(linkSearchRequestInfo);
+                break;
+            case MONTHLY:
+                processMonthlyRecords(linkSearchRequestInfo);
+                break;
+            default:
+                processAllRecords(linkSearchRequestInfo);
+                break;
+        }
+    }
 
+    private void processMonthlyRecords(final LinkSearchRequestInfo linkSearchRequestInfo) {
+        final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList = linkSearchRequestInfo.getLinkSearchRequestKeywordInfoList();
+        final List<String> generatedLinkList = generatedLinkList(linkSearchRequestKeywordInfoList);
+
+        for (final String generatedLink : generatedLinkList) {
+            final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo = createLinkSearchGeneratedLinkInfo(linkSearchRequestInfo, generatedLink);
+            linkSearchGeneratedLinkInfoService.save(linkSearchGeneratedLinkInfo);
+
+            final Element body = JSoupUtil.getBody(generatedLink);
+            if (body != null && body.html().contains("Your search returned no results. Try broadening your search criteria and ")) {
+                continue;
+            }
+            final Integer totalPageCount = getPageCount(body);
+
+            final List<LinkSearchPageInfo> linkSearchPageInfoList = getLinkSearchPageInfoList(linkSearchRequestInfo, totalPageCount, generatedLink);
+            linkSearchPageInfoService.save(linkSearchPageInfoList);
+
+            final List<QueueMessageDto> queueMessageDtoList = convertEntitiesToMessages(linkSearchPageInfoList);
+            messageSender.sendMessage(queueConfigurationDto, queueMessageDtoList);
+        }
+    }
+
+    private void processAllRecords(final LinkSearchRequestInfo linkSearchRequestInfo) {
+        final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList = linkSearchRequestInfo.getLinkSearchRequestKeywordInfoList();
         final String generatedLink = generateLink(linkSearchRequestKeywordInfoList);
         final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo = createLinkSearchGeneratedLinkInfo(linkSearchRequestInfo, generatedLink);
         linkSearchGeneratedLinkInfoService.save(linkSearchGeneratedLinkInfo);
@@ -54,7 +93,7 @@ public abstract class AbstractSearchEngine implements SearchEngine{
         final Element body = JSoupUtil.getBody(generatedLink);
         final Integer totalPageCount = getPageCount(body);
 
-        final List<LinkSearchPageInfo> linkSearchPageInfoList = getLinkSearchPageInfoList(linkSearchRequestInfo, totalPageCount);
+        final List<LinkSearchPageInfo> linkSearchPageInfoList = getLinkSearchPageInfoList(linkSearchRequestInfo, totalPageCount, generatedLink);
         linkSearchPageInfoService.save(linkSearchPageInfoList);
 
         final List<QueueMessageDto> queueMessageDtoList = convertEntitiesToMessages(linkSearchPageInfoList);
@@ -69,7 +108,7 @@ public abstract class AbstractSearchEngine implements SearchEngine{
         return linkSearchGeneratedLinkInfo;
     }
 
-    private List<LinkSearchPageInfo> getLinkSearchPageInfoList(LinkSearchRequestInfo linkSearchRequestInfo, Integer totalRecordCount) {
+    private List<LinkSearchPageInfo> getLinkSearchPageInfoList(LinkSearchRequestInfo linkSearchRequestInfo, Integer totalRecordCount, final String generatedLink) {
         final List<LinkSearchPageInfo> linkSearchPageInfoList = new ArrayList<>();
 
         final Integer totalPageCount = (int) Math.ceil(totalRecordCount.floatValue() / getPerPageRecordCount().floatValue());
@@ -82,12 +121,13 @@ public abstract class AbstractSearchEngine implements SearchEngine{
             final int startPage = SLICE_COUNT * i;
             final int endPage = startPage + SLICE_COUNT;
 
-            final LinkSearchPageInfo linkSearchPageInfo = getLinkSearchPageInfo(linkSearchRequestInfo, startPage, endPage);
+            final LinkSearchPageInfo linkSearchPageInfo = getLinkSearchPageInfo(linkSearchRequestInfo, startPage, endPage, generatedLink);
+            linkSearchPageInfo.setGeneratedLink(generatedLink);
             linkSearchPageInfoList.add(linkSearchPageInfo);
         }
 
         if (totalPageCount != 0) {
-            final LinkSearchPageInfo linkSearchPageInfo = getLinkSearchPageInfo(linkSearchRequestInfo, fullPageCount, totalPageCount);
+            final LinkSearchPageInfo linkSearchPageInfo = getLinkSearchPageInfo(linkSearchRequestInfo, fullPageCount, totalPageCount, generatedLink);
             linkSearchPageInfoList.add(linkSearchPageInfo);
         }
         return linkSearchPageInfoList;
@@ -98,12 +138,13 @@ public abstract class AbstractSearchEngine implements SearchEngine{
         return linkSearchPageInfoList.stream().map(linkSearchPageInfo -> new QueueMessageDto(linkSearchPageInfo.getId())).collect(Collectors.toList());
     }
 
-    private LinkSearchPageInfo getLinkSearchPageInfo(LinkSearchRequestInfo linkSearchRequestInfo, int startPage, int endPage) {
+    private LinkSearchPageInfo getLinkSearchPageInfo(LinkSearchRequestInfo linkSearchRequestInfo, int startPage, int endPage, final String generatedLink) {
         final LinkSearchPageInfo linkSearchPageInfo = new LinkSearchPageInfo();
         linkSearchPageInfo.setSiteInfoType(getSiteInfoType());
         linkSearchPageInfo.setStartPage(startPage);
         linkSearchPageInfo.setEndPage(endPage);
         linkSearchPageInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
+        linkSearchPageInfo.setGeneratedLink(generatedLink);
         return linkSearchPageInfo;
     }
 }

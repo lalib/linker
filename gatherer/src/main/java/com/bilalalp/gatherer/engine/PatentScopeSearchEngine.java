@@ -48,6 +48,11 @@ public class PatentScopeSearchEngine extends AbstractSearchEngine implements Sea
     }
 
     @Override
+    protected List<String> generatedLinkList(List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList) {
+        return null;
+    }
+
+    @Override
     protected Integer getPageCount(final Element element) {
 
         final Elements elementsByAttributeValue = element.getElementsByAttributeValue("class", "topResultFormCol1");
@@ -60,6 +65,11 @@ public class PatentScopeSearchEngine extends AbstractSearchEngine implements Sea
     @Override
     protected Integer getPerPageRecordCount() {
         return PER_PAGE_RECORD_COUNT;
+    }
+
+    @Override
+    protected SearchType getSearchType() {
+        return SearchType.ALL;
     }
 
     @Override
