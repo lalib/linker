@@ -1,4 +1,4 @@
-package com.bilalalp.parser.config;
+package com.bilalalp.extracter.config;
 
 import com.bilalalp.common.config.CommonConfig;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

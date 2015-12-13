@@ -1,9 +1,9 @@
-package com.bilalalp.parser.config;
+package com.bilalalp.extracter.config;
 
 
 import com.bilalalp.common.constant.QueueConfigConstant;
 import com.bilalalp.common.dto.QueueConfigurationDto;
-import com.bilalalp.parser.consumer.ParserConsumer;
+import com.bilalalp.extracter.consumer.ExtracterConsumer;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@ComponentScan(value = {"com.bilalalp.parser"})
+@ComponentScan(value = {"com.bilalalp.extracter"})
 @EnableTransactionManagement(proxyTargetClass = true)
 @PropertySource(value = {"classpath:amqp.properties"})
 @Configuration
@@ -32,7 +32,7 @@ public class QueueConfig {
     private Environment environment;
 
     @Autowired
-    private ParserConsumer parserConsumer;
+    private ExtracterConsumer extracterConsumer;
 
     @Bean
     public Connection rabbitConnection() {
@@ -88,7 +88,7 @@ public class QueueConfig {
         simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
         simpleMessageListenerContainer.setMessageConverter(messageConverter());
         simpleMessageListenerContainer.setQueueNames(collectorQueueConfiguration().getQueueName());
-        simpleMessageListenerContainer.setMessageListener(parserConsumer);
+        simpleMessageListenerContainer.setMessageListener(extracterConsumer);
         return simpleMessageListenerContainer;
     }
 

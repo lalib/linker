@@ -1,4 +1,4 @@
-package com.bilalalp.parser.service;
+package com.bilalalp.extracter.service;
 
 import com.bilalalp.common.entity.PatentInfo;
 import com.bilalalp.common.service.PatentInfoService;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-public abstract class AbstractParserService implements ParserService {
+public abstract class AbstractExtracterService implements ExtracterService {
 
     @Autowired
     private PatentInfoService patentInfoService;

@@ -1,4 +1,4 @@
-package com.bilalalp.parser.service;
+package com.bilalalp.extracter.service;
 
 import com.bilalalp.common.entity.site.SiteInfoType;
 import org.jsoup.nodes.Document;
@@ -7,7 +7,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UsptoContentParser extends AbstractParserService implements ParserService {
+public class UsptoContentExtracter extends AbstractExtracterService implements ExtracterService {
 
     @Override
     public SiteInfoType getSiteInfoType() {

@@ -1,10 +1,10 @@
-package com.bilalalp.parser.consumer;
+package com.bilalalp.extracter.consumer;
 
 import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.PatentInfoService;
-import com.bilalalp.parser.service.ParserService;
+import com.bilalalp.extracter.service.ExtracterService;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class ParserConsumer implements MessageListener {
+public class ExtracterConsumer implements MessageListener {
 
     @Autowired
     private MessageConverter messageConverter;
@@ -30,7 +30,7 @@ public class ParserConsumer implements MessageListener {
     @Autowired
     private ApplicationContext applicationContext;
 
-    private static final Map<SiteInfoType, ParserService> PARSER_SERVICE_MAP = new HashMap<>();
+    private static final Map<SiteInfoType, ExtracterService> PARSER_SERVICE_MAP = new HashMap<>();
 
     @Transactional
     @Override
@@ -43,8 +43,8 @@ public class ParserConsumer implements MessageListener {
 
     @PostConstruct
     public void init() {
-        final Collection<ParserService> values = applicationContext.getBeansOfType(ParserService.class).values();
-        for (final ParserService searcherService : values) {
+        final Collection<ExtracterService> values = applicationContext.getBeansOfType(ExtracterService.class).values();
+        for (final ExtracterService searcherService : values) {
             PARSER_SERVICE_MAP.put(searcherService.getSiteInfoType(), searcherService);
         }
     }
