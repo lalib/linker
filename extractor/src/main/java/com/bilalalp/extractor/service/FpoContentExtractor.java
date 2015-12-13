@@ -7,7 +7,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FpoContentExtracter extends AbstractExtracterService implements ExtracterService {
+public class FpoContentExtractor extends AbstractExtractorService implements ExtractorService {
 
     @Override
     protected String getAbstractContent(final Document documentBody) {

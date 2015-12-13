@@ -3,7 +3,7 @@ package com.bilalalp.extractor.config;
 
 import com.bilalalp.common.constant.QueueConfigConstant;
 import com.bilalalp.common.dto.QueueConfigurationDto;
-import com.bilalalp.extractor.consumer.ExtracterConsumer;
+import com.bilalalp.extractor.consumer.ExtractorConsumer;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
@@ -32,7 +32,7 @@ public class QueueConfig {
     private Environment environment;
 
     @Autowired
-    private ExtracterConsumer extracterConsumer;
+    private ExtractorConsumer extractorConsumer;
 
     @Bean
     public Connection rabbitConnection() {
@@ -88,7 +88,7 @@ public class QueueConfig {
         simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
         simpleMessageListenerContainer.setMessageConverter(messageConverter());
         simpleMessageListenerContainer.setQueueNames(collectorQueueConfiguration().getQueueName());
-        simpleMessageListenerContainer.setMessageListener(extracterConsumer);
+        simpleMessageListenerContainer.setMessageListener(extractorConsumer);
         return simpleMessageListenerContainer;
     }
 

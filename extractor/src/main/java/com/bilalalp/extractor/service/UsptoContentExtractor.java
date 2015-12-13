@@ -7,7 +7,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UsptoContentExtracter extends AbstractExtracterService implements ExtracterService {
+public class UsptoContentExtractor extends AbstractExtractorService implements ExtractorService {
 
     @Override
     public SiteInfoType getSiteInfoType() {
