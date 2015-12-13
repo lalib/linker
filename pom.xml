@@ -49,6 +49,7 @@
         <module>collector</module>
         <module>gatherer</module>
         <module>extractor</module>
+        <module>parser</module>
     </modules>
 
     <dependencies>
