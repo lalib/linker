@@ -1,41 +1,21 @@
 package com.bilalalp.parser.service;
 
-import com.bilalalp.common.entity.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
-import com.bilalalp.common.service.PatentInfoService;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UsptoContentParser implements ParserService {
-
-    @Autowired
-    private PatentInfoService patentInfoService;
-
-    @Transactional(propagation = Propagation.SUPPORTS)
-    @Override
-    public void parse(final PatentInfo patentInfo) {
-
-        final String body = patentInfo.getBody();
-        final Document documentBody = Jsoup.parse(body);
-
-        final String abstractContent = getAbstractContent(documentBody);
-        patentInfo.setAbstractContent(abstractContent);
-        patentInfoService.save(patentInfo);
-    }
+public class UsptoContentParser extends AbstractParserService implements ParserService {
 
     @Override
     public SiteInfoType getSiteInfoType() {
         return SiteInfoType.USPTO;
     }
 
-    private String getAbstractContent(final Document document) {
+    @Override
+    protected String getAbstractContent(final Document document) {
 
         try {
             final Element body = document.body();
@@ -56,7 +36,20 @@ public class UsptoContentParser implements ParserService {
 
             return null;
         } catch (Exception ex) {
+            ex.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    protected String getClaimContent(final Document document) {
+        System.out.println("Not implemented Yet!");
+        throw new RuntimeException("Not implemented Yet!");
+    }
+
+    @Override
+    protected String getDescriptionContent(Document document) {
+        System.out.println("Not implemented Yet!");
+        throw new RuntimeException("Not implemented Yet!");
     }
 }

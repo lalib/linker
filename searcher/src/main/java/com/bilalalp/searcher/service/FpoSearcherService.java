@@ -80,7 +80,10 @@ public class FpoSearcherService implements SearcherService {
                     final String href = foundLink.attr("href");
                     final String mainUrl = MAIN_URL + href;
                     final PatentInfo patentInfo = new PatentInfo();
+                    patentInfo.setLinkSearchPageInfo(linkSearchPageInfo);
+                    patentInfo.setPatentTitle(elementsByTag.text());
                     patentInfo.setPatentLink(mainUrl);
+                    patentInfo.setSearchLink(link);
                     patentInfoList.add(patentInfo);
                 }
 

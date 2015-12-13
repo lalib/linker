@@ -2,7 +2,6 @@ package com.bilalalp.common.entity;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
-import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,6 +39,14 @@ public class PatentInfo extends AbstractEntity {
     @Lob
     @Column(name = "C_ABSTRACT_CONTENT")
     private String abstractContent;
+
+    @Lob
+    @Column(name = "C_CLAIM_CONTENT")
+    private String claimContent;
+
+    @Lob
+    @Column(name = "C_DESCRIPTION_CONTENT")
+    private String descriptionContent;
 
     @Column(name = "C_PARSED")
     private Boolean parsed = Boolean.FALSE;
