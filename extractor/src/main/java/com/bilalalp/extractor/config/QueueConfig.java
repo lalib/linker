@@ -1,9 +1,9 @@
-package com.bilalalp.extracter.config;
+package com.bilalalp.extractor.config;
 
 
 import com.bilalalp.common.constant.QueueConfigConstant;
 import com.bilalalp.common.dto.QueueConfigurationDto;
-import com.bilalalp.extracter.consumer.ExtracterConsumer;
+import com.bilalalp.extractor.consumer.ExtracterConsumer;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@ComponentScan(value = {"com.bilalalp.extracter"})
+@ComponentScan(value = {"com.bilalalp.extractor"})
 @EnableTransactionManagement(proxyTargetClass = true)
 @PropertySource(value = {"classpath:amqp.properties"})
 @Configuration

@@ -1,10 +1,10 @@
-package com.bilalalp.extracter.consumer;
+package com.bilalalp.extractor.consumer;
 
 import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.PatentInfoService;
-import com.bilalalp.extracter.service.ExtracterService;
+import com.bilalalp.extractor.service.ExtracterService;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.support.converter.MessageConverter;

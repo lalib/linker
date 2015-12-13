@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>extracter</artifactId>
+    <artifactId>extractor</artifactId>
 
     <dependencies>
         <dependency>
@@ -57,9 +57,8 @@
         </dependency>
     </dependencies>
 
-
     <build>
-        <finalName>parser</finalName>
+        <finalName>extractor</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
