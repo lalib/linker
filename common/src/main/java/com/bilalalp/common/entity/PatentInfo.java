@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = PatentInfo.TABLE_NAME)
@@ -47,6 +48,29 @@ public class PatentInfo extends AbstractEntity {
     @Lob
     @Column(name = "C_DESCRIPTION_CONTENT")
     private String descriptionContent;
+
+    @Column(name = "C_INVENTORS")
+    private String inventors;
+
+    @Column(name = "C_APPLICATION_NUMBER")
+    private String applicationNumber;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "C_FILLING_DATE")
+    private Date fillingDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "C_PUCLICATION_DATE")
+    private Date publicationDate;
+
+    @Column(name = "C_PRIMARY_CLASS")
+    private String primaryClass;
+
+    @Column(name = "C_INTERNATIONAL_CLASS")
+    private String internationalClass;
+
+    @Column(name = "C_ASSIGNEE")
+    private String assignee;
 
     @Column(name = "C_PARSED")
     private Boolean parsed = Boolean.FALSE;

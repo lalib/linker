@@ -6,12 +6,51 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class UsptoContentExtractor extends AbstractExtractorService implements ExtractorService {
 
     @Override
     public SiteInfoType getSiteInfoType() {
         return SiteInfoType.USPTO;
+    }
+
+    @Override
+    protected String getInternationalClass(Document document) {
+        return null;
+    }
+
+    @Override
+    protected String getPrimaryClass(Document document) {
+        return null;
+    }
+
+    @Override
+    protected Date getPublicationDate(Document document) {
+        return null;
+    }
+
+    @Override
+    protected Date getFillingDate(Document document) {
+        return null;
+    }
+
+    @Override
+    protected String getAssignee(Document document) {
+        return null;
+    }
+
+    @Override
+    protected String getApplicationNumber(Document document) {
+        return null;
+    }
+
+    @Override
+    protected String getInventors(Document document) {
+
+
+        return null;
     }
 
     @Override
