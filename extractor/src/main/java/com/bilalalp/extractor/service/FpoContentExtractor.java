@@ -77,7 +77,7 @@ public class FpoContentExtractor extends AbstractExtractorService implements Ext
                         final Element parent = element.parent();
                         final Elements abstractContent = parent.getElementsByClass("disp_elm_text");
                         if (abstractContent != null && !abstractContent.isEmpty()) {
-                            return abstractContent.get(0).text();
+                            return abstractContent.get(0).text().trim();
                         }
                     }
                 }
