@@ -87,6 +87,7 @@ public class CommonConfig {
         jpaPropertyMap.put(Environment.CACHE_REGION_FACTORY, commonConfigHelper.getHibernateCacheRegionFactoryClass());
         jpaPropertyMap.put(Environment.USE_QUERY_CACHE, commonConfigHelper.getHibernateCacheUseQueryCache());
         jpaPropertyMap.put(Environment.USE_SECOND_LEVEL_CACHE, commonConfigHelper.getHibernateCacheUseSecondLevelCache());
+        jpaPropertyMap.put(Environment.DIALECT, commonConfigHelper.getHibernateDialect());
         jpaPropertyMap.put(AvailableSettings.INTERCEPTOR, commonConfigHelper.getHibernateEjbInterceptor());
         return jpaPropertyMap;
     }

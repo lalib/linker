@@ -77,8 +77,42 @@ public class QueueConfig {
     }
 
     @Bean
+    public Binding linkSearcherQueueBinding() {
+        return BindingBuilder.bind(linkSearcherQueue())
+                .to(amqpDirectExchange())
+                .with(linkSearcherQueueConfiguration().getQueueKey())
+                .noargs();
+    }
+
+    @Bean
     public Queue foundLinkQueue() {
         return new Queue(foundLinkQueueConfiguration().getQueueName());
+    }
+
+    @Bean
+    public Queue linkSearcherQueue() {
+        return new Queue(linkSearcherQueueConfiguration().getQueueName());
+    }
+
+    @Bean
+    public MessageListenerContainer linkSearcherQueueContainer() {
+        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        simpleMessageListenerContainer.setConcurrentConsumers(1);
+        simpleMessageListenerContainer.setMessageConverter(messageConverter());
+        simpleMessageListenerContainer.setMessageListener(linkSearcherConsumer);
+        simpleMessageListenerContainer.setQueueNames(linkSearcherQueueConfiguration().getQueueName());
+        return simpleMessageListenerContainer;
+    }
+
+    @Bean
+    public MessageListenerContainer foundLinkQueueContainer() {
+        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        simpleMessageListenerContainer.setConcurrentConsumers(1);
+        simpleMessageListenerContainer.setMessageConverter(messageConverter());
+        simpleMessageListenerContainer.setQueueNames(foundLinkQueueConfiguration().getQueueName());
+        return simpleMessageListenerContainer;
     }
 
     @Qualifier(value = "foundLinkQueueConfiguration")
@@ -100,30 +134,4 @@ public class QueueConfig {
         queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_LINK_SEARCHER_QUEUE_NAME));
         return queueConfigurationDto;
     }
-
-    @Bean
-    public Queue linkSearcherQueue() {
-        return new Queue(linkSearcherQueueConfiguration().getQueueName());
-    }
-
-    @Bean
-    public Binding linkSearcherQueueBinding() {
-        return BindingBuilder.bind(linkSearcherQueue())
-                .to(amqpDirectExchange())
-                .with(linkSearcherQueueConfiguration().getQueueKey())
-                .noargs();
-    }
-
-    @Bean
-    public MessageListenerContainer linkSearcherQueueContainer() {
-        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
-        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
-        simpleMessageListenerContainer.setConcurrentConsumers(1);
-        simpleMessageListenerContainer.setMessageConverter(messageConverter());
-        simpleMessageListenerContainer.setMessageListener(linkSearcherConsumer);
-        simpleMessageListenerContainer.setQueueNames(linkSearcherQueueConfiguration().getQueueName());
-        return simpleMessageListenerContainer;
-    }
-
-
 }

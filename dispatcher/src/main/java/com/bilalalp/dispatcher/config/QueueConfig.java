@@ -87,7 +87,6 @@ public class QueueConfig {
         return new Queue(dispatcherRequestQueueConfiguration().getQueueName());
     }
 
-
     @Bean
     public MessageListenerContainer linkSearcherQueueContainer() {
         final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());

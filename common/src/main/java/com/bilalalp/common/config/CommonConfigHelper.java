@@ -113,11 +113,15 @@ public class CommonConfigHelper {
     }
 
     public Boolean getHibernateCacheUseSecondLevelCache() {
-        return getBooleanProperty(CommonDatabaseConstant.HIEBRNATE_CACHE_USE_SECOND_LEVEL_CACHE);
+        return getBooleanProperty(CommonDatabaseConstant.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE);
     }
 
     public String getHibernateEjbInterceptor() {
         return environment.getProperty(CommonDatabaseConstant.HIBERNATE_EJB_INTERCEPTOR);
+    }
+
+    public String getHibernateDialect() {
+        return getStringProperty(CommonDatabaseConstant.HIBERNATE_DIALECT);
     }
 
     private Integer getIntProperty(final String propertyName) {

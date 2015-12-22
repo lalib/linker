@@ -28,8 +28,9 @@ public final class CommonDatabaseConstant {
     public static final String HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
     public static final String HIBERNATE_CACHE_REGION_FACTORY_CLASS = "hibernate.cache.region.factory_class";
     public static final String HIBERNATE_CACHE_USE_QUERY_CACHE = "hibernate.cache.use_query_cache";
-    public static final String HIEBRNATE_CACHE_USE_SECOND_LEVEL_CACHE = "hibernate.cache.use_second_level_cache";
+    public static final String HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = "hibernate.cache.use_second_level_cache";
     public static final String HIBERNATE_EJB_INTERCEPTOR = "hibernate.ejb.interceptor";
+    public static final String HIBERNATE_DIALECT = "linker.jdbc.dialect";
 
     private CommonDatabaseConstant() {
         // Common Database Constant
