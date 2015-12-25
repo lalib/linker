@@ -91,4 +91,9 @@ public class UsptoContentExtractor extends AbstractExtractorService implements E
         System.out.println("Not implemented Yet!");
         throw new RuntimeException("Not implemented Yet!");
     }
+
+    @Override
+    protected String getPatentNumber(Document document) {
+        return null;
+    }
 }

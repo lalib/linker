@@ -78,8 +78,21 @@ public class QueueConfig {
     }
 
     @Bean
+    public Binding extractorQueueBinding() {
+        return BindingBuilder.bind(extractorQueue())
+                .to(amqpDirectExchange())
+                .with(extractorQueueConfiguration().getQueueKey())
+                .noargs();
+    }
+
+    @Bean
     public Queue collectorQueue() {
         return new Queue(collectorQueueConfiguration().getQueueName());
+    }
+
+    @Bean
+    public Queue extractorQueue() {
+        return new Queue(extractorQueueConfiguration().getQueueName());
     }
 
     @Bean
@@ -92,6 +105,15 @@ public class QueueConfig {
         return simpleMessageListenerContainer;
     }
 
+    @Bean
+    public MessageListenerContainer extractorQueueContainer() {
+        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        simpleMessageListenerContainer.setMessageConverter(messageConverter());
+        simpleMessageListenerContainer.setQueueNames(extractorQueueConfiguration().getQueueName());
+        return simpleMessageListenerContainer;
+    }
+
     @Qualifier(value = "collectorQueueConfiguration")
     @Bean
     public QueueConfigurationDto collectorQueueConfiguration() {
@@ -99,6 +121,16 @@ public class QueueConfig {
         queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
         queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_COLLECTOR_QUEUE_KEY));
         queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_COLLECTOR_QUEUE_NAME));
+        return queueConfigurationDto;
+    }
+
+    @Qualifier(value = "extractorQueueConfiguration")
+    @Bean
+    public QueueConfigurationDto extractorQueueConfiguration() {
+        final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
+        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
+        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_EXTRACTOR_QUEUE_KEY));
+        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_EXTRACTOR_QUEUE_NAME));
         return queueConfigurationDto;
     }
 }

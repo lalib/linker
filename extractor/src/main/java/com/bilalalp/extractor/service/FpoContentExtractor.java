@@ -65,6 +65,30 @@ public class FpoContentExtractor extends AbstractExtractorService implements Ext
         return getContent(document, "Description:");
     }
 
+    @Override
+    protected String getPatentNumber(Document document) {
+        try {
+
+            final Element body = document.body();
+            final Elements elementsContainingOwnText = body.getElementsByAttributeValue("style", "clear: none;");
+
+            if (elementsContainingOwnText != null && elementsContainingOwnText.size() !=0) {
+                Elements allElements = elementsContainingOwnText.get(0).getAllElements();
+                if (allElements.size() == 1) {
+                    return allElements.get(0).text();
+                } else if (allElements.size() > 1) {
+                    return allElements.get(1).text();
+                }
+            }else{
+                return getContent(document,"Document Type and Number:");
+            }
+            return null;
+        } catch (final Exception ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
+    }
+
     private String getContent(final Document document, final String searchText) {
         try {
 

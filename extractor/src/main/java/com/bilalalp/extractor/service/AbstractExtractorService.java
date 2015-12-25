@@ -1,10 +1,14 @@
 package com.bilalalp.extractor.service;
 
+import com.bilalalp.common.dto.QueueConfigurationDto;
+import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.PatentInfo;
 import com.bilalalp.common.service.PatentInfoService;
+import com.bilalalp.extractor.amqp.MessageSender;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +18,13 @@ public abstract class AbstractExtractorService implements ExtractorService {
 
     @Autowired
     private PatentInfoService patentInfoService;
+
+    @Autowired
+    private MessageSender messageSender;
+
+    @Qualifier("extractorQueueConfiguration")
+    @Autowired
+    private QueueConfigurationDto queueConfigurationDto;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public void parse(final PatentInfo patentInfo) {
@@ -30,6 +41,7 @@ public abstract class AbstractExtractorService implements ExtractorService {
         final String internationalClass = getInternationalClass(documentBody);
         final Date fillingDate = getFillingDate(documentBody);
         final String applicationNumber = getApplicationNumber(documentBody);
+        final String patentNumber=getPatentNumber(documentBody);
 
         patentInfo.setApplicationNumber(applicationNumber);
         patentInfo.setFillingDate(fillingDate);
@@ -41,7 +53,11 @@ public abstract class AbstractExtractorService implements ExtractorService {
         patentInfo.setClaimContent(claimContent);
         patentInfo.setDescriptionContent(descriptionContent);
         patentInfo.setInventors(inventors);
+        patentInfo.setPatentNumber(patentNumber);
+        patentInfo.setParsed(true);
+
         patentInfoService.save(patentInfo);
+        messageSender.sendMessage(queueConfigurationDto,new QueueMessageDto(patentInfo.getId()));
     }
 
     protected abstract String getInternationalClass(Document document);
@@ -63,4 +79,6 @@ public abstract class AbstractExtractorService implements ExtractorService {
     protected abstract String getClaimContent(Document document);
 
     protected abstract String getDescriptionContent(Document document);
+
+    protected abstract String getPatentNumber(Document document);
 }

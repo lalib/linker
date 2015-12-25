@@ -53,6 +53,7 @@ public class PatentInfo extends AbstractEntity {
     @Column(name = "C_INVENTORS")
     private String inventors;
 
+    @Lob
     @Column(name = "C_APPLICATION_NUMBER")
     private String applicationNumber;
 
@@ -64,9 +65,11 @@ public class PatentInfo extends AbstractEntity {
     @Column(name = "C_PUCLICATION_DATE")
     private Date publicationDate;
 
+    @Lob
     @Column(name = "C_PRIMARY_CLASS")
     private String primaryClass;
 
+    @Lob
     @Column(name = "C_INTERNATIONAL_CLASS")
     private String internationalClass;
 
