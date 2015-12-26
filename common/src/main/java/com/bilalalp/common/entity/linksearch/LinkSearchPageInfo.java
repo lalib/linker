@@ -1,11 +1,13 @@
 package com.bilalalp.common.entity.linksearch;
 
+import com.bilalalp.common.entity.PatentInfo;
 import com.bilalalp.common.entity.base.AbstractEntity;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = LinkSearchPageInfo.TABLE_NAME)
@@ -38,4 +40,7 @@ public class LinkSearchPageInfo extends AbstractEntity {
     @Lob
     @Column(name = "C_GENERATED_LINK")
     private String generatedLink;
+
+    @OneToMany(targetEntity = PatentInfo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "linkSearchPageInfo")
+    private List<PatentInfo> patentInfoList;
 }

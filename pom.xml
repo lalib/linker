@@ -32,6 +32,7 @@
 
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-lang.version>3.4</commons-lang.version>
+        <opencsv.version>3.6</opencsv.version>
 
         <lombok.version>1.16.6</lombok.version>
         <jsoup.version>1.8.3</jsoup.version>
@@ -51,6 +52,7 @@
         <module>gatherer</module>
         <module>extractor</module>
         <module>parser</module>
+        <module>exporter</module>
     </modules>
 
     <dependencies>

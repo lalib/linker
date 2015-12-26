@@ -4,6 +4,7 @@ import com.bilalalp.common.entity.base.AbstractEntity;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -54,6 +55,7 @@ public class PatentInfo extends AbstractEntity {
     private String inventors;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "C_APPLICATION_NUMBER")
     private String applicationNumber;
 
@@ -66,10 +68,12 @@ public class PatentInfo extends AbstractEntity {
     private Date publicationDate;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "C_PRIMARY_CLASS")
     private String primaryClass;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "C_INTERNATIONAL_CLASS")
     private String internationalClass;
 

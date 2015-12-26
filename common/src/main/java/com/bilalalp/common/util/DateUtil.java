@@ -20,4 +20,12 @@ public final class DateUtil {
             return null;
         }
     }
+
+    public static String fromDate(final Date date, final String pattern) {
+        try {
+            return new SimpleDateFormat(pattern).format(date);
+        } catch (final Exception ex) {
+            return "";
+        }
+    }
 }
