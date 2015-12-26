@@ -2,18 +2,18 @@ package com.bilalalp.dispatcher.service;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
+import com.bilalalp.common.entity.StopWordInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestSiteInfo;
 import com.bilalalp.common.entity.site.SiteInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
-import com.bilalalp.common.service.LinkSearchRequestInfoService;
-import com.bilalalp.common.service.LinkSearchRequestKeywordInfoService;
-import com.bilalalp.common.service.LinkSearchRequestSiteInfoService;
-import com.bilalalp.common.service.SiteInfoService;
+import com.bilalalp.common.service.*;
 import com.bilalalp.dispatcher.amqp.MessageSender;
 import com.bilalalp.dispatcher.dto.LinkSearchRequest;
 import com.bilalalp.dispatcher.dto.LinkSearchResponse;
+import com.bilalalp.dispatcher.dto.StopWordCreateRequest;
+import com.bilalalp.dispatcher.dto.StopWordCreateResponse;
 import com.bilalalp.dispatcher.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,6 +42,9 @@ public class DispatcherServiceImpl implements DispatcherService {
     private SiteInfoService siteInfoService;
 
     @Autowired
+    private StopWordInfoService stopWordInfoService;
+
+    @Autowired
     private LinkSearchRequestInfoService linkSearchRequestInfoService;
 
     @Autowired
@@ -60,6 +63,19 @@ public class DispatcherServiceImpl implements DispatcherService {
         messageSender.sendMessage(queueConfigurationDto, new QueueMessageDto(requestId));
 
         return new LinkSearchResponse(requestId);
+    }
+
+    @Override
+    public StopWordCreateResponse processCreateStopWordRequest(final StopWordCreateRequest stopWordCreateRequest) {
+
+        final List<String> stopWordList = stopWordCreateRequest.getStopWordList();
+
+        for (final String stopWord : stopWordList) {
+            final StopWordInfo stopWordInfo = new StopWordInfo();
+            stopWordInfo.setStopWord(stopWord);
+            stopWordInfoService.save(stopWordInfo);
+        }
+        return new StopWordCreateResponse();
     }
 
     private Long persistRequest(final LinkSearchRequest linkSearchRequest) {
