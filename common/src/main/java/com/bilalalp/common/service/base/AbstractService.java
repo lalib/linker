@@ -1,10 +1,12 @@
 package com.bilalalp.common.service.base;
 
 import lombok.Setter;
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 @Setter
 public abstract class AbstractService<T> implements BaseService<T> {
@@ -27,5 +29,11 @@ public abstract class AbstractService<T> implements BaseService<T> {
     @Override
     public T find(final Long id) {
         return getRepository().findOne(id);
+    }
+
+    @Override
+    public List<T> findAll() {
+        final Iterable<T> iterable = getRepository().findAll();
+        return IteratorUtils.toList(iterable.iterator());
     }
 }

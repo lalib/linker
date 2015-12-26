@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = PatentInfo.TABLE_NAME)
@@ -91,4 +92,8 @@ public class PatentInfo extends AbstractEntity {
     @ManyToOne(targetEntity = LinkSearchPageInfo.class, fetch = FetchType.LAZY)
     @JoinColumn(name = LinkSearchPageInfo.JOIN_COLUMN)
     private LinkSearchPageInfo linkSearchPageInfo;
+
+    @OneToMany(targetEntity = SplitWordInfo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patentInfo")
+    private List<SplitWordInfo> splitWordInfoList;
+
 }
