@@ -38,6 +38,7 @@
         <jsoup.version>1.8.3</jsoup.version>
 
         <common.version>1.0-SNAPSHOT</common.version>
+        <junit.version>4.12</junit.version>
 
         <jetty.plugin.version>9.2.1.v20140609</jetty.plugin.version>
         <maven.compiler.plugin.version>3.2</maven.compiler.plugin.version>

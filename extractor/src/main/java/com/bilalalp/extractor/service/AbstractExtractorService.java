@@ -75,14 +75,12 @@ public abstract class AbstractExtractorService implements ExtractorService {
             final Set<String> mySet = new HashSet<>(Arrays.asList(split));
             final List<PatentClassInfo> patentClassInfoList = new ArrayList<>();
 
-            System.out.println(primary);
             for (final String value : mySet) {
                 final PatentClassInfo patentClassInfo = new PatentClassInfo();
                 patentClassInfo.setPatentInfo(patentInfo);
                 patentClassInfo.setClassInfo(value.trim().toLowerCase());
                 patentClassInfo.setPatentClassInfoType(primary);
                 patentClassInfoList.add(patentClassInfo);
-                System.out.println(value.trim().toLowerCase());
             }
 
             return patentClassInfoList;
