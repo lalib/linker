@@ -1,7 +1,7 @@
 package com.bilalalp.parser.consumer;
 
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.common.entity.PatentInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.parser.service.ParserService;
 import org.springframework.amqp.core.Message;

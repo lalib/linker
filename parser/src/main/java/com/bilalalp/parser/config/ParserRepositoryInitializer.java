@@ -1,12 +1,11 @@
 package com.bilalalp.parser.config;
 
-import com.bilalalp.common.entity.StopWordInfo;
+import com.bilalalp.common.entity.patent.StopWordInfo;
 import com.bilalalp.common.service.StopWordInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

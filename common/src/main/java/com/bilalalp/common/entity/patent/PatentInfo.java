@@ -1,4 +1,4 @@
-package com.bilalalp.common.entity;
+package com.bilalalp.common.entity.patent;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,18 +66,8 @@ public class PatentInfo extends AbstractEntity {
     private Date fillingDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "C_PUCLICATION_DATE")
+    @Column(name = "C_PUBLICATION_DATE")
     private Date publicationDate;
-
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    @Column(name = "C_PRIMARY_CLASS")
-    private String primaryClass;
-
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    @Column(name = "C_INTERNATIONAL_CLASS")
-    private String internationalClass;
 
     @Lob
     @Column(name = "C_ASSIGNEE")
@@ -95,5 +86,8 @@ public class PatentInfo extends AbstractEntity {
 
     @OneToMany(targetEntity = SplitWordInfo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patentInfo")
     private List<SplitWordInfo> splitWordInfoList;
+
+    @OneToMany(targetEntity = PatentClassInfo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patentInfo")
+    private List<PatentClassInfo> patentClassInfoList;
 
 }

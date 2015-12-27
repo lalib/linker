@@ -1,7 +1,7 @@
 package com.bilalalp.extractor.consumer;
 
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.common.entity.PatentInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.extractor.service.ExtractorService;

@@ -1,6 +1,6 @@
 package com.bilalalp.common.service;
 
-import com.bilalalp.common.entity.StopWordInfo;
+import com.bilalalp.common.entity.patent.StopWordInfo;
 import com.bilalalp.common.repository.StopWordInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.bilalalp.parser.service;
 
-import com.bilalalp.common.entity.PatentInfo;
-import com.bilalalp.common.entity.SplitWordInfo;
-import com.bilalalp.common.entity.SplitWordType;
+import com.bilalalp.common.entity.patent.PatentInfo;
+import com.bilalalp.common.entity.patent.SplitWordInfo;
+import com.bilalalp.common.entity.patent.SplitWordType;
 import com.bilalalp.common.service.SplitWordInfoService;
 import com.bilalalp.parser.config.ParserInitialRepository;
 import org.apache.commons.lang3.StringUtils;

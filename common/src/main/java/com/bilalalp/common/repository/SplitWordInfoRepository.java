@@ -1,6 +1,6 @@
 package com.bilalalp.common.repository;
 
-import com.bilalalp.common.entity.SplitWordInfo;
+import com.bilalalp.common.entity.patent.SplitWordInfo;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

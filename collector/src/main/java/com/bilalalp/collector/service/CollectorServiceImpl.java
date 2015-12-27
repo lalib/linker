@@ -3,7 +3,7 @@ package com.bilalalp.collector.service;
 import com.bilalalp.collector.amqp.MessageSender;
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.common.entity.PatentInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.common.util.JSoupUtil;
 import org.jsoup.nodes.Element;

@@ -2,7 +2,7 @@ package com.bilalalp.dispatcher.service;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.common.entity.StopWordInfo;
+import com.bilalalp.common.entity.patent.StopWordInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestSiteInfo;

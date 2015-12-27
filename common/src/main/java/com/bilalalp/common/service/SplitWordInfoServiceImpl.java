@@ -1,6 +1,6 @@
 package com.bilalalp.common.service;
 
-import com.bilalalp.common.entity.SplitWordInfo;
+import com.bilalalp.common.entity.patent.SplitWordInfo;
 import com.bilalalp.common.repository.SplitWordInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;

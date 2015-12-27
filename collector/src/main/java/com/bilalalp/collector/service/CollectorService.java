@@ -1,6 +1,6 @@
 package com.bilalalp.collector.service;
 
-import com.bilalalp.common.entity.PatentInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 
 public interface CollectorService {
 

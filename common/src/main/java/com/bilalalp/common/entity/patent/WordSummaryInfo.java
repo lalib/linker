@@ -1,4 +1,4 @@
-package com.bilalalp.common.entity;
+package com.bilalalp.common.entity.patent;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;

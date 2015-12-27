@@ -1,6 +1,6 @@
 package com.bilalalp.common.entity.linksearch;
 
-import com.bilalalp.common.entity.PatentInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.base.AbstractEntity;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import lombok.Getter;

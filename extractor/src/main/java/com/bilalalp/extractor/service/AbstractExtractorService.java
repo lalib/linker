@@ -2,9 +2,12 @@ package com.bilalalp.extractor.service;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.common.entity.PatentInfo;
+import com.bilalalp.common.entity.patent.PatentClassInfo;
+import com.bilalalp.common.entity.patent.PatentClassInfoType;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.extractor.amqp.MessageSender;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.*;
 
 public abstract class AbstractExtractorService implements ExtractorService {
 
@@ -35,19 +38,24 @@ public abstract class AbstractExtractorService implements ExtractorService {
         final String claimContent = getClaimContent(documentBody);
         final String descriptionContent = getDescriptionContent(documentBody);
         final String inventors = getInventors(documentBody);
-        final String assignee=getAssignee(documentBody);
+        final String assignee = getAssignee(documentBody);
         final String primaryClass = getPrimaryClass(documentBody);
         final Date publicationDate = getPublicationDate(documentBody);
         final String internationalClass = getInternationalClass(documentBody);
         final Date fillingDate = getFillingDate(documentBody);
         final String applicationNumber = getApplicationNumber(documentBody);
-        final String patentNumber=getPatentNumber(documentBody);
+        final String patentNumber = getPatentNumber(documentBody);
 
+        final List<PatentClassInfo> primaryClassPatentClassInfoList = createPatentClassInfo(primaryClass, PatentClassInfoType.PRIMARY, patentInfo);
+        final List<PatentClassInfo> internationalClassPatentClassInfoList = createPatentClassInfo(internationalClass, PatentClassInfoType.INTERNATIONAL, patentInfo);
+        final List<PatentClassInfo> patentClassInfoList = new ArrayList<>();
+        patentClassInfoList.addAll(primaryClassPatentClassInfoList);
+        patentClassInfoList.addAll(internationalClassPatentClassInfoList);
+
+        patentInfo.setPatentClassInfoList(patentClassInfoList);
         patentInfo.setApplicationNumber(applicationNumber);
         patentInfo.setFillingDate(fillingDate);
-        patentInfo.setInternationalClass(internationalClass);
         patentInfo.setPublicationDate(publicationDate);
-        patentInfo.setPrimaryClass(primaryClass);
         patentInfo.setAssignee(assignee);
         patentInfo.setAbstractContent(abstractContent);
         patentInfo.setClaimContent(claimContent);
@@ -57,7 +65,30 @@ public abstract class AbstractExtractorService implements ExtractorService {
         patentInfo.setParsed(true);
 
         patentInfoService.save(patentInfo);
-        messageSender.sendMessage(queueConfigurationDto,new QueueMessageDto(patentInfo.getId()));
+        messageSender.sendMessage(queueConfigurationDto, new QueueMessageDto(patentInfo.getId()));
+    }
+
+    private List<PatentClassInfo> createPatentClassInfo(final String primaryClass, final PatentClassInfoType primary, final PatentInfo patentInfo) {
+
+        if (StringUtils.isNotEmpty(primaryClass)) {
+            final String[] split = primaryClass.split(";");
+            final Set<String> mySet = new HashSet<>(Arrays.asList(split));
+            final List<PatentClassInfo> patentClassInfoList = new ArrayList<>();
+
+            System.out.println(primary);
+            for (final String value : mySet) {
+                final PatentClassInfo patentClassInfo = new PatentClassInfo();
+                patentClassInfo.setPatentInfo(patentInfo);
+                patentClassInfo.setClassInfo(value.trim().toLowerCase());
+                patentClassInfo.setPatentClassInfoType(primary);
+                patentClassInfoList.add(patentClassInfo);
+                System.out.println(value.trim().toLowerCase());
+            }
+
+            return patentClassInfoList;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     protected abstract String getInternationalClass(Document document);

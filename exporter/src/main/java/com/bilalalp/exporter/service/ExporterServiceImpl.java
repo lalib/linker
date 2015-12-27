@@ -1,6 +1,6 @@
 package com.bilalalp.exporter.service;
 
-import com.bilalalp.common.entity.PatentInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.service.LinkSearchPageInfoService;
@@ -58,10 +58,6 @@ public class ExporterServiceImpl implements ExporterService {
                 fileWriter.append(patentInfo.getPatentLink());
                 fileWriter.append(COMMA_DELIMITER);
                 fileWriter.append(patentInfo.getInventors());
-                fileWriter.append(COMMA_DELIMITER);
-                fileWriter.append(patentInfo.getInternationalClass());
-                fileWriter.append(COMMA_DELIMITER);
-                fileWriter.append(patentInfo.getPrimaryClass());
                 fileWriter.append(COMMA_DELIMITER);
                 fileWriter.append(patentInfo.getAssignee());
                 fileWriter.append(COMMA_DELIMITER);

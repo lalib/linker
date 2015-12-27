@@ -1,4 +1,4 @@
-package com.bilalalp.common.entity;
+package com.bilalalp.common.entity.patent;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
 import lombok.Getter;
@@ -20,5 +20,6 @@ public class StopWordInfo extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "C_STOP_WORD")
     private String stopWord;
 }
