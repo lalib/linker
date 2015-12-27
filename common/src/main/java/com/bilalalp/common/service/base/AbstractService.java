@@ -5,6 +5,7 @@ import org.apache.commons.collections.IteratorUtils;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,9 +32,9 @@ public abstract class AbstractService<T> implements BaseService<T> {
         return getRepository().findOne(id);
     }
 
+    @Transactional
     @Override
     public List<T> findAll() {
-        final Iterable<T> iterable = getRepository().findAll();
-        return IteratorUtils.toList(iterable.iterator());
+        return IteratorUtils.toList(getRepository().findAll().iterator());
     }
 }

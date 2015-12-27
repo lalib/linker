@@ -56,7 +56,6 @@ public class ParserServiceImpl implements ParserService {
             splitWordInfo.setWord(word);
             splitWordInfoList.add(splitWordInfo);
         }
-
         return splitWordInfoList;
     }
 

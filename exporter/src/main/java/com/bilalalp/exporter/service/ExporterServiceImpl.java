@@ -3,9 +3,9 @@ package com.bilalalp.exporter.service;
 import com.bilalalp.common.entity.PatentInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
-import com.bilalalp.common.repository.LinkSearchPageInfoRepository;
-import com.bilalalp.common.repository.PatentInfoRepository;
+import com.bilalalp.common.service.LinkSearchPageInfoService;
 import com.bilalalp.common.service.LinkSearchRequestInfoService;
+import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.common.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,22 +30,22 @@ public class ExporterServiceImpl implements ExporterService {
     private LinkSearchRequestInfoService linkSearchRequestInfoService;
 
     @Autowired
-    private LinkSearchPageInfoRepository linkSearchPageInfoRepository;
+    private LinkSearchPageInfoService linkSearchPageInfoService;
 
     @Autowired
-    private PatentInfoRepository patentInfoRepository;
+    private PatentInfoService patentInfoService;
 
     @Transactional
     public void export(final Long requestId) throws IOException {
 
         final LinkSearchRequestInfo linkSearchRequestInfo = linkSearchRequestInfoService.find(requestId);
-        final List<LinkSearchPageInfo> linkSearchPageInfoList = linkSearchPageInfoRepository.getLinkSearchPageInfoListBylinkSearchRequestInfo(linkSearchRequestInfo.getId());
+        final List<LinkSearchPageInfo> linkSearchPageInfoList = linkSearchPageInfoService.getLinkSearchPageInfoListBylinkSearchRequestInfo(linkSearchRequestInfo);
 
         final FileWriter fileWriter = new FileWriter("C:\\exportable\\testfile.csv");
 
         for (final LinkSearchPageInfo linkSearchPageInfo : linkSearchPageInfoList) {
 
-            List<PatentInfo> patentInfos = patentInfoRepository.getPatentListBylinkSearchPageInfo(linkSearchPageInfo);
+            final List<PatentInfo> patentInfos = patentInfoService.getPatentListBylinkSearchPageInfo(linkSearchPageInfo);
 
             for (final PatentInfo patentInfo : patentInfos) {
 
@@ -77,9 +77,7 @@ public class ExporterServiceImpl implements ExporterService {
                 fileWriter.append(NEW_LINE_SEPARATOR);
                 fileWriter.flush();
             }
-
             entityManager.clear();
-
         }
         fileWriter.close();
     }

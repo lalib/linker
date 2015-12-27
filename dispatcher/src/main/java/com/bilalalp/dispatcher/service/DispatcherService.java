@@ -1,13 +1,12 @@
 package com.bilalalp.dispatcher.service;
 
-import com.bilalalp.dispatcher.dto.LinkSearchRequest;
-import com.bilalalp.dispatcher.dto.LinkSearchResponse;
-import com.bilalalp.dispatcher.dto.StopWordCreateRequest;
-import com.bilalalp.dispatcher.dto.StopWordCreateResponse;
+import com.bilalalp.dispatcher.dto.*;
 
 public interface DispatcherService {
 
     LinkSearchResponse processLinkSearchRequest(LinkSearchRequest linkSearchRequest);
 
     StopWordCreateResponse processCreateStopWordRequest(StopWordCreateRequest stopWordCreateRequest);
+
+    WordSummaryCreateResponse processCreateWordSummary(WordSummaryCreateRequest wordSummaryCreateRequest);
 }

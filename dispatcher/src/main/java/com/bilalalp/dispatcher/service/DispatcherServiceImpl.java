@@ -10,10 +10,7 @@ import com.bilalalp.common.entity.site.SiteInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.*;
 import com.bilalalp.dispatcher.amqp.MessageSender;
-import com.bilalalp.dispatcher.dto.LinkSearchRequest;
-import com.bilalalp.dispatcher.dto.LinkSearchResponse;
-import com.bilalalp.dispatcher.dto.StopWordCreateRequest;
-import com.bilalalp.dispatcher.dto.StopWordCreateResponse;
+import com.bilalalp.dispatcher.dto.*;
 import com.bilalalp.dispatcher.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,6 +50,9 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Autowired
     private LinkSearchRequestSiteInfoService linkSearchRequestSiteInfoService;
 
+    @Autowired
+    private WordSummaryInfoService wordSummaryInfoService;
+
     @Override
     @Transactional
     public LinkSearchResponse processLinkSearchRequest(final LinkSearchRequest linkSearchRequest) {
@@ -76,6 +76,15 @@ public class DispatcherServiceImpl implements DispatcherService {
             stopWordInfoService.save(stopWordInfo);
         }
         return new StopWordCreateResponse();
+    }
+
+    @Override
+    @Transactional
+    public WordSummaryCreateResponse processCreateWordSummary(final WordSummaryCreateRequest wordSummaryCreateRequest) {
+        final Long linkSearchRequestInfoId = wordSummaryCreateRequest.getLinkSearchRequestInfoId();
+        final LinkSearchRequestInfo linkSearchRequestInfo = linkSearchRequestInfoService.find(linkSearchRequestInfoId);
+        wordSummaryInfoService.bulkInsert(linkSearchRequestInfo);
+        return new WordSummaryCreateResponse();
     }
 
     private Long persistRequest(final LinkSearchRequest linkSearchRequest) {

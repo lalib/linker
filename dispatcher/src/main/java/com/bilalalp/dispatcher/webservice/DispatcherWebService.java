@@ -1,9 +1,6 @@
 package com.bilalalp.dispatcher.webservice;
 
-import com.bilalalp.dispatcher.dto.LinkSearchRequest;
-import com.bilalalp.dispatcher.dto.LinkSearchResponse;
-import com.bilalalp.dispatcher.dto.StopWordCreateRequest;
-import com.bilalalp.dispatcher.dto.StopWordCreateResponse;
+import com.bilalalp.dispatcher.dto.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -20,6 +17,10 @@ public interface DispatcherWebService {
     @POST
     @Path("/createStopWord")
     StopWordCreateResponse createStopWord(StopWordCreateRequest stopWordCreateRequest);
+
+    @POST
+    @Path("/createWordSummary")
+    WordSummaryCreateResponse createWordSummary(WordSummaryCreateRequest wordSummaryCreateRequest);
 
     @GET
     String state();
