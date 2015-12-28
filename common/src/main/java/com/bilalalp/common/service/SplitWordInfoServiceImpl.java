@@ -6,6 +6,7 @@ import com.bilalalp.common.service.base.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> implements SplitWordInfoService {
@@ -16,5 +17,11 @@ public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> imp
     @Override
     protected CrudRepository<SplitWordInfo, Long> getRepository() {
         return splitWordInfoRepository;
+    }
+
+    @Transactional
+    @Override
+    public void deleteByRequestId(final Long requestId) {
+        splitWordInfoRepository.deleteByRequestId(requestId);
     }
 }

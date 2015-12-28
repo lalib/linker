@@ -9,4 +9,8 @@ import java.util.List;
 public interface PatentInfoService extends BaseService<PatentInfo> {
 
     List<PatentInfo> getPatentListBylinkSearchPageInfo(LinkSearchPageInfo linkSearchPageInfo);
+
+    List<Long> getPatentIds(Long requestId);
+
+    void resetParseInformation(Long requestId);
 }
