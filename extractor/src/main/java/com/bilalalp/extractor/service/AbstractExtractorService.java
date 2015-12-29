@@ -33,6 +33,9 @@ public abstract class AbstractExtractorService implements ExtractorService {
     public void parse(final PatentInfo patentInfo) {
 
         final String body = patentInfo.getBody();
+        if(StringUtils.isEmpty(body)){
+            return;
+        }
         final Document documentBody = Jsoup.parse(body);
         final String abstractContent = getAbstractContent(documentBody);
         final String claimContent = getClaimContent(documentBody);
