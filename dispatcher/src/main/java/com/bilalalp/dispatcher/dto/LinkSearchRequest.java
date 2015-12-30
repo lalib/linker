@@ -20,4 +20,10 @@ public class LinkSearchRequest {
     @XmlElement(name = "keyword")
     @XmlElementWrapper
     private List<String> keywordList;
+
+    @XmlElement(name = "internationalPatentClass")
+    private String internationalPatentClass;
+
+    @XmlElement(name = "patentClassSearch")
+    private boolean patentClassSearch;
 }

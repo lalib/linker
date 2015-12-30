@@ -38,7 +38,9 @@ public abstract class AbstractSearchEngine implements SearchEngine {
 
     protected abstract String generateLink(final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList);
 
-    protected abstract List<String> generatedLinkList(final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList);
+    protected abstract List<String> generateLinkList(final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList);
+
+    protected abstract String generatePatentClassLinkList(final String patentClass, final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList);
 
     protected abstract Integer getPageCount(Element element);
 
@@ -54,7 +56,11 @@ public abstract class AbstractSearchEngine implements SearchEngine {
                 processAllRecords(linkSearchRequestInfo);
                 break;
             case MONTHLY:
-                processMonthlyRecords(linkSearchRequestInfo);
+                if (Boolean.FALSE.equals(linkSearchRequestInfo.getInternationalPatentClassSearch())) {
+                    processMonthlyRecords(linkSearchRequestInfo);
+                } else {
+                    processAllRecordsForPatentClass(linkSearchRequestInfo);
+                }
                 break;
             default:
                 processAllRecords(linkSearchRequestInfo);
@@ -62,9 +68,22 @@ public abstract class AbstractSearchEngine implements SearchEngine {
         }
     }
 
-    private void processMonthlyRecords(final LinkSearchRequestInfo linkSearchRequestInfo) {
+    private void processAllRecordsForPatentClass(final LinkSearchRequestInfo linkSearchRequestInfo) {
+
         final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList = linkSearchRequestInfo.getLinkSearchRequestKeywordInfoList();
-        final List<String> generatedLinkList = generatedLinkList(linkSearchRequestKeywordInfoList);
+        final String generatedLink = generatePatentClassLinkList(linkSearchRequestInfo.getInternationalPatentClass(), linkSearchRequestKeywordInfoList);
+        final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo = createLinkSearchGeneratedLinkInfo(linkSearchRequestInfo, generatedLink);
+        linkSearchGeneratedLinkInfoService.save(linkSearchGeneratedLinkInfo);
+
+        final List<LinkSearchPageInfo> linkSearchPageInfoList = getLinkSearchPageInfoList(linkSearchRequestInfo, 1000, generatedLink);
+        linkSearchPageInfoService.save(linkSearchPageInfoList);
+
+        final List<QueueMessageDto> queueMessageDtoList = convertEntitiesToMessages(linkSearchPageInfoList);
+        messageSender.sendMessage(queueConfigurationDto, queueMessageDtoList);
+    }
+
+    private void processMonthlyRecords(final LinkSearchRequestInfo linkSearchRequestInfo) {
+        final List<String> generatedLinkList = generateLinkList(linkSearchRequestInfo.getLinkSearchRequestKeywordInfoList());
 
         for (final String generatedLink : generatedLinkList) {
             final LinkSearchGeneratedLinkInfo linkSearchGeneratedLinkInfo = createLinkSearchGeneratedLinkInfo(linkSearchRequestInfo, generatedLink);

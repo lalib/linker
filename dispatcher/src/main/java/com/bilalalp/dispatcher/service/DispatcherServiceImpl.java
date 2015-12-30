@@ -2,10 +2,10 @@ package com.bilalalp.dispatcher.service;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.common.entity.patent.StopWordInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestSiteInfo;
+import com.bilalalp.common.entity.patent.StopWordInfo;
 import com.bilalalp.common.entity.site.SiteInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.*;
@@ -92,11 +92,9 @@ public class DispatcherServiceImpl implements DispatcherService {
         final List<SiteInfoType> filteredInfoTypeList = filterSiteInfoTypeList(linkSearchRequest.getSiteInfoTypeList());
         final List<String> filteredKeywordList = filteredKeywordInfoList(linkSearchRequest.getKeywordList());
 
-        return saveEntities(filteredInfoTypeList, filteredKeywordList);
-    }
-
-    private Long saveEntities(List<SiteInfoType> filteredInfoTypeList, List<String> filteredKeywordList) {
         final LinkSearchRequestInfo linkSearchRequestInfo = new LinkSearchRequestInfo();
+        linkSearchRequestInfo.setInternationalPatentClass(linkSearchRequest.getInternationalPatentClass());
+        linkSearchRequestInfo.setInternationalPatentClassSearch(linkSearchRequest.isPatentClassSearch());
         final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList = createLinkSearchRequestKeywordInfoList(linkSearchRequestInfo, filteredKeywordList);
         final List<LinkSearchRequestSiteInfo> linkSearchRequestSiteInfoList = createLinkSearchRequestSiteInfoList(linkSearchRequestInfo, filteredInfoTypeList);
 

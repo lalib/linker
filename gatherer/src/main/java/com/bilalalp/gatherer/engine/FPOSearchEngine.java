@@ -48,7 +48,7 @@ public class FPOSearchEngine extends AbstractSearchEngine implements SearchEngin
     }
 
     @Override
-    protected List<String> generatedLinkList(List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList) {
+    protected List<String> generateLinkList(List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList) {
 
         final Calendar startCalendar = getStartCalendar();
 
@@ -95,6 +95,38 @@ public class FPOSearchEngine extends AbstractSearchEngine implements SearchEngin
 
         }
         return generatedLinks;
+    }
+
+    @Override
+    protected String generatePatentClassLinkList(final String patentClass, final List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList) {
+
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("http://www.freepatentsonline.com/result.html?uspat=on&usapp=on&eupat=on&jp=on&pct=on");
+        stringBuilder.append("&depat=on&date_range=all&stemming=on&sort=relevance&srch=xprtsrch&");
+        stringBuilder.append("query_txt=IPC%2F%22");
+        stringBuilder.append(patentClass.concat("%22+NOT+"));
+
+        boolean firstTime = true;
+
+        for (final LinkSearchRequestKeywordInfo linkSearchRequestKeywordInfo : linkSearchRequestKeywordInfoList) {
+
+            final String replacedKeyword = linkSearchRequestKeywordInfo.getKeyword().replace(" ", "+");
+
+            if (firstTime) {
+                stringBuilder.append("%28ABST%2F%22").append(replacedKeyword).append("%22");
+            } else {
+                stringBuilder.append("+or+ABST%2F%22").append(replacedKeyword).append("%22");
+            }
+
+            stringBuilder.append("+or+ACLM%2F%22").append(replacedKeyword).append("%22");
+            stringBuilder.append("+or+TTL%2F%22").append(replacedKeyword).append("%22");
+            stringBuilder.append("+or+SPEC%2F%22").append(replacedKeyword).append("%22");
+            firstTime = false;
+        }
+
+        stringBuilder.append("%29&p=1");
+
+        return stringBuilder.toString();
     }
 
     private String getFormattedDate(final Calendar calendar) {

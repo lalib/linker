@@ -22,6 +22,12 @@ public class LinkSearchRequestInfo extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "C_INTERNATIONAL_PATENT_CLASS")
+    private String internationalPatentClass;
+
+    @Column(name = "C_PATENT_CLASS_SEARCH")
+    private Boolean internationalPatentClassSearch;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "C_LSR_STATUS")
     private LinkSearchRequestStatusType linkSearchRequestStatusType = LinkSearchRequestStatusType.WAITING;

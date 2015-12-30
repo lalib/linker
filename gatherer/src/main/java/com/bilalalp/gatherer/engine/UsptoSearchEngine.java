@@ -43,7 +43,12 @@ public class UsptoSearchEngine extends AbstractSearchEngine {
     }
 
     @Override
-    protected List<String> generatedLinkList(List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList) {
+    protected List<String> generateLinkList(List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList) {
+        return null;
+    }
+
+    @Override
+    protected String generatePatentClassLinkList(String patentClass, List<LinkSearchRequestKeywordInfo> linkSearchRequestKeywordInfoList) {
         return null;
     }
 
