@@ -5,6 +5,7 @@ import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestSiteInfo;
+import com.bilalalp.common.entity.patent.KeywordSelectionRequest;
 import com.bilalalp.common.entity.patent.StopWordInfo;
 import com.bilalalp.common.entity.site.SiteInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
@@ -32,6 +33,10 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Autowired
     private QueueConfigurationDto queueConfigurationDto;
 
+    @Qualifier(value = "selectorQueueConfiguration")
+    @Autowired
+    private QueueConfigurationDto selectorQueueConfigurationDto;
+
     @Autowired
     private Validator<LinkSearchRequest> linkSearchRequestValidator;
 
@@ -52,6 +57,9 @@ public class DispatcherServiceImpl implements DispatcherService {
 
     @Autowired
     private WordSummaryInfoService wordSummaryInfoService;
+
+    @Autowired
+    private KeywordSelectionRequestService keywordSelectionRequestService;
 
     @Override
     @Transactional
@@ -85,6 +93,16 @@ public class DispatcherServiceImpl implements DispatcherService {
         final LinkSearchRequestInfo linkSearchRequestInfo = linkSearchRequestInfoService.find(linkSearchRequestInfoId);
         wordSummaryInfoService.bulkInsert(linkSearchRequestInfo);
         return new WordSummaryCreateResponse();
+    }
+
+    @Override
+    public KeywordSelectionResponseDto processSelectKeywordRequest(final KeywordSelectionRequestDto keywordSelectionRequestDto) {
+        final KeywordSelectionRequest keywordSelectionRequest = new KeywordSelectionRequest();
+        keywordSelectionRequest.setFirstRequestId(keywordSelectionRequest.getFirstRequestId());
+        keywordSelectionRequest.setSecondRequestId(keywordSelectionRequest.getSecondRequestId());
+        keywordSelectionRequestService.save(keywordSelectionRequest);
+        messageSender.sendMessage(selectorQueueConfigurationDto, new QueueMessageDto(keywordSelectionRequest.getId()));
+        return new KeywordSelectionResponseDto(keywordSelectionRequest.getId());
     }
 
     private Long persistRequest(final LinkSearchRequest linkSearchRequest) {

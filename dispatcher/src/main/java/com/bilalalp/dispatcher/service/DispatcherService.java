@@ -9,4 +9,6 @@ public interface DispatcherService {
     StopWordCreateResponse processCreateStopWordRequest(StopWordCreateRequest stopWordCreateRequest);
 
     WordSummaryCreateResponse processCreateWordSummary(WordSummaryCreateRequest wordSummaryCreateRequest);
+
+    KeywordSelectionResponseDto processSelectKeywordRequest(KeywordSelectionRequestDto keywordSelectionRequestDto);
 }

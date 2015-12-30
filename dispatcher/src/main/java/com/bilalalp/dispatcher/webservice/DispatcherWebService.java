@@ -22,6 +22,10 @@ public interface DispatcherWebService {
     @Path("/createWordSummary")
     WordSummaryCreateResponse createWordSummary(WordSummaryCreateRequest wordSummaryCreateRequest);
 
+    @POST
+    @Path("/selectKeyword")
+    KeywordSelectionResponseDto selectKeyword(KeywordSelectionRequestDto keywordSelectionRequestDto);
+
     @GET
     String state();
 }

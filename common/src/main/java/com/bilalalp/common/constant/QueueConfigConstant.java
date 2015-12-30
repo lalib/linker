@@ -25,7 +25,10 @@ public final class QueueConfigConstant {
     public static final String AMQP_EXTRACTOR_QUEUE_NAME = "amqp.extractor.queue.name";
     public static final String AMQP_EXTRACTOR_QUEUE_KEY = "amqp.extractor.queue.key";
 
-  private QueueConfigConstant() {
+    public static final String AMQP_SELECTOR_QUEUE_NAME = "amqp.selector.queue.name";
+    public static final String AMQP_SELECTOR_QUEUE_KEY = "amqp.selector.queue.key";
+
+    private QueueConfigConstant() {
         // Constant Class
     }
 }

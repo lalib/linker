@@ -27,6 +27,11 @@ public class DispatcherWebServiceImpl implements DispatcherWebService {
     }
 
     @Override
+    public KeywordSelectionResponseDto selectKeyword(final KeywordSelectionRequestDto keywordSelectionRequestDto) {
+        return dispatcherService.processSelectKeywordRequest(keywordSelectionRequestDto);
+    }
+
+    @Override
     public String state() {
         return "App is up!";
     }

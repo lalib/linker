@@ -54,6 +54,7 @@
         <module>extractor</module>
         <module>parser</module>
         <module>exporter</module>
+        <module>selector</module>
     </modules>
 
     <dependencies>
