@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Setter
 public class KeywordSelectionRequest extends AbstractEntity {
 
-    public static final String JOIN_COLUMN = "C_KEYWORD_SELECTION_INFO_ID";
+    public static final String JOIN_COLUMN = "C_KEYWORD_SELECTION_ID";
     public static final String TABLE_NAME = "T_KEYWORD_SELECTION";
 
     @Id
