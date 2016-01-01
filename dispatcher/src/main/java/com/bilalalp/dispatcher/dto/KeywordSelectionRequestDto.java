@@ -19,4 +19,10 @@ public class KeywordSelectionRequestDto {
 
     @XmlElement(name = "secondRequestId")
     private Long secondRequestId;
+
+    @XmlElement(name = "topKeywordSelectionCount")
+    private Long topKeywordSelectionCount;
+
+    @XmlElement(name = "ratio")
+    private Double ratio;
 }

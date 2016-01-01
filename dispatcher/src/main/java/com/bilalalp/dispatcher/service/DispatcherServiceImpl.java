@@ -100,6 +100,8 @@ public class DispatcherServiceImpl implements DispatcherService {
         final KeywordSelectionRequest keywordSelectionRequest = new KeywordSelectionRequest();
         keywordSelectionRequest.setFirstRequestId(keywordSelectionRequest.getFirstRequestId());
         keywordSelectionRequest.setSecondRequestId(keywordSelectionRequest.getSecondRequestId());
+        keywordSelectionRequest.setRatio(keywordSelectionRequestDto.getRatio());
+        keywordSelectionRequest.setTopSelectedKeywordCount(keywordSelectionRequestDto.getTopKeywordSelectionCount());
         keywordSelectionRequestService.save(keywordSelectionRequest);
         messageSender.sendMessage(selectorQueueConfigurationDto, new QueueMessageDto(keywordSelectionRequest.getId()));
         return new KeywordSelectionResponseDto(keywordSelectionRequest.getId());

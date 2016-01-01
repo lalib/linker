@@ -26,4 +26,10 @@ public class KeywordSelectionRequest extends AbstractEntity {
 
     @Column(name = "C_SECOND_REQUEST_ID")
     private Long secondRequestId;
+
+    @Column(name = "C_TOP_SELECTED_KEYWORD_COUNT")
+    private Long topSelectedKeywordCount;
+
+    @Column(name = "C_RATIO")
+    private Double ratio;
 }
