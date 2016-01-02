@@ -28,6 +28,6 @@ public class SelectorConsumer implements MessageListener {
     public void onMessage(final Message message) {
         final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
         final KeywordSelectionRequest keywordSelectionRequest = keywordSelectionRequestService.find(queueMessageDto.getId());
-        selectorService.selectKeyword(keywordSelectionRequest.getFirstRequestId(), keywordSelectionRequest.getSecondRequestId());
+        selectorService.selectKeyword(keywordSelectionRequest);
     }
 }
