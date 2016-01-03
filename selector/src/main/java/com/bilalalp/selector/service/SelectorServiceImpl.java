@@ -38,7 +38,7 @@ public class SelectorServiceImpl implements SelectorService {
 
         final LinkSearchRequestInfo firstLinkSearchRequestInfo = linkSearchRequestInfoService.find(keywordSelectionRequest.getFirstRequestId());
         final LinkSearchRequestInfo secondLinkSearchRequestInfo = linkSearchRequestInfoService.find(keywordSelectionRequest.getSecondRequestId());
-        final List<WordSummaryInfo> wordSummaryInfoList = wordSummaryInfoService.findByLinkSearchRequestInfo(firstLinkSearchRequestInfo, new PageRequest(0, 5000));
+        final List<WordSummaryInfo> wordSummaryInfoList = wordSummaryInfoService.findByLinkSearchRequestInfo(firstLinkSearchRequestInfo, new PageRequest(0, keywordSelectionRequest.getTopSelectedKeywordCount().intValue()));
 
         final Long patentCount = patentInfoService.getPatentInfoCountByLinkSearchPageInfo(firstLinkSearchRequestInfo);
         final List<WordSummaryInfo> selectedWordSummaryInfoList = new ArrayList<>();
