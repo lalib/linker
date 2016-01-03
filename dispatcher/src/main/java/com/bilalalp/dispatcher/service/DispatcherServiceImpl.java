@@ -98,8 +98,8 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Override
     public KeywordSelectionResponseDto processSelectKeywordRequest(final KeywordSelectionRequestDto keywordSelectionRequestDto) {
         final KeywordSelectionRequest keywordSelectionRequest = new KeywordSelectionRequest();
-        keywordSelectionRequest.setFirstRequestId(keywordSelectionRequest.getFirstRequestId());
-        keywordSelectionRequest.setSecondRequestId(keywordSelectionRequest.getSecondRequestId());
+        keywordSelectionRequest.setFirstRequestId(keywordSelectionRequestDto.getFirstRequestId());
+        keywordSelectionRequest.setSecondRequestId(keywordSelectionRequestDto.getSecondRequestId());
         keywordSelectionRequest.setRatio(keywordSelectionRequestDto.getRatio());
         keywordSelectionRequest.setTopSelectedKeywordCount(keywordSelectionRequestDto.getTopKeywordSelectionCount());
         keywordSelectionRequestService.save(keywordSelectionRequest);

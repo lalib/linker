@@ -26,8 +26,12 @@ public class SelectorConsumer implements MessageListener {
     @Transactional
     @Override
     public void onMessage(final Message message) {
-        final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
-        final KeywordSelectionRequest keywordSelectionRequest = keywordSelectionRequestService.find(queueMessageDto.getId());
-        selectorService.selectKeyword(keywordSelectionRequest);
+        try {
+            final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
+            final KeywordSelectionRequest keywordSelectionRequest = keywordSelectionRequestService.find(queueMessageDto.getId());
+            selectorService.selectKeyword(keywordSelectionRequest);
+        }catch (final Exception ex){
+            ex.printStackTrace();
+        }
     }
 }

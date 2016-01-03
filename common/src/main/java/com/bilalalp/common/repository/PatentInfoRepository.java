@@ -1,6 +1,7 @@
 package com.bilalalp.common.repository;
 
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
+import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,7 @@ public interface PatentInfoRepository extends CrudRepository<PatentInfo, Long> {
     @Modifying
     @Query("UPDATE PatentInfo p set p.abstractContent=null, p.applicationNumber=null,p.assignee=null,p.claimContent=null,p.descriptionContent=null,p.fillingDate=null,p.inventors=null,p.parsed=false,p.patentNumber=null,p.publicationDate=null WHERE p.linkSearchPageInfo.linkSearchRequestInfo.id= :requestId")
     void resetParseInformation(@Param("requestId") Long requestId);
+
+    @Query("SELECT COUNT(p.id) FROM PatentInfo p WHERE p.linkSearchPageInfo.linkSearchRequestInfo = :linkSearchRequestInfo")
+    Long getPatentInfoCountByLinkSearchRequestInfo(@Param("linkSearchRequestInfo") LinkSearchRequestInfo linkSearchRequestInfo);
 }
