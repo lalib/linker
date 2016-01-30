@@ -101,3 +101,4 @@ local.properties
 .texlipse
 
 **/target
+*.exec
