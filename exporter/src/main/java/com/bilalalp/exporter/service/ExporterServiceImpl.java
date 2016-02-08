@@ -1,8 +1,8 @@
 package com.bilalalp.exporter.service;
 
-import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.service.LinkSearchPageInfoService;
 import com.bilalalp.common.service.LinkSearchRequestInfoService;
 import com.bilalalp.common.service.PatentInfoService;

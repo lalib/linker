@@ -30,7 +30,7 @@ public class ParserServiceImpl implements ParserService {
             final String removedPunctuations = removePunctuations(abstractContent);
             final String removedStopWords = removeStopWords(removedPunctuations);
             final String removedMultipleSpaces = removeMultipleSpaces(removedStopWords);
-            if(StringUtils.isEmpty(removedMultipleSpaces.trim())){
+            if (StringUtils.isEmpty(removedMultipleSpaces.trim())) {
                 return;
             }
             final List<String> splitBySpaceList = createNGram(1, removedMultipleSpaces);
@@ -65,7 +65,9 @@ public class ParserServiceImpl implements ParserService {
         for (int i = 0; i < parts.length - len + 1; i++) {
             final StringBuilder sb = new StringBuilder();
             for (int k = 0; k < len; k++) {
-                if (k > 0) sb.append(' ');
+                if (k > 0) {
+                    sb.append(' ');
+                }
                 sb.append(parts[i + k]);
             }
             result[i] = sb.toString();

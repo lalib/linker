@@ -41,7 +41,7 @@ public class CollectorServiceImpl implements CollectorService {
         }
     }
 
-    private String getBody(final String text){
+    private String getBody(final String text) {
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {

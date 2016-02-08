@@ -2,14 +2,15 @@ package com.bilalalp.searcher.service;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchGeneratedLinkInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.common.util.JSoupUtil;
 import com.bilalalp.searcher.amqp.MessageSender;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UsptoSearcherService implements SearcherService {
 
@@ -91,6 +93,7 @@ public class UsptoSearcherService implements SearcherService {
 
                 tryCount = 0;
             } catch (final Exception ex) {
+                log.error(ex.getLocalizedMessage(), ex);
                 ex.printStackTrace();
                 tryCount++;
                 i--;
@@ -123,7 +126,7 @@ public class UsptoSearcherService implements SearcherService {
                 }
             }
         } catch (final Exception e) {
-            System.out.printf(e.getMessage());
+            log.error(e.getMessage(), e);
         }
 
         return null;

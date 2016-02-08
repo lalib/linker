@@ -5,6 +5,7 @@ import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.extractor.service.ExtractorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -15,11 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class ExtractorConsumer implements MessageListener {
+
+    private static final Map<SiteInfoType, ExtractorService> PARSER_SERVICE_MAP = new EnumMap<>(SiteInfoType.class);
 
     @Autowired
     private MessageConverter messageConverter;
@@ -30,13 +34,11 @@ public class ExtractorConsumer implements MessageListener {
     @Autowired
     private ApplicationContext applicationContext;
 
-    private static final Map<SiteInfoType, ExtractorService> PARSER_SERVICE_MAP = new HashMap<>();
-
     @Transactional
     @Override
     public void onMessage(final Message message) {
         final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
-        System.out.println(queueMessageDto.getId().toString());
+        log.debug(queueMessageDto.getId().toString());
         final PatentInfo patentInfo = patentInfoService.find(queueMessageDto.getId());
         PARSER_SERVICE_MAP.get(patentInfo.getLinkSearchPageInfo().getSiteInfoType()).parse(patentInfo);
     }

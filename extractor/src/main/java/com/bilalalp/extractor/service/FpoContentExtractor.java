@@ -2,6 +2,7 @@ package com.bilalalp.extractor.service;
 
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.util.DateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Slf4j
 @Service
 public class FpoContentExtractor extends AbstractExtractorService implements ExtractorService {
 
@@ -72,19 +74,19 @@ public class FpoContentExtractor extends AbstractExtractorService implements Ext
             final Element body = document.body();
             final Elements elementsContainingOwnText = body.getElementsByAttributeValue("style", "clear: none;");
 
-            if (elementsContainingOwnText != null && elementsContainingOwnText.size() !=0) {
+            if (elementsContainingOwnText != null && !elementsContainingOwnText.isEmpty()) {
                 Elements allElements = elementsContainingOwnText.get(0).getAllElements();
                 if (allElements.size() == 1) {
                     return allElements.get(0).text();
                 } else if (allElements.size() > 1) {
                     return allElements.get(1).text();
                 }
-            }else{
-                return getContent(document,"Document Type and Number:");
+            } else {
+                return getContent(document, "Document Type and Number:");
             }
             return null;
         } catch (final Exception ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage(), ex);
             throw ex;
         }
     }
@@ -108,7 +110,7 @@ public class FpoContentExtractor extends AbstractExtractorService implements Ext
             }
             return null;
         } catch (final Exception ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage(), ex);
             throw ex;
         }
     }

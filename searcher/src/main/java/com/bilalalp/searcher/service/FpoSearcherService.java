@@ -2,12 +2,13 @@ package com.bilalalp.searcher.service;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
-import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.common.util.JSoupUtil;
 import com.bilalalp.searcher.amqp.MessageSender;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class FpoSearcherService implements SearcherService {
 
@@ -89,7 +91,7 @@ public class FpoSearcherService implements SearcherService {
 
                 tryCount = 0;
             } catch (final Exception ex) {
-                ex.printStackTrace();
+                log.error(ex.getMessage(), ex);
                 tryCount++;
                 i--;
 

@@ -5,7 +5,7 @@ import com.bilalalp.common.entity.site.SiteInfoType;
 
 public interface SearchEngine {
 
-     SiteInfoType getSiteInfoType();
+    SiteInfoType getSiteInfoType();
 
     void crawlLink(final LinkSearchRequestInfo linkSearchRequestInfo);
 }

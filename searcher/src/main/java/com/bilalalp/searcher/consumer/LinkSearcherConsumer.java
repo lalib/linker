@@ -21,16 +21,13 @@ import java.util.Map;
 @Service
 public class LinkSearcherConsumer implements MessageListener {
 
+    private static final Map<SiteInfoType, SearcherService> SEARCHER_SERVICE_MAP = new EnumMap<>(SiteInfoType.class);
     @Autowired
     private MessageConverter messageConverter;
-
     @Autowired
     private LinkSearchPageInfoService linkSearchPageInfoService;
-
     @Autowired
     private ApplicationContext applicationContext;
-
-    private static final Map<SiteInfoType, SearcherService> SEARCHER_SERVICE_MAP = new EnumMap<>(SiteInfoType.class);
 
     @Transactional
     @Override

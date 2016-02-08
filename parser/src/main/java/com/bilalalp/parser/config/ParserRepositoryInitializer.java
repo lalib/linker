@@ -25,8 +25,8 @@ public class ParserRepositoryInitializer {
         parserInitialRepository.setStopWordList(stopWords);
     }
 
-    private List<String> initPunctuations(){
-        return Arrays.asList("","");
+    private List<String> initPunctuations() {
+        return Arrays.asList("", "");
     }
 
     private List<String> initStopWords() {

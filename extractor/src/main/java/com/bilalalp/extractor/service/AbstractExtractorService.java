@@ -30,10 +30,11 @@ public abstract class AbstractExtractorService implements ExtractorService {
     private QueueConfigurationDto queueConfigurationDto;
 
     @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
     public void parse(final PatentInfo patentInfo) {
 
         final String body = patentInfo.getBody();
-        if(StringUtils.isEmpty(body)){
+        if (StringUtils.isEmpty(body)) {
             return;
         }
         final Document documentBody = Jsoup.parse(body);

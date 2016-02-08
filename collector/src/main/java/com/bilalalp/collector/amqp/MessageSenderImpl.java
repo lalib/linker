@@ -25,8 +25,8 @@ public class MessageSenderImpl implements MessageSender {
     @Override
     public void sendMessage(final QueueConfigurationDto queueConfigurationDto, final List<QueueMessageDto> queueMessageDtoList) {
 
-        for(final QueueMessageDto queueMessageDto : queueMessageDtoList){
-            sendMessage(queueConfigurationDto,queueMessageDto);
+        for (final QueueMessageDto queueMessageDto : queueMessageDtoList) {
+            sendMessage(queueConfigurationDto, queueMessageDto);
         }
     }
 }

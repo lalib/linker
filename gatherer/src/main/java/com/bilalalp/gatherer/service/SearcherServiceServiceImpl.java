@@ -12,20 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class SearcherServiceServiceImpl implements SearcherService {
 
+    private static final Map<SiteInfoType, SearchEngine> SEARCH_ENGINE_MAP = new EnumMap<>(SiteInfoType.class);
     @Autowired
     private LinkSearchRequestInfoService linkSearchRequestInfoService;
-
     @Autowired
     private ApplicationContext applicationContext;
-
-    private static final Map<SiteInfoType, SearchEngine> SEARCH_ENGINE_MAP = new HashMap<>();
 
     @PostConstruct
     public void init() {

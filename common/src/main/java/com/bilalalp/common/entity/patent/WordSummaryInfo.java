@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Access(AccessType.FIELD)
 @Getter
 @Setter
-public class WordSummaryInfo extends AbstractEntity{
+public class WordSummaryInfo extends AbstractEntity {
 
     public static final String JOIN_COLUMN = "C_WORD_SUMMARY_ID";
     public static final String TABLE_NAME = "T_WORD_SUMMARY_INFO";
