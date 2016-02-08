@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 @Service
@@ -30,7 +30,7 @@ public class LinkSearcherConsumer implements MessageListener {
     @Autowired
     private ApplicationContext applicationContext;
 
-    private static final Map<SiteInfoType, SearcherService> SEARCHER_SERVICE_MAP = new HashMap<>();
+    private static final Map<SiteInfoType, SearcherService> SEARCHER_SERVICE_MAP = new EnumMap<>(SiteInfoType.class);
 
     @Transactional
     @Override
