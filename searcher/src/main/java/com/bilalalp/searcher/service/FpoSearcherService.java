@@ -5,6 +5,7 @@ import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
+import com.bilalalp.common.exception.LinkerCommonException;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.common.util.JSoupUtil;
 import com.bilalalp.searcher.amqp.MessageSender;
@@ -54,7 +55,7 @@ public class FpoSearcherService implements SearcherService {
                 final Element body = JSoupUtil.getBody(link);
 
                 if (body == null) {
-                    throw new RuntimeException("Body is null!");
+                    throw new LinkerCommonException("Body is null!");
                 } else if (body.html().contains("Your search returned no results.")) {
                     continue;
                 }

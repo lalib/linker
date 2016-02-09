@@ -7,6 +7,7 @@ import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
+import com.bilalalp.common.exception.LinkerCommonException;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.common.util.JSoupUtil;
 import com.bilalalp.searcher.amqp.MessageSender;
@@ -56,7 +57,7 @@ public class UsptoSearcherService implements SearcherService {
                 final Element body = JSoupUtil.getBody(link);
 
                 if (body == null) {
-                    throw new RuntimeException("Body is null!");
+                    throw new LinkerCommonException("Body is null!");
                 }
                 final Elements table = body.getElementsByTag("table");
 
@@ -94,7 +95,6 @@ public class UsptoSearcherService implements SearcherService {
                 tryCount = 0;
             } catch (final Exception ex) {
                 log.error(ex.getLocalizedMessage(), ex);
-                ex.printStackTrace();
                 tryCount++;
                 i--;
 

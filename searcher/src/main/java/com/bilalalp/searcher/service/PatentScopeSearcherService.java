@@ -7,6 +7,7 @@ import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
+import com.bilalalp.common.exception.LinkerCommonException;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.common.util.JSoupUtil;
 import com.bilalalp.searcher.amqp.MessageSender;
@@ -63,7 +64,7 @@ public class PatentScopeSearcherService implements SearcherService {
 
                 final String endStr = "We are sorry but we experience a high volume traffic and we need to filter out the automatic queries form the legitimate human requests.";
                 if (body == null || body.html().contains(endStr)) {
-                    throw new RuntimeException("EOF Proxy Error.");
+                    throw new LinkerCommonException("EOF Proxy Error.");
                 }
 
                 final Integer pageCount = getPageCount(body);
