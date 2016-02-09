@@ -75,19 +75,24 @@ public class FpoContentExtractor extends AbstractExtractorService implements Ext
             final Elements elementsContainingOwnText = body.getElementsByAttributeValue("style", "clear: none;");
 
             if (elementsContainingOwnText != null && !elementsContainingOwnText.isEmpty()) {
-                Elements allElements = elementsContainingOwnText.get(0).getAllElements();
-                if (allElements.size() == 1) {
-                    return allElements.get(0).text();
-                } else if (allElements.size() > 1) {
-                    return allElements.get(1).text();
-                }
+                return getString(elementsContainingOwnText);
             } else {
                 return getContent(document, "Document Type and Number:");
             }
-            return null;
         } catch (final Exception ex) {
             log.error(ex.getMessage(), ex);
             throw ex;
+        }
+    }
+
+    private String getString(final Elements elementsContainingOwnText) {
+        final Elements allElements = elementsContainingOwnText.get(0).getAllElements();
+        if (allElements.size() == 1) {
+            return allElements.get(0).text();
+        } else if (allElements.size() > 1) {
+            return allElements.get(1).text();
+        } else {
+            return null;
         }
     }
 
@@ -98,21 +103,27 @@ public class FpoContentExtractor extends AbstractExtractorService implements Ext
             final Elements elementsContainingOwnText = body.getElementsContainingOwnText(searchText);
 
             if (elementsContainingOwnText != null) {
-                for (final Element element : elementsContainingOwnText) {
-                    if (element.text().contains(searchText)) {
-                        final Element parent = element.parent();
-                        final Elements abstractContent = parent.getElementsByClass("disp_elm_text");
-                        if (abstractContent != null && !abstractContent.isEmpty()) {
-                            return abstractContent.get(0).text().trim();
-                        }
-                    }
-                }
+                return getString(searchText, elementsContainingOwnText);
+            } else {
+                return null;
             }
-            return null;
         } catch (final Exception ex) {
             log.error(ex.getMessage(), ex);
             throw ex;
         }
+    }
+
+    private String getString(final String searchText, final Elements elementsContainingOwnText) {
+        for (final Element element : elementsContainingOwnText) {
+            if (element.text().contains(searchText)) {
+                final Element parent = element.parent();
+                final Elements abstractContent = parent.getElementsByClass("disp_elm_text");
+                if (abstractContent != null && !abstractContent.isEmpty()) {
+                    return abstractContent.get(0).text().trim();
+                }
+            }
+        }
+        return null;
     }
 
     @Override

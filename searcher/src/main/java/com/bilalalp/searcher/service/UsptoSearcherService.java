@@ -59,38 +59,9 @@ public class UsptoSearcherService implements SearcherService {
                 if (body == null) {
                     throw new LinkerCommonException("Body is null!");
                 }
+
                 final Elements table = body.getElementsByTag("table");
-
-                boolean isItMiddle = false;
-
-                for (Element element : table) {
-
-                    if (!isItMiddle) {
-                        isItMiddle = true;
-                        continue;
-                    }
-
-                    final Elements tr = element.getElementsByTag("tr");
-
-                    for (Element trElement : tr) {
-                        final Elements aElements = trElement.getElementsByTag("a");
-
-                        if (aElements != null && !aElements.isEmpty()) {
-                            final Element element1 = aElements.get(0);
-                            final Element element2 = aElements.get(1);
-
-                            final PatentInfo patentInfo = new PatentInfo();
-                            patentInfo.setPatentLink(MAIN_URL + element1.attr("href"));
-                            patentInfo.setPatentNumber(element1.text());
-                            patentInfo.setPatentTitle(element2.text());
-                            patentInfo.setSearchLink(link);
-                            patentInfo.setLinkSearchPageInfo(linkSearchPageInfo);
-                            patentInfoList.add(patentInfo);
-                        }
-                    }
-
-                    isItMiddle = false;
-                }
+                patentInfoList.addAll(getTableLinks(linkSearchPageInfo, link, table));
 
                 tryCount = 0;
             } catch (final Exception ex) {
@@ -110,6 +81,47 @@ public class UsptoSearcherService implements SearcherService {
         messageSender.sendMessage(queueConfigurationDto, convertPatentInfoToQueueMessageDto(patentInfoList));
     }
 
+    private List<PatentInfo> getTableLinks(LinkSearchPageInfo linkSearchPageInfo, String link, Elements table) {
+
+        boolean isItMiddle = false;
+        final List<PatentInfo> patentInfoList = new ArrayList<>();
+
+        for (Element element : table) {
+
+            if (!isItMiddle) {
+                isItMiddle = true;
+                continue;
+            }
+
+            final Elements tr = element.getElementsByTag("tr");
+            patentInfoList.addAll(getPatentInfoList(linkSearchPageInfo, link, tr));
+            isItMiddle = false;
+        }
+
+        return patentInfoList;
+    }
+
+    private List<PatentInfo> getPatentInfoList(final LinkSearchPageInfo linkSearchPageInfo, final String link, final Elements tr) {
+
+        final List<PatentInfo> patentInfoList = new ArrayList<>();
+        for (Element trElement : tr) {
+            final Elements aElements = trElement.getElementsByTag("a");
+
+            if (aElements != null && !aElements.isEmpty()) {
+                final Element element1 = aElements.get(0);
+                final Element element2 = aElements.get(1);
+
+                final PatentInfo patentInfo = new PatentInfo();
+                patentInfo.setPatentLink(MAIN_URL + element1.attr("href"));
+                patentInfo.setPatentNumber(element1.text());
+                patentInfo.setPatentTitle(element2.text());
+                patentInfo.setSearchLink(link);
+                patentInfo.setLinkSearchPageInfo(linkSearchPageInfo);
+                patentInfoList.add(patentInfo);
+            }
+        }
+        return patentInfoList;
+    }
 
     private List<QueueMessageDto> convertPatentInfoToQueueMessageDto(final List<PatentInfo> patentInfoList) {
         return patentInfoList.stream().map(patentInfo -> new QueueMessageDto(patentInfo.getId())).collect(Collectors.toList());

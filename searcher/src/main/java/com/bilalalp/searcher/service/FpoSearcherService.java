@@ -67,28 +67,7 @@ public class FpoSearcherService implements SearcherService {
                 final Element tables = children.get(0);
                 final Elements elements = tables.children();
 
-                boolean firstOne = true;
-
-                for (final Element el : elements) {
-
-                    if (firstOne) {
-                        firstOne = false;
-                        continue;
-                    }
-
-                    final Elements links = el.children();
-                    final Element foundLinkNode = links.get(2);
-                    final Elements elementsByTag = foundLinkNode.getElementsByTag("a");
-                    final Element foundLink = elementsByTag.get(0);
-                    final String href = foundLink.attr("href");
-                    final String mainUrl = MAIN_URL + href;
-                    final PatentInfo patentInfo = new PatentInfo();
-                    patentInfo.setLinkSearchPageInfo(linkSearchPageInfo);
-                    patentInfo.setPatentTitle(elementsByTag.text());
-                    patentInfo.setPatentLink(mainUrl);
-                    patentInfo.setSearchLink(link);
-                    patentInfoList.add(patentInfo);
-                }
+                patentInfoList.addAll(getElementInfos(linkSearchPageInfo, link, elements));
 
                 tryCount = 0;
             } catch (final Exception ex) {
@@ -108,6 +87,34 @@ public class FpoSearcherService implements SearcherService {
             patentInfoService.save(patentInfoList);
             messageSender.sendMessage(queueConfigurationDto, convertPatentInfoToQueueMessageDto(patentInfoList));
         }
+    }
+
+    private List<PatentInfo> getElementInfos(LinkSearchPageInfo linkSearchPageInfo,String link, Elements elements) {
+
+        boolean firstOne = true;
+        final List<PatentInfo> patentInfoList = new ArrayList<>();
+        for (final Element el : elements) {
+
+            if (firstOne) {
+                firstOne = false;
+                continue;
+            }
+
+            final Elements links = el.children();
+            final Element foundLinkNode = links.get(2);
+            final Elements elementsByTag = foundLinkNode.getElementsByTag("a");
+            final Element foundLink = elementsByTag.get(0);
+            final String href = foundLink.attr("href");
+            final String mainUrl = MAIN_URL + href;
+            final PatentInfo patentInfo = new PatentInfo();
+            patentInfo.setLinkSearchPageInfo(linkSearchPageInfo);
+            patentInfo.setPatentTitle(elementsByTag.text());
+            patentInfo.setPatentLink(mainUrl);
+            patentInfo.setSearchLink(link);
+            patentInfoList.add(patentInfo);
+        }
+
+        return patentInfoList;
     }
 
     private List<QueueMessageDto> convertPatentInfoToQueueMessageDto(final List<PatentInfo> patentInfoList) {

@@ -76,33 +76,7 @@ public class PatentScopeSearcherService implements SearcherService {
                 pageNumber++;
 
                 final Elements tables = body.getElementsByTag("table");
-
-                for (final Element table : tables) {
-
-                    final Element resultTable = table.getElementById("resultTable");
-
-                    if (resultTable == null) {
-                        continue;
-                    }
-
-                    final Elements trElements = table.getElementsByTag("tr");
-
-                    for (final Element element : trElements) {
-
-                        if (doesRowContainsUrl(element)) {
-                            final Elements aClass = element.getElementsByAttributeValue("class", "trans-section");
-
-                            final PatentInfo patentInfo = getPatentInfo(element, aClass);
-                            if (patentInfo == null) {
-                                continue;
-                            }
-
-                            patentInfo.setLinkSearchPageInfo(linkSearchPageInfo);
-                            patentInfo.setSearchLink(link);
-                            patentInfoList.add(patentInfo);
-                        }
-                    }
-                }
+                patentInfoList.addAll(getTableInfos(linkSearchPageInfo, link, tables));
 
                 tryCount = 0;
 
@@ -121,6 +95,45 @@ public class PatentScopeSearcherService implements SearcherService {
 
         patentInfoService.save(patentInfoList);
         messageSender.sendMessage(queueConfigurationDto, convertPatentInfoToQueueMessageDto(patentInfoList));
+    }
+
+    private List<PatentInfo> getTableInfos(LinkSearchPageInfo linkSearchPageInfo, String link, Elements tables) {
+
+        final List<PatentInfo> patentInfoList = new ArrayList<>();
+        for (final Element table : tables) {
+
+            final Element resultTable = table.getElementById("resultTable");
+
+            if (resultTable == null) {
+                continue;
+            }
+
+            final Elements trElements = table.getElementsByTag("tr");
+            patentInfoList.addAll(getPatentInfoList(linkSearchPageInfo, link, trElements));
+        }
+
+        return patentInfoList;
+    }
+
+    private List<PatentInfo> getPatentInfoList(LinkSearchPageInfo linkSearchPageInfo, String link, Elements trElements) {
+
+        final List<PatentInfo> patentInfoList = new ArrayList<>();
+        for (final Element element : trElements) {
+
+            if (doesRowContainsUrl(element)) {
+                final Elements aClass = element.getElementsByAttributeValue("class", "trans-section");
+
+                final PatentInfo patentInfo = getPatentInfo(element, aClass);
+                if (patentInfo == null) {
+                    continue;
+                }
+
+                patentInfo.setLinkSearchPageInfo(linkSearchPageInfo);
+                patentInfo.setSearchLink(link);
+                patentInfoList.add(patentInfo);
+            }
+        }
+        return patentInfoList;
     }
 
     @Override
