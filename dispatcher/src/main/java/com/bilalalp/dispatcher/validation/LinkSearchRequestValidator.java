@@ -1,7 +1,7 @@
 package com.bilalalp.dispatcher.validation;
 
 import com.bilalalp.dispatcher.dto.LinkSearchRequest;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 @Service

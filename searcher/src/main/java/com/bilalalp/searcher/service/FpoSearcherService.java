@@ -9,7 +9,7 @@ import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.common.util.JSoupUtil;
 import com.bilalalp.searcher.amqp.MessageSender;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;

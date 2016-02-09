@@ -1,7 +1,7 @@
 package com.bilalalp.common.service.base;
 
 import lombok.Setter;
-import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections4.IteratorUtils;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
