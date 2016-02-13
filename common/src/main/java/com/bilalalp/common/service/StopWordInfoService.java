@@ -5,4 +5,5 @@ import com.bilalalp.common.service.base.BaseService;
 
 public interface StopWordInfoService extends BaseService<StopWordInfo> {
 
+    void persistIfNotExist(String word);
 }
