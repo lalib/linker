@@ -89,7 +89,7 @@ public class FpoSearcherService implements SearcherService {
         }
     }
 
-    private List<PatentInfo> getElementInfos(LinkSearchPageInfo linkSearchPageInfo,String link, Elements elements) {
+    private List<PatentInfo> getElementInfos(LinkSearchPageInfo linkSearchPageInfo, String link, Elements elements) {
 
         boolean firstOne = true;
         final List<PatentInfo> patentInfoList = new ArrayList<>();
