@@ -11,7 +11,7 @@ import java.io.*;
 
 @Slf4j
 @Service
-public class StopWordInitializerService implements Serializable {
+public class StopwordInitializerService implements Serializable {
 
     @Autowired
     private StopWordInfoService stopWordInfoService;
