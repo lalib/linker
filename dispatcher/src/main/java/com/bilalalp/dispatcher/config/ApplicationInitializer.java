@@ -1,6 +1,6 @@
 package com.bilalalp.dispatcher.config;
 
-import com.bilalalp.dispatcher.service.WordInitializerService;
+import com.bilalalp.dispatcher.service.StopWordInitializerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +11,10 @@ import java.io.Serializable;
 public class ApplicationInitializer implements Serializable {
 
     @Autowired
-    private WordInitializerService wordInitializerService;
+    private StopWordInitializerService stopWordInitializerService;
 
     @PostConstruct
     public void init() {
-        wordInitializerService.init();
+        stopWordInitializerService.init();
     }
 }
