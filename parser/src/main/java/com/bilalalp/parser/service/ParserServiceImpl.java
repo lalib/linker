@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ParserServiceImpl implements ParserService {
@@ -22,13 +23,17 @@ public class ParserServiceImpl implements ParserService {
     @Autowired
     private SplitWordInfoService splitWordInfoService;
 
+    @Autowired
+    private LemmatizerService lemmatizerService;
+
     @Override
     public void parse(final PatentInfo patentInfo) {
 
         final String abstractContent = patentInfo.getAbstractContent();
         if (StringUtils.isNotEmpty(abstractContent)) {
             final String removedPunctuations = removePunctuations(abstractContent);
-            final String removedStopWords = removeStopWords(removedPunctuations);
+            final String lemmatizedWords = lemmatizerService.lemmatize(removedPunctuations);
+            final String removedStopWords = removeStopWords(lemmatizedWords);
             final String removedMultipleSpaces = removeMultipleSpaces(removedStopWords);
             if (StringUtils.isEmpty(removedMultipleSpaces.trim())) {
                 return;
@@ -47,16 +52,15 @@ public class ParserServiceImpl implements ParserService {
     }
 
     private List<SplitWordInfo> createNGramSplitWords(final List<String> splitBySpaceList, final PatentInfo patentInfo, final SplitWordType splitWordType) {
+        return splitBySpaceList.stream().map(k -> createSplitWordInfo(patentInfo, splitWordType, k)).collect(Collectors.toList());
+    }
 
-        final List<SplitWordInfo> splitWordInfoList = new ArrayList<>();
-        for (final String word : splitBySpaceList) {
-            final SplitWordInfo splitWordInfo = new SplitWordInfo();
-            splitWordInfo.setPatentInfo(patentInfo);
-            splitWordInfo.setSplitWordType(splitWordType);
-            splitWordInfo.setWord(word);
-            splitWordInfoList.add(splitWordInfo);
-        }
-        return splitWordInfoList;
+    private SplitWordInfo createSplitWordInfo(final PatentInfo patentInfo, final SplitWordType splitWordType, final String k) {
+        final SplitWordInfo splitWordInfo = new SplitWordInfo();
+        splitWordInfo.setPatentInfo(patentInfo);
+        splitWordInfo.setSplitWordType(splitWordType);
+        splitWordInfo.setWord(k);
+        return splitWordInfo;
     }
 
     public List<String> createNGram(final int len, final String str) {
@@ -68,7 +72,7 @@ public class ParserServiceImpl implements ParserService {
                 if (k > 0) {
                     sb.append(' ');
                 }
-                sb.append(parts[i + k]);
+                sb.append(parts[i + k].trim());
             }
             result[i] = sb.toString();
         }
@@ -88,7 +92,7 @@ public class ParserServiceImpl implements ParserService {
             }
         }
 
-        return replacedContent;
+        return replacedContent.trim();
     }
 
     private String removePunctuations(final String content) {
@@ -99,10 +103,15 @@ public class ParserServiceImpl implements ParserService {
 
         String replacedContent = content;
 
-        for (final String stopWord : parserInitialRepository.getStopWordList()) {
-            replacedContent = replacedContent.replaceAll(stopWord, " ");
+        final List<String> stopWordList = parserInitialRepository.getStopWordList();
+        for (final String stopWord : stopWordList) {
+            replacedContent = replacedContent.replaceAll(" ".concat(stopWord.trim()).concat(" "), " ");
+
+            if (replacedContent.startsWith(stopWord.trim().concat(" "))) {
+                replacedContent = replacedContent.replaceFirst(stopWord.trim().concat(" "), " ").trim();
+            }
         }
 
-        return replacedContent;
+        return replacedContent.trim();
     }
 }

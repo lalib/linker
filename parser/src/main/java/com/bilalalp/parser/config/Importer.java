@@ -7,8 +7,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class Importer {
 
     public static void main(String[] args) {
-
-        final AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(QueueConfig.class, CommonConfig.class);
-        annotationConfigApplicationContext.getBean(ImporterService.class).importToQueue(4L);
+        new AnnotationConfigApplicationContext(QueueConfig.class, CommonConfig.class).getBean(ImporterService.class).importToQueue(4L);
     }
 }
