@@ -28,7 +28,7 @@
         <c3p0.version>0.9.5.2</c3p0.version>
         <h2.version>1.4.191</h2.version>
         <mysql.version>5.1.38</mysql.version>
-        <postgresql.version>9.4.1207.jre7</postgresql.version>
+        <postgresql.version>9.4.1208.jre7</postgresql.version>
 
         <stanford-nlp.version>3.6.0</stanford-nlp.version>
         <commons-collections.version>4.1</commons-collections.version>

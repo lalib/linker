@@ -28,6 +28,18 @@ public class WordSummaryInfoServiceImpl extends AbstractService<WordSummaryInfo>
         return wordSummaryInfoRepository;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Long getCountByLinkSearchRequestInfoAndThresholdValue(final LinkSearchRequestInfo linkSearchRequestInfo, final Long thresholdValue) {
+        return wordSummaryInfoRepository.getCountByLinkSearchRequestInfoAndThresholdValue(linkSearchRequestInfo, thresholdValue);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<WordSummaryInfo> findByLinkSearchRequestInfoAndThresholdValue(final LinkSearchRequestInfo linkSearchRequestInfo, final Long thresholdValue, final Pageable pageable) {
+        return wordSummaryInfoRepository.findByLinkSearchRequestInfoAndThresholdValue(linkSearchRequestInfo, thresholdValue, pageable);
+    }
+
     @Override
     public void bulkInsert(final LinkSearchRequestInfo linkSearchRequestInfo) {
         wordSummaryInfoCustomRepository.bulkInsert(linkSearchRequestInfo);

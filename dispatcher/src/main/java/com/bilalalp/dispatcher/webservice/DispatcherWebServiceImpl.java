@@ -5,6 +5,8 @@ import com.bilalalp.dispatcher.service.DispatcherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.core.Response;
+
 @Service
 public class DispatcherWebServiceImpl implements DispatcherWebService {
 
@@ -29,6 +31,12 @@ public class DispatcherWebServiceImpl implements DispatcherWebService {
     @Override
     public KeywordSelectionResponseDto selectKeyword(final KeywordSelectionRequestDto keywordSelectionRequestDto) {
         return dispatcherService.processSelectKeywordRequest(keywordSelectionRequestDto);
+    }
+
+    @Override
+    public Response eliminateKeywords(final Long lsrId, final Long threshold) {
+        dispatcherService.eliminate(lsrId, threshold);
+        return Response.ok().build();
     }
 
     @Override

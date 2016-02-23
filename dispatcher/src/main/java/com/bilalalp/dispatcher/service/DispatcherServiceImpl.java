@@ -61,6 +61,9 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Autowired
     private KeywordSelectionRequestService keywordSelectionRequestService;
 
+    @Autowired
+    private WordEliminationService wordEliminationService;
+
     @Override
     @Transactional
     public LinkSearchResponse processLinkSearchRequest(final LinkSearchRequest linkSearchRequest) {
@@ -105,6 +108,12 @@ public class DispatcherServiceImpl implements DispatcherService {
         keywordSelectionRequestService.save(keywordSelectionRequest);
         messageSender.sendMessage(selectorQueueConfigurationDto, new QueueMessageDto(keywordSelectionRequest.getId()));
         return new KeywordSelectionResponseDto(keywordSelectionRequest.getId());
+    }
+
+    @Transactional
+    @Override
+    public void eliminate(final Long lsrId, final Long threshold) {
+        wordEliminationService.process(lsrId, threshold);
     }
 
     private Long persistRequest(final LinkSearchRequest linkSearchRequest) {

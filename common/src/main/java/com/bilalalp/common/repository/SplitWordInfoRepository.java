@@ -1,5 +1,6 @@
 package com.bilalalp.common.repository;
 
+import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.SplitWordInfo;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,10 @@ public interface SplitWordInfoRepository extends CrudRepository<SplitWordInfo, L
     @Modifying
     @Query("delete from SplitWordInfo s where s.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id= :requestId")
     void deleteByRequestId(@Param("requestId") Long requestId);
+
+    @Query("SELECT COUNT(p.id) FROM SplitWordInfo p WHERE p.patentInfo.id = :patentInfo AND p.word = :word")
+    Long getCountByPatentInfoIdAndWord(@Param("patentInfo") Long patentInfoId, @Param("word") String word);
+
+    @Query("SELECT COUNT(p.id) FROM SplitWordInfo p WHERE p.patentInfo.linkSearchPageInfo.linkSearchRequestInfo =:linkSearchRequestInfo AND p.word = :word")
+    Long getWordCountByLinkSearchRequestInfoAndWord(@Param("linkSearchRequestInfo") LinkSearchRequestInfo linkSearchRequestInfo, @Param("word") String word);
 }

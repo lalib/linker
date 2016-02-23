@@ -7,7 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = SplitWordInfo.TABLE_NAME)
+@Table(name = SplitWordInfo.TABLE_NAME, indexes = {@Index(name = "IDX_WORD", columnList = "C_WORD"), @Index(name = "IDX_WORD_PATENT", columnList = "C_WORD,C_PATENT_INFO_ID")})
 @Access(AccessType.FIELD)
 @Getter
 @Setter

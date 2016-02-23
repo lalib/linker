@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface WordSummaryInfoService extends BaseService<WordSummaryInfo> {
 
+    Long getCountByLinkSearchRequestInfoAndThresholdValue(LinkSearchRequestInfo linkSearchRequestInfo, Long thresholdValue);
+
+    List<WordSummaryInfo> findByLinkSearchRequestInfoAndThresholdValue(LinkSearchRequestInfo linkSearchRequestInfo, Long thresholdValue, Pageable pageable);
+
     void bulkInsert(final LinkSearchRequestInfo linkSearchRequestInfo);
 
     List<WordSummaryInfo> findByLinkSearchRequestInfo(LinkSearchRequestInfo linkSearchRequestInfo, Pageable pageable);

@@ -11,4 +11,7 @@ public interface DispatcherService {
     WordSummaryCreateResponse processCreateWordSummary(WordSummaryCreateRequest wordSummaryCreateRequest);
 
     KeywordSelectionResponseDto processSelectKeywordRequest(KeywordSelectionRequestDto keywordSelectionRequestDto);
+
+    void eliminate(Long lsrId, Long threshold);
+
 }
