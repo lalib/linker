@@ -30,6 +30,8 @@ public interface PatentInfoRepository extends CrudRepository<PatentInfo, Long> {
     @Query("SELECT COUNT(p.id) FROM PatentInfo p WHERE p.linkSearchPageInfo.linkSearchRequestInfo = :linkSearchRequestInfo")
     Long getPatentInfoCountByLinkSearchRequestInfo(@Param("linkSearchRequestInfo") LinkSearchRequestInfo linkSearchRequestInfo);
 
-    @Query("SELECT DISTINCT new com.bilalalp.common.dto.EntityDto(s.patentInfo.id,s.patentInfo.version) FROM SplitWordInfo s WHERE s.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and s.patentInfo.id NOT IN (SELECT k.patentInfo.id FROM SplitWordInfo k WHERE k.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and k.word =:word)")
+    @Query("SELECT DISTINCT new com.bilalalp.common.dto.EntityDto(s.id,s.version) " +
+            "FROM PatentInfo s WHERE s.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and s.id NOT IN " +
+            "(SELECT k.patentInfo.id FROM SplitWordInfo k WHERE k.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and k.word =:word)")
     List<EntityDto> getPatentInfoIds(@Param("lsrId") Long lsrId, @Param("word") String word);
 }

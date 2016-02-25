@@ -5,16 +5,12 @@ import com.bilalalp.common.dto.PatentWordCountDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.entity.tfidf.WordElimination;
 import com.bilalalp.common.repository.TfIdfInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
 import lombok.Getter;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,43 +47,7 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
 
     @Transactional
     @Override
-    public void process(final Long lsrId, final Long thresholdValue) {
-
-        final LinkSearchRequestInfo linkSearchRequestInfo = linkSearchRequestInfoService.find(lsrId);
-
-        Long start = 0L;
-        Long pageSize = 1000L;
-
-        Long thValue = 0L;
-
-        boolean result = true;
-
-        while (result) {
-
-            final Pageable pageable = new PageRequest(start.intValue(), pageSize.intValue());
-            final List<WordElimination> wordEliminationList = wordEliminationService.getEliminatedWordsByLinkSearchRequestInfoAndThresholdValue(linkSearchRequestInfo, pageable);
-
-            start += 1L;
-
-            if (CollectionUtils.isEmpty(wordEliminationList)) {
-                break;
-            }
-
-            for (final WordElimination wordElimination : wordEliminationList) {
-
-                processEliminatedWord(linkSearchRequestInfo, wordElimination, thresholdValue);
-                thValue++;
-                System.out.println("TH VALUE : " + thValue);
-
-                if (thValue.compareTo(thresholdValue) == 0) {
-                    result = false;
-                    break;
-                }
-            }
-        }
-    }
-
-    private void processEliminatedWord(final LinkSearchRequestInfo linkSearchRequestInfo, final WordElimination wordElimination, final Long thresholdValue) {
+    public void processEliminatedWord(final LinkSearchRequestInfo linkSearchRequestInfo, final WordElimination wordElimination, final Long thresholdValue) {
 
         final List<PatentWordCountDto> patentWordCountDtoList = splitWordInfoService.getPatentWordCount(linkSearchRequestInfo, wordElimination.getWord());
         for (final PatentWordCountDto patentWordCountDto : patentWordCountDtoList) {

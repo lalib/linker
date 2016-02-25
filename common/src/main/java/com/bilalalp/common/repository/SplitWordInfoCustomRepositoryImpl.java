@@ -18,7 +18,10 @@ public class SplitWordInfoCustomRepositoryImpl implements SplitWordInfoCustomRep
     public List<PatentWordCountDto> getPatentWordCount(final LinkSearchRequestInfo linkSearchRequestInfo, final String word) {
 
         return entityManager
-                .createQuery("SELECT new com.bilalalp.common.dto.PatentWordCountDto(s.patentInfo.id,s.patentInfo.version, COUNT(s.word)) FROM SplitWordInfo s WHERE s.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and s.word =:word GROUP BY s.patentInfo.id,s.patentInfo.version")
+                .createQuery("SELECT new com.bilalalp.common.dto.PatentWordCountDto(s.patentInfo.id,s.patentInfo.version, COUNT(s.word)) " +
+                        "FROM SplitWordInfo s " +
+                        "WHERE s.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and s.word =:word " +
+                        "GROUP BY s.patentInfo.id,s.patentInfo.version")
                 .setParameter("lsrId", linkSearchRequestInfo.getId())
                 .setParameter("word", word)
                 .getResultList();
@@ -28,7 +31,11 @@ public class SplitWordInfoCustomRepositoryImpl implements SplitWordInfoCustomRep
     public Long getPatentWordCountWithoutZeroCount(final LinkSearchRequestInfo linkSearchRequestInfo, final String word) {
 
         return (long) entityManager
-                .createQuery("SELECT new com.bilalalp.common.dto.PatentWordCountDto(s.patentInfo.id,s.patentInfo.version,COUNT(s.word)) FROM SplitWordInfo s WHERE s.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and s.word =:word GROUP BY s.patentInfo.id,s.patentInfo.version HAVING COUNT(s.word) > 0")
+                .createQuery("SELECT new com.bilalalp.common.dto.PatentWordCountDto(s.patentInfo.id,s.patentInfo.version,COUNT(s.word)) " +
+                        "FROM SplitWordInfo s " +
+                        "WHERE s.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and s.word =:word " +
+                        "GROUP BY s.patentInfo.id,s.patentInfo.version " +
+                        "HAVING COUNT(s.word) > 0")
                 .setParameter("lsrId", linkSearchRequestInfo.getId())
                 .setParameter("word", word)
                 .getResultList().size();
