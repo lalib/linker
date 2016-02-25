@@ -40,8 +40,8 @@ public class DispatcherWebServiceImpl implements DispatcherWebService {
     }
 
     @Override
-    public Response calculateTfIdf(final Long lsrId,final  Long thresholdValue) {
-        dispatcherService.calculateTfIdf(lsrId,thresholdValue);
+    public Response calculateTfIdf(final Long lsrId, final Long thresholdValue) {
+        dispatcherService.calculateTfIdf(lsrId, thresholdValue);
         return Response.ok().build();
     }
 

@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatentWordCountDto implements Serializable{
+public class PatentWordCountDto implements Serializable {
 
     private Long patentId;
 

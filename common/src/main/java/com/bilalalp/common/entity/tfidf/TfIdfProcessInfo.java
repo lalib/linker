@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Access(AccessType.FIELD)
 @Getter
 @Setter
-public class TfIdfProcessInfo extends AbstractEntity{
+public class TfIdfProcessInfo extends AbstractEntity {
 
     public static final String JOIN_COLUMN = "C_TF_IDF_PROCESS_INFO_ID";
 

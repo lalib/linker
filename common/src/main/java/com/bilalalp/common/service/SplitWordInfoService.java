@@ -4,7 +4,6 @@ import com.bilalalp.common.dto.PatentWordCountDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.SplitWordInfo;
 import com.bilalalp.common.service.base.BaseService;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

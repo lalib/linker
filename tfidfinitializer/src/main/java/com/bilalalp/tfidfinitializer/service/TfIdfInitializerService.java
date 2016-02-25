@@ -103,7 +103,7 @@ public class TfIdfInitializerService implements MessageListener {
         try {
             final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
             process(queueMessageDto.getId());
-        }catch (final Exception ex){
+        } catch (final Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
