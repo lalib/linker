@@ -2,8 +2,8 @@ package com.bilalalp.common.service;
 
 
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
-import com.bilalalp.common.entity.patent.WordElimination;
-import com.bilalalp.common.entity.patent.WordSummaryInfo;
+import com.bilalalp.common.entity.tfidf.WordElimination;
+import com.bilalalp.common.entity.tfidf.WordSummaryInfo;
 import com.bilalalp.common.repository.WordEliminationRepository;
 import com.bilalalp.common.service.base.AbstractService;
 import lombok.Getter;
@@ -69,7 +69,7 @@ public class WordEliminationServiceImpl extends AbstractService<WordElimination>
 
                 final WordElimination wordElimination = new WordElimination();
                 wordElimination.setLinkSearchRequestInfo(linkSearchRequestInfo);
-                wordElimination.setScore(tfIdfResult.longValue());
+                wordElimination.setScore(tfIdfResult);
                 wordElimination.setThresholdValue(thresholdValue);
                 wordElimination.setWord(wordSummaryInfo.getWord());
                 wordElimination.setCount(wordSummaryInfo.getCount());
@@ -88,5 +88,10 @@ public class WordEliminationServiceImpl extends AbstractService<WordElimination>
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveWithNewTransaction(final WordElimination wordElimination) {
         save(wordElimination);
+    }
+
+    @Override
+    public List<WordElimination> getEliminatedWordsByLinkSearchRequestInfoAndThresholdValue(final LinkSearchRequestInfo linkSearchRequestInfo, final Pageable pageable) {
+        return repository.getEliminatedWordsByLinkSearchRequestInfoAndThresholdValue(linkSearchRequestInfo, pageable);
     }
 }

@@ -9,6 +9,7 @@ import com.bilalalp.common.entity.patent.KeywordSelectionRequest;
 import com.bilalalp.common.entity.patent.StopWordInfo;
 import com.bilalalp.common.entity.site.SiteInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
+import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.service.*;
 import com.bilalalp.dispatcher.amqp.MessageSender;
 import com.bilalalp.dispatcher.dto.*;
@@ -37,6 +38,10 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Autowired
     private QueueConfigurationDto selectorQueueConfigurationDto;
 
+    @Qualifier("tfIdfQueueConfiguration")
+    @Autowired
+    private QueueConfigurationDto tfIdfQueueConfigurationDto;
+
     @Autowired
     private Validator<LinkSearchRequest> linkSearchRequestValidator;
 
@@ -63,6 +68,9 @@ public class DispatcherServiceImpl implements DispatcherService {
 
     @Autowired
     private WordEliminationService wordEliminationService;
+
+    @Autowired
+    private TfIdfRequestInfoService tfIdfRequestInfoService;
 
     @Override
     @Transactional
@@ -114,6 +122,20 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Override
     public void eliminate(final Long lsrId, final Long threshold) {
         wordEliminationService.process(lsrId, threshold);
+    }
+
+    @Transactional
+    @Override
+    public void calculateTfIdf(final Long lsrId, final Long thresholdValue) {
+
+        final LinkSearchRequestInfo linkSearchRequestInfo = linkSearchRequestInfoService.find(lsrId);
+
+        final TfIdfRequestInfo tfIdfRequestInfo = new TfIdfRequestInfo();
+        tfIdfRequestInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
+        tfIdfRequestInfo.setThresholdValue(thresholdValue);
+
+        tfIdfRequestInfoService.save(tfIdfRequestInfo);
+        messageSender.sendMessage(tfIdfQueueConfigurationDto, new QueueMessageDto(tfIdfRequestInfo.getId()));
     }
 
     private Long persistRequest(final LinkSearchRequest linkSearchRequest) {

@@ -14,4 +14,5 @@ public interface DispatcherService {
 
     void eliminate(Long lsrId, Long threshold);
 
+    void calculateTfIdf(Long lsrId, Long thresholdValue);
 }

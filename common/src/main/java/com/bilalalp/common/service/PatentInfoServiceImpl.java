@@ -1,5 +1,6 @@
 package com.bilalalp.common.service;
 
+import com.bilalalp.common.dto.EntityDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
@@ -44,5 +45,10 @@ public class PatentInfoServiceImpl extends AbstractService<PatentInfo> implement
     @Override
     public Long getPatentInfoCountByLinkSearchPageInfo(final LinkSearchRequestInfo linkSearchRequestInfo) {
         return patentInfoRepository.getPatentInfoCountByLinkSearchRequestInfo(linkSearchRequestInfo);
+    }
+
+    @Override
+    public List<EntityDto> getPatentInfos(final Long lsrId, final String word) {
+        return patentInfoRepository.getPatentInfoIds(lsrId, word);
     }
 }

@@ -32,5 +32,9 @@ public interface DispatcherWebService {
     Response eliminateKeywords(@QueryParam("lsrId") Long lsrId, @QueryParam("threshold") Long threshold);
 
     @GET
+    @Path("/calculateTfIdf")
+    Response calculateTfIdf(@QueryParam("lsrId") Long lsrId, @QueryParam("threshold") Long threshold);
+
+    @GET
     String state();
 }

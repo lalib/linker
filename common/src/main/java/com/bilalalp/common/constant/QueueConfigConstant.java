@@ -28,6 +28,12 @@ public final class QueueConfigConstant {
     public static final String AMQP_SELECTOR_QUEUE_NAME = "amqp.selector.queue.name";
     public static final String AMQP_SELECTOR_QUEUE_KEY = "amqp.selector.queue.key";
 
+    public static final String AMQP_TF_IDF_QUEUE_NAME = "amqp.tfidf.queue.name";
+    public static final String AMQP_TF_IDF_QUEUE_KEY = "amqp.tfidf.queue.key";
+
+    public static final String AMQP_TF_IDF_PROCESS_QUEUE_NAME = "amqp.tfidf.process.queue.name";
+    public static final String AMQP_TF_IDF_PROCESS_QUEUE_KEY = "amqp.tfidf.process.queue.key";
+
     private QueueConfigConstant() {
         // Constant Class
     }

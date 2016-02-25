@@ -1,6 +1,7 @@
 package com.bilalalp.common.entity.patent;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
+import com.bilalalp.common.entity.tfidf.WordSummaryInfo;
 import lombok.Getter;
 import lombok.Setter;
 

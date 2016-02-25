@@ -87,6 +87,14 @@ public class QueueConfig {
     }
 
     @Bean
+    public Binding tfIdfQueueBinding() {
+        return BindingBuilder.bind(tfIdfQueue())
+                .to(amqpDirectExchange())
+                .with(tfIdfQueueConfiguration().getQueueKey())
+                .noargs();
+    }
+
+    @Bean
     public Queue linkSearcherQueue() {
         return new Queue(linkSearcherQueueConfiguration().getQueueName());
     }
@@ -99,6 +107,11 @@ public class QueueConfig {
     @Bean
     public Queue selectorQueue() {
         return new Queue(selectorQueueConfiguration().getQueueName());
+    }
+
+    @Bean
+    public Queue tfIdfQueue() {
+        return new Queue(tfIdfQueueConfiguration().getQueueName());
     }
 
     @Bean
@@ -131,6 +144,16 @@ public class QueueConfig {
         return simpleMessageListenerContainer;
     }
 
+    @Bean
+    public MessageListenerContainer tfIdfQueueContainer() {
+        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        simpleMessageListenerContainer.setConcurrentConsumers(1);
+        simpleMessageListenerContainer.setMessageConverter(messageConverter());
+        simpleMessageListenerContainer.setQueueNames(tfIdfQueueConfiguration().getQueueName());
+        return simpleMessageListenerContainer;
+    }
+
     @Qualifier(value = "dispatcherRequestQueueConfiguration")
     @Bean
     public QueueConfigurationDto dispatcherRequestQueueConfiguration() {
@@ -158,6 +181,16 @@ public class QueueConfig {
         queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
         queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_SELECTOR_QUEUE_KEY));
         queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_SELECTOR_QUEUE_NAME));
+        return queueConfigurationDto;
+    }
+
+    @Qualifier(value = "tfIdfQueueConfiguration")
+    @Bean
+    public QueueConfigurationDto tfIdfQueueConfiguration() {
+        final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
+        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
+        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_TF_IDF_QUEUE_KEY));
+        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_TF_IDF_QUEUE_NAME));
         return queueConfigurationDto;
     }
 }

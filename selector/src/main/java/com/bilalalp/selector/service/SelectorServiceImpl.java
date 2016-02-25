@@ -3,7 +3,7 @@ package com.bilalalp.selector.service;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.KeywordSelectionRequest;
 import com.bilalalp.common.entity.patent.SelectedKeywordInfo;
-import com.bilalalp.common.entity.patent.WordSummaryInfo;
+import com.bilalalp.common.entity.tfidf.WordSummaryInfo;
 import com.bilalalp.common.service.LinkSearchRequestInfoService;
 import com.bilalalp.common.service.PatentInfoService;
 import com.bilalalp.common.service.SelectedKeywordInfoService;

@@ -1,7 +1,7 @@
 package com.bilalalp.common.repository;
 
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
-import com.bilalalp.common.entity.patent.WordSummaryInfo;
+import com.bilalalp.common.entity.tfidf.WordSummaryInfo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

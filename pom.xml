@@ -56,6 +56,8 @@
         <module>parser</module>
         <module>exporter</module>
         <module>selector</module>
+        <module>tfidfinitializer</module>
+        <module>tfidfprocessor</module>
     </modules>
 
     <dependencies>
