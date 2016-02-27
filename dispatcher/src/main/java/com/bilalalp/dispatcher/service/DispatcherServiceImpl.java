@@ -10,6 +10,7 @@ import com.bilalalp.common.entity.patent.StopWordInfo;
 import com.bilalalp.common.entity.site.SiteInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
+import com.bilalalp.common.entity.tfidf.WordEliminationRequestInfo;
 import com.bilalalp.common.service.*;
 import com.bilalalp.dispatcher.amqp.MessageSender;
 import com.bilalalp.dispatcher.dto.*;
@@ -42,6 +43,10 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Autowired
     private QueueConfigurationDto tfIdfQueueConfigurationDto;
 
+    @Qualifier("weriQueueConfiguration")
+    @Autowired
+    private QueueConfigurationDto weriQueueConfigurationDto;
+
     @Autowired
     private Validator<LinkSearchRequest> linkSearchRequestValidator;
 
@@ -67,10 +72,10 @@ public class DispatcherServiceImpl implements DispatcherService {
     private KeywordSelectionRequestService keywordSelectionRequestService;
 
     @Autowired
-    private WordEliminationService wordEliminationService;
+    private TfIdfRequestInfoService tfIdfRequestInfoService;
 
     @Autowired
-    private TfIdfRequestInfoService tfIdfRequestInfoService;
+    private WordEliminationRequestInfoService wordEliminationRequestInfoService;
 
     @Override
     @Transactional
@@ -121,7 +126,13 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Transactional
     @Override
     public void eliminate(final Long lsrId, final Long threshold) {
-        wordEliminationService.process(lsrId, threshold);
+
+        final WordEliminationRequestInfo wordEliminationRequestInfo = new WordEliminationRequestInfo();
+        wordEliminationRequestInfo.setLinkSearchRequestInfo(linkSearchRequestInfoService.find(lsrId));
+        wordEliminationRequestInfo.setThresholdValue(threshold);
+
+        wordEliminationRequestInfoService.save(wordEliminationRequestInfo);
+        messageSender.sendMessage(weriQueueConfigurationDto, new QueueMessageDto(wordEliminationRequestInfo.getId()));
     }
 
     @Transactional

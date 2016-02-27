@@ -34,6 +34,12 @@ public final class QueueConfigConstant {
     public static final String AMQP_TF_IDF_PROCESS_QUEUE_NAME = "amqp.tfidf.process.queue.name";
     public static final String AMQP_TF_IDF_PROCESS_QUEUE_KEY = "amqp.tfidf.process.queue.key";
 
+    public static final String AMQP_WERI_QUEUE_NAME = "amqp.weri.queue.name";
+    public static final String AMQP_WERI_QUEUE_KEY = "amqp.weri.queue.key";
+
+    public static final String AMQP_WERP_QUEUE_NAME = "amqp.werp.queue.name";
+    public static final String AMQP_WERP_QUEUE_KEY = "amqp.werp.queue.key";
+
     private QueueConfigConstant() {
         // Constant Class
     }

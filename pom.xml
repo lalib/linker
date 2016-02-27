@@ -15,9 +15,9 @@
         <source.java.version>1.8</source.java.version>
         <target.java.version>1.8</target.java.version>
 
-        <spring.version>4.2.4.RELEASE</spring.version>
+        <spring.version>4.2.5.RELEASE</spring.version>
         <spring-amqp.version>1.5.4.RELEASE</spring-amqp.version>
-        <spring-data.version>1.9.2.RELEASE</spring-data.version>
+        <spring-data.version>1.9.4.RELEASE</spring-data.version>
 
         <cxf.version>3.1.5</cxf.version>
         <jackson-jaxrs.version>2.7.1</jackson-jaxrs.version>
@@ -58,6 +58,8 @@
         <module>selector</module>
         <module>tfidfinitializer</module>
         <module>tfidfprocessor</module>
+        <module>wordeliminator</module>
+        <module>wordprocessor</module>
     </modules>
 
     <dependencies>

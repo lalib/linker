@@ -95,6 +95,14 @@ public class QueueConfig {
     }
 
     @Bean
+    public Binding weriQueueBinding() {
+        return BindingBuilder.bind(weriQueue())
+                .to(amqpDirectExchange())
+                .with(weriQueueConfiration().getQueueKey())
+                .noargs();
+    }
+
+    @Bean
     public Queue linkSearcherQueue() {
         return new Queue(linkSearcherQueueConfiguration().getQueueName());
     }
@@ -112,6 +120,11 @@ public class QueueConfig {
     @Bean
     public Queue tfIdfQueue() {
         return new Queue(tfIdfQueueConfiguration().getQueueName());
+    }
+
+    @Bean
+    public Queue weriQueue() {
+        return new Queue(weriQueueConfiration().getQueueName());
     }
 
     @Bean
@@ -154,6 +167,16 @@ public class QueueConfig {
         return simpleMessageListenerContainer;
     }
 
+    @Bean
+    public MessageListenerContainer weriQueueContainer() {
+        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        simpleMessageListenerContainer.setConcurrentConsumers(1);
+        simpleMessageListenerContainer.setMessageConverter(messageConverter());
+        simpleMessageListenerContainer.setQueueNames(weriQueueConfiration().getQueueName());
+        return simpleMessageListenerContainer;
+    }
+
     @Qualifier(value = "dispatcherRequestQueueConfiguration")
     @Bean
     public QueueConfigurationDto dispatcherRequestQueueConfiguration() {
@@ -191,6 +214,16 @@ public class QueueConfig {
         queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
         queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_TF_IDF_QUEUE_KEY));
         queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_TF_IDF_QUEUE_NAME));
+        return queueConfigurationDto;
+    }
+
+    @Qualifier("weriQueueConfiguration")
+    @Bean
+    public QueueConfigurationDto weriQueueConfiration() {
+        final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
+        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
+        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_WERI_QUEUE_KEY));
+        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_WERI_QUEUE_NAME));
         return queueConfigurationDto;
     }
 }

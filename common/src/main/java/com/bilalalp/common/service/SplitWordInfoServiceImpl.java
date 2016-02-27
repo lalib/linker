@@ -57,4 +57,10 @@ public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> imp
     public Long getPatentWordCountWithoutZeroCount(LinkSearchRequestInfo linkSearchRequestInfo, String word) {
         return splitWordInfoCustomRepository.getPatentWordCountWithoutZeroCount(linkSearchRequestInfo, word);
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Long getSplitWordCount(final LinkSearchRequestInfo linkSearchRequestInfo, final String word) {
+        return splitWordInfoCustomRepository.getSplitWordCount(linkSearchRequestInfo, word);
+    }
 }

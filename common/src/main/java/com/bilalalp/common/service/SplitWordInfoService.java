@@ -18,4 +18,6 @@ public interface SplitWordInfoService extends BaseService<SplitWordInfo> {
     Long getWordCountByLinkSearchRequestInfoAndWord(LinkSearchRequestInfo linkSearchRequestInfo, String word);
 
     Long getPatentWordCountWithoutZeroCount(final LinkSearchRequestInfo linkSearchRequestInfo, final String word);
+
+    Long getSplitWordCount(LinkSearchRequestInfo linkSearchRequestInfo, String word);
 }

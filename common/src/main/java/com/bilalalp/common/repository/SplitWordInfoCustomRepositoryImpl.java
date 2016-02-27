@@ -1,6 +1,7 @@
 package com.bilalalp.common.repository;
 
 import com.bilalalp.common.dto.PatentWordCountDto;
+import com.bilalalp.common.dto.WordProcessorDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import org.springframework.stereotype.Repository;
 
@@ -39,5 +40,15 @@ public class SplitWordInfoCustomRepositoryImpl implements SplitWordInfoCustomRep
                 .setParameter("lsrId", linkSearchRequestInfo.getId())
                 .setParameter("word", word)
                 .getResultList().size();
+    }
+
+    @Override
+    public Long getSplitWordCount(final LinkSearchRequestInfo linkSearchRequestInfo, final String word) {
+        return (long) entityManager
+                .createQuery("SELECT COUNT(DISTINCT p.id) FROM SplitWordInfo p " +
+                        "WHERE p.patentInfo.linkSearchPageInfo.linkSearchRequestInfo = :linkSearchRequestInfo AND p.word =:word")
+                .setParameter("linkSearchRequestInfo", linkSearchRequestInfo)
+                .setParameter("word", word)
+                .getSingleResult();
     }
 }

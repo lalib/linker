@@ -62,10 +62,9 @@ public class WordEliminationServiceImpl extends AbstractService<WordElimination>
 
             for (final WordSummaryInfo wordSummaryInfo : wordSummaryInfoList) {
                 final Long dfValue = splitWordInfoService.getWordCountByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, wordSummaryInfo.getWord());
-                final Long numberOfPatentCount = splitWordInfoService.getPatentWordCountWithoutZeroCount(linkSearchRequestInfo, wordSummaryInfo.getWord());
+                final Long numberOfPatentCount = splitWordInfoService.getSplitWordCount(linkSearchRequestInfo, wordSummaryInfo.getWord());
                 final double logResult = Math.log(patentInfoCount.doubleValue() / numberOfPatentCount);
                 final Double tfIdfResult = dfValue.doubleValue() * logResult;
-
 
                 final WordElimination wordElimination = new WordElimination();
                 wordElimination.setLinkSearchRequestInfo(linkSearchRequestInfo);
