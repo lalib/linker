@@ -81,6 +81,7 @@ public class TfIdfInitializerService implements MessageListener {
                 tfIdfProcessInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
                 tfIdfProcessInfo.setThresholdValue(tfIdfRequestInfo.getThresholdValue());
                 tfIdfProcessInfo.setWordElimination(wordElimination);
+                tfIdfProcessInfo.setTfIdfRequestInfo(tfIdfRequestInfo);
                 applicationContext.getBean(TfIdfInitializerService.class).saveAndSendToQueue(tfIdfProcessInfo);
 
                 if (thValue.compareTo(tfIdfRequestInfo.getThresholdValue()) == 0) {

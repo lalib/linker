@@ -29,6 +29,6 @@ public class TfIdfProcessorService implements MessageListener {
         final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
         System.out.println(queueMessageDto.getId());
         final TfIdfProcessInfo tfIdfProcessInfo = tfIdfProcessInfoService.find(queueMessageDto.getId());
-        tfIdfInfoService.processEliminatedWord(tfIdfProcessInfo.getLinkSearchRequestInfo(), tfIdfProcessInfo.getWordElimination(), tfIdfProcessInfo.getThresholdValue());
+        tfIdfInfoService.processEliminatedWord(tfIdfProcessInfo);
     }
 }

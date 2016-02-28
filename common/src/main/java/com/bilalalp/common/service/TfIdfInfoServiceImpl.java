@@ -5,6 +5,8 @@ import com.bilalalp.common.dto.PatentWordCountDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfInfo;
+import com.bilalalp.common.entity.tfidf.TfIdfProcessInfo;
+import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.entity.tfidf.WordElimination;
 import com.bilalalp.common.repository.TfIdfInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
@@ -45,19 +47,6 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
     @Autowired
     private TfIdfRequestInfoService tfIdfRequestInfoService;
 
-    @Transactional
-    @Override
-    public void processEliminatedWord(final LinkSearchRequestInfo linkSearchRequestInfo, final WordElimination wordElimination, final Long thresholdValue) {
-
-        final List<PatentWordCountDto> patentWordCountDtoList = splitWordInfoService.getPatentWordCount(linkSearchRequestInfo, wordElimination.getWord());
-        for (final PatentWordCountDto patentWordCountDto : patentWordCountDtoList) {
-            applicationContext.getBean(TfIdfInfoServiceImpl.class).saveWithNewTransaction(wordElimination, linkSearchRequestInfo, patentWordCountDto, thresholdValue);
-        }
-
-        final List<EntityDto> patentInfoIds = patentInfoService.getPatentInfos(linkSearchRequestInfo.getId(), wordElimination.getWord());
-        applicationContext.getBean(TfIdfInfoServiceImpl.class).saveWithNewTransaction(wordElimination, linkSearchRequestInfo, patentInfoIds, thresholdValue);
-    }
-
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void saveWithNewTransaction(final WordElimination wordElimination, final LinkSearchRequestInfo linkSearchRequestInfo, final PatentWordCountDto patentWordCountDto, final Long thresholdValue) {
@@ -82,11 +71,32 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         save(tfIdfInfo);
     }
 
+    @Override
+    public void processEliminatedWord(final TfIdfProcessInfo tfIdfProcessInfo) {
+
+        final LinkSearchRequestInfo linkSearchRequestInfo = tfIdfProcessInfo.getLinkSearchRequestInfo();
+        final Long thresholdValue = tfIdfProcessInfo.getThresholdValue();
+        final WordElimination wordElimination = tfIdfProcessInfo.getWordElimination();
+        final List<PatentWordCountDto> patentWordCountDtoList = splitWordInfoService.getPatentWordCount(linkSearchRequestInfo, wordElimination.getWord());
+
+        for (final PatentWordCountDto patentWordCountDto : patentWordCountDtoList) {
+            applicationContext.getBean(TfIdfInfoServiceImpl.class).saveWithNewTransaction(wordElimination, linkSearchRequestInfo, patentWordCountDto, thresholdValue);
+        }
+
+        final List<EntityDto> patentInfoIds = patentInfoService.getPatentInfos(linkSearchRequestInfo.getId(), wordElimination.getWord());
+        applicationContext.getBean(TfIdfInfoServiceImpl.class).saveWithNewTransaction(tfIdfProcessInfo, patentInfoIds);
+    }
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
-    public void saveWithNewTransaction(final WordElimination wordElimination, final LinkSearchRequestInfo linkSearchRequestInfo, final List<EntityDto> patentInfos, final Long thresholdValue) {
+    public void saveWithNewTransaction(final TfIdfProcessInfo tfIdfProcessInfo, final List<EntityDto> patentInfoIds) {
 
-        for (final EntityDto entityDto : patentInfos) {
+        final WordElimination wordElimination = tfIdfProcessInfo.getWordElimination();
+        final LinkSearchRequestInfo linkSearchRequestInfo = tfIdfProcessInfo.getLinkSearchRequestInfo();
+        final Long thresholdValue = tfIdfProcessInfo.getThresholdValue();
+        final TfIdfRequestInfo tfIdfRequestInfo = tfIdfProcessInfo.getTfIdfRequestInfo();
+
+        for (final EntityDto entityDto : patentInfoIds) {
             final PatentInfo patentInfo = new PatentInfo();
             patentInfo.setId(entityDto.getId());
             patentInfo.setVersion(entityDto.getVersion());
@@ -99,6 +109,7 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
             tfIdfInfo.setPatentCount(wordElimination.getPatentCount());
             tfIdfInfo.setThresholdValue(thresholdValue);
             tfIdfInfo.setWord(wordElimination.getWord());
+            tfIdfInfo.setTfIdfRequestInfo(tfIdfRequestInfo);
 
             tfIdfInfo.setScore(0d);
             tfIdfInfo.setCount(0L);

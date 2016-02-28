@@ -32,4 +32,8 @@ public class TfIdfProcessInfo extends AbstractEntity {
     @ManyToOne(targetEntity = WordElimination.class, fetch = FetchType.LAZY)
     @JoinColumn(name = WordElimination.JOIN_COLUMN)
     private WordElimination wordElimination;
+
+    @ManyToOne(targetEntity = TfIdfRequestInfo.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = TfIdfRequestInfo.JOIN_COLUMN)
+    private TfIdfRequestInfo tfIdfRequestInfo;
 }

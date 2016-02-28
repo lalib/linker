@@ -9,7 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = TfIdfInfo.TABLE_NAME)
+@Table(name = TfIdfInfo.TABLE_NAME, indexes = {@Index(name = "IDX_WRD", columnList = "C_WORD"), @Index(name = "IND_PTNT", columnList = PatentInfo.JOIN_COLUMN)})
 @Access(AccessType.FIELD)
 @Getter
 @Setter
@@ -53,4 +53,8 @@ public class TfIdfInfo extends AbstractEntity {
 
     @Column(name = "C_THRESHOLD_VALUE")
     private Long thresholdValue;
+
+    @ManyToOne(targetEntity = TfIdfRequestInfo.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = TfIdfRequestInfo.JOIN_COLUMN)
+    private TfIdfRequestInfo tfIdfRequestInfo;
 }
