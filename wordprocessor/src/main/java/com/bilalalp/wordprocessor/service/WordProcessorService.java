@@ -39,8 +39,7 @@ public class WordProcessorService implements MessageListener {
         final Long patentCount = wordEliminationProcessInfo.getPatentCount();
 
         final Long dfValue = splitWordInfoService.getWordCountByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, wordSummaryInfo.getWord());
-        final Long numberOfPatentCount = splitWordInfoService.getSplitWordCount(linkSearchRequestInfo, wordSummaryInfo.getWord());
-        final double logResult = Math.log(patentCount.doubleValue() / numberOfPatentCount);
+        final double logResult = Math.log(wordSummaryInfo.getCount().doubleValue() / dfValue);
         final Double tfIdfResult = dfValue.doubleValue() * logResult;
 
         final WordElimination wordElimination = new WordElimination();
@@ -52,7 +51,7 @@ public class WordProcessorService implements MessageListener {
         wordElimination.setDfValue(dfValue);
         wordElimination.setLogValue(logResult);
         wordElimination.setPatentCount(patentCount);
-        wordElimination.setTfValue(numberOfPatentCount);
+        wordElimination.setTfValue(wordSummaryInfo.getCount());
         wordEliminationService.save(wordElimination);
     }
 

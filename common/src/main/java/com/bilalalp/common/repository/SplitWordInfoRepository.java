@@ -20,8 +20,7 @@ public interface SplitWordInfoRepository extends CrudRepository<SplitWordInfo, L
     @Query("SELECT COUNT(p.id) FROM SplitWordInfo p WHERE p.patentInfo.id = :patentInfo AND p.word = :word")
     Long getCountByPatentInfoIdAndWord(@Param("patentInfo") Long patentInfoId, @Param("word") String word);
 
-    @Query("SELECT COUNT(DISTINCT p.id) FROM PatentInfo p " +
-            "WHERE p.linkSearchPageInfo.linkSearchRequestInfo =:linkSearchRequestInfo AND " +
-            " (SELECT COUNT(k.id) FROM SplitWordInfo k WHERE k.word =:word AND k.patentInfo.id = p.id) > 0")
+    @Query("SELECT COUNT(DISTINCT p.patentInfo.id) FROM SplitWordInfo p " +
+            "WHERE p.patentInfo.linkSearchPageInfo.linkSearchRequestInfo =:linkSearchRequestInfo AND p.word = :word")
     Long getWordCountByLinkSearchRequestInfoAndWord(@Param("linkSearchRequestInfo") LinkSearchRequestInfo linkSearchRequestInfo, @Param("word") String word);
 }
