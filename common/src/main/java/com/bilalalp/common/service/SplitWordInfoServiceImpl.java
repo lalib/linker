@@ -36,31 +36,31 @@ public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> imp
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public Long getCountByPatentInfoIdAndWord(final Long patentInfoId, final String word) {
-        return splitWordInfoRepository.getCountByPatentInfoIdAndWord(patentInfoId, word);
+    public Long getCountByPatentInfoIdAndWord(final Long patentInfoId, final Long wordInfoId) {
+        return splitWordInfoRepository.getCountByPatentInfoIdAndWord(patentInfoId, wordInfoId);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public List<PatentWordCountDto> getPatentWordCount(final LinkSearchRequestInfo linkSearchRequestInfo, final String word) {
-        return splitWordInfoCustomRepository.getPatentWordCount(linkSearchRequestInfo, word);
+    public List<PatentWordCountDto> getPatentWordCount(final LinkSearchRequestInfo linkSearchRequestInfo, final Long wordInfoId) {
+        return splitWordInfoCustomRepository.getPatentWordCount(linkSearchRequestInfo, wordInfoId);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public Long getWordCountByLinkSearchRequestInfoAndWord(final LinkSearchRequestInfo linkSearchRequestInfo, final String word) {
-        return splitWordInfoRepository.getWordCountByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, word);
+    public Long getWordCountByLinkSearchRequestInfoAndWord(final LinkSearchRequestInfo linkSearchRequestInfo, final Long wordInfoId) {
+        return splitWordInfoRepository.getWordCountByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, wordInfoId);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public Long getPatentWordCountWithoutZeroCount(LinkSearchRequestInfo linkSearchRequestInfo, String word) {
-        return splitWordInfoCustomRepository.getPatentWordCountWithoutZeroCount(linkSearchRequestInfo, word);
+    public Long getPatentWordCountWithoutZeroCount(LinkSearchRequestInfo linkSearchRequestInfo, Long wordInfoId) {
+        return splitWordInfoCustomRepository.getPatentWordCountWithoutZeroCount(linkSearchRequestInfo, wordInfoId);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public Long getSplitWordCount(final LinkSearchRequestInfo linkSearchRequestInfo, final String word) {
-        return splitWordInfoCustomRepository.getSplitWordCount(linkSearchRequestInfo, word);
+    public Long getSplitWordCount(final LinkSearchRequestInfo linkSearchRequestInfo, final Long wordInfoId) {
+        return splitWordInfoCustomRepository.getSplitWordCount(linkSearchRequestInfo, wordInfoId);
     }
 }

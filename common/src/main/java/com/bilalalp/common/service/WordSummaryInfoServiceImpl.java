@@ -52,7 +52,7 @@ public class WordSummaryInfoServiceImpl extends AbstractService<WordSummaryInfo>
     }
 
     @Override
-    public WordSummaryInfo findByLinkSearchRequestInfoAndWord(final LinkSearchRequestInfo linkSearchRequestInfo, final String word) {
-        return wordSummaryInfoRepository.findByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, word);
+    public WordSummaryInfo findByLinkSearchRequestInfoAndWord(final LinkSearchRequestInfo linkSearchRequestInfo, final Long wordInfoId) {
+        return wordSummaryInfoRepository.findByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, wordInfoId);
     }
 }

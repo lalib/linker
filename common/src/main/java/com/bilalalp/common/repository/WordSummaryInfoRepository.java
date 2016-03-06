@@ -22,6 +22,6 @@ public interface WordSummaryInfoRepository extends CrudRepository<WordSummaryInf
     @Query("Select p FROM WordSummaryInfo p WHERE p.linkSearchRequestInfo = :linkSearchRequestInfo ORDER BY p.count DESC")
     List<WordSummaryInfo> findByLinkSearchRequestInfo(@Param("linkSearchRequestInfo") LinkSearchRequestInfo linkSearchRequestInfo, Pageable pageable);
 
-    @Query("SELECT p FROM WordSummaryInfo p WHERE p.linkSearchRequestInfo = :linkSearchRequestInfo AND p.word = :word")
-    WordSummaryInfo findByLinkSearchRequestInfoAndWord(@Param("linkSearchRequestInfo") LinkSearchRequestInfo linkSearchRequestInfo, @Param("word") String word);
+    @Query("SELECT p FROM WordSummaryInfo p WHERE p.linkSearchRequestInfo = :linkSearchRequestInfo AND p.wordInfoId = :wordInfoId")
+    WordSummaryInfo findByLinkSearchRequestInfoAndWord(@Param("linkSearchRequestInfo") LinkSearchRequestInfo linkSearchRequestInfo, @Param("wordInfoId") Long wordInfoId);
 }

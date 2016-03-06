@@ -26,6 +26,9 @@ public class WordEliminationServiceImpl extends AbstractService<WordElimination>
     private WordEliminationRepository repository;
 
     @Autowired
+    private WordInfoService wordInfoService;
+
+    @Autowired
     private LinkSearchRequestInfoService linkSearchRequestInfoService;
 
     @Autowired
@@ -61,8 +64,9 @@ public class WordEliminationServiceImpl extends AbstractService<WordElimination>
             }
 
             for (final WordSummaryInfo wordSummaryInfo : wordSummaryInfoList) {
-                final Long dfValue = splitWordInfoService.getWordCountByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, wordSummaryInfo.getWord());
-                final Long numberOfPatentCount = splitWordInfoService.getSplitWordCount(linkSearchRequestInfo, wordSummaryInfo.getWord());
+
+                final Long dfValue = splitWordInfoService.getWordCountByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, wordSummaryInfo.getWordInfoId());
+                final Long numberOfPatentCount = splitWordInfoService.getSplitWordCount(linkSearchRequestInfo, wordSummaryInfo.getWordInfoId());
                 final double logResult = Math.log(patentInfoCount.doubleValue() / numberOfPatentCount);
                 final Double tfIdfResult = dfValue.doubleValue() * logResult;
 
@@ -70,7 +74,7 @@ public class WordEliminationServiceImpl extends AbstractService<WordElimination>
                 wordElimination.setLinkSearchRequestInfo(linkSearchRequestInfo);
                 wordElimination.setScore(tfIdfResult);
                 wordElimination.setThresholdValue(thresholdValue);
-                wordElimination.setWord(wordSummaryInfo.getWord());
+                wordElimination.setWordInfoId(wordSummaryInfo.getWordInfoId());
                 wordElimination.setCount(wordSummaryInfo.getCount());
                 wordElimination.setDfValue(dfValue);
                 wordElimination.setLogValue(logResult);

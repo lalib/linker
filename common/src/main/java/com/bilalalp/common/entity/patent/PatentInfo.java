@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = PatentInfo.TABLE_NAME,indexes = {@Index(name = "INX_ID",columnList = "id")})
+@Table(name = PatentInfo.TABLE_NAME, indexes = {@Index(name = "INX_ID", columnList = "id")})
 @Access(AccessType.FIELD)
 @Getter
 @Setter

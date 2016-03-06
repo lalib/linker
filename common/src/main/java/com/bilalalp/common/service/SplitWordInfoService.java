@@ -11,13 +11,13 @@ public interface SplitWordInfoService extends BaseService<SplitWordInfo> {
 
     void deleteByRequestId(Long requestId);
 
-    Long getCountByPatentInfoIdAndWord(Long patentInfoId, String word);
+    Long getCountByPatentInfoIdAndWord(Long patentInfoId, Long word);
 
-    List<PatentWordCountDto> getPatentWordCount(LinkSearchRequestInfo linkSearchRequestInfo, String word);
+    List<PatentWordCountDto> getPatentWordCount(LinkSearchRequestInfo linkSearchRequestInfo, final Long wordInfoId);
 
-    Long getWordCountByLinkSearchRequestInfoAndWord(LinkSearchRequestInfo linkSearchRequestInfo, String word);
+    Long getWordCountByLinkSearchRequestInfoAndWord(LinkSearchRequestInfo linkSearchRequestInfo, final Long wordInfoId);
 
-    Long getPatentWordCountWithoutZeroCount(final LinkSearchRequestInfo linkSearchRequestInfo, final String word);
+    Long getPatentWordCountWithoutZeroCount(final LinkSearchRequestInfo linkSearchRequestInfo, final Long wordInfoId);
 
-    Long getSplitWordCount(LinkSearchRequestInfo linkSearchRequestInfo, String word);
+    Long getSplitWordCount(LinkSearchRequestInfo linkSearchRequestInfo, Long word);
 }

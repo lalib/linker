@@ -17,5 +17,5 @@ public interface WordSummaryInfoService extends BaseService<WordSummaryInfo> {
 
     List<WordSummaryInfo> findByLinkSearchRequestInfo(LinkSearchRequestInfo linkSearchRequestInfo, Pageable pageable);
 
-    WordSummaryInfo findByLinkSearchRequestInfoAndWord(LinkSearchRequestInfo linkSearchRequestInfo, String word);
+    WordSummaryInfo findByLinkSearchRequestInfoAndWord(LinkSearchRequestInfo linkSearchRequestInfo, Long wordInfoId);
 }

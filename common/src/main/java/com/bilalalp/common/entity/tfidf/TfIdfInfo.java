@@ -2,14 +2,13 @@ package com.bilalalp.common.entity.tfidf;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
-import com.bilalalp.common.entity.patent.PatentInfo;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = TfIdfInfo.TABLE_NAME, indexes = {@Index(name = "IDX_WRD", columnList = "C_WORD"), @Index(name = "IND_PTNT", columnList = PatentInfo.JOIN_COLUMN)})
+@Table(name = TfIdfInfo.TABLE_NAME)
 @Access(AccessType.FIELD)
 @Getter
 @Setter
@@ -22,12 +21,11 @@ public class TfIdfInfo extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "C_WORD")
-    private String word;
+    @Column(name = WordInfo.JOIN_COLUMN)
+    private Long wordInfoId;
 
-    @ManyToOne(targetEntity = PatentInfo.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = PatentInfo.JOIN_COLUMN)
-    private PatentInfo patentInfo;
+    @Column
+    private Long patentInfoId;
 
     @Column(name = "C_SCORE")
     private Double score;
@@ -47,14 +45,12 @@ public class TfIdfInfo extends AbstractEntity {
     @Column(name = "C_TF_VALUE")
     private Long tfValue;
 
-    @ManyToOne(targetEntity = LinkSearchRequestInfo.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = LinkSearchRequestInfo.JOIN_COLUMN)
-    private LinkSearchRequestInfo linkSearchRequestInfo;
+    @Column(name = LinkSearchRequestInfo.JOIN_COLUMN)
+    private Long linkSearchRequestInfoId;
 
     @Column(name = "C_THRESHOLD_VALUE")
     private Long thresholdValue;
 
-    @ManyToOne(targetEntity = TfIdfRequestInfo.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = TfIdfRequestInfo.JOIN_COLUMN)
-    private TfIdfRequestInfo tfIdfRequestInfo;
+    @Column
+    private Long tfIdfRequestInfoId;
 }

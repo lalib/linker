@@ -4,10 +4,7 @@ import com.bilalalp.common.dto.EntityDto;
 import com.bilalalp.common.dto.PatentWordCountDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfProcessInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
-import com.bilalalp.common.entity.tfidf.WordElimination;
+import com.bilalalp.common.entity.tfidf.*;
 import com.bilalalp.common.repository.TfIdfInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
 import lombok.Getter;
@@ -25,6 +22,9 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
 
     @Autowired
     private TfIdfInfoRepository repository;
+
+    @Autowired
+    private WordInfoService wordInfoService;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -58,16 +58,16 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         final Double tfIdfValue = patentWordCountDto.getWordCount() * wordElimination.getLogValue();
 
         final TfIdfInfo tfIdfInfo = new TfIdfInfo();
-        tfIdfInfo.setPatentInfo(patentInfo);
+        tfIdfInfo.setPatentInfoId(patentInfo.getId());
         tfIdfInfo.setCount(patentWordCountDto.getWordCount());
         tfIdfInfo.setDfValue(wordElimination.getDfValue());
-        tfIdfInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
+        tfIdfInfo.setLinkSearchRequestInfoId(linkSearchRequestInfo.getId());
         tfIdfInfo.setLogValue(wordElimination.getLogValue());
         tfIdfInfo.setPatentCount(wordElimination.getPatentCount());
         tfIdfInfo.setScore(tfIdfValue);
         tfIdfInfo.setTfValue(patentWordCountDto.getWordCount());
         tfIdfInfo.setThresholdValue(thresholdValue);
-        tfIdfInfo.setWord(wordElimination.getWord());
+        tfIdfInfo.setWordInfoId(wordElimination.getWordInfoId());
         save(tfIdfInfo);
     }
 
@@ -77,13 +77,13 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         final LinkSearchRequestInfo linkSearchRequestInfo = tfIdfProcessInfo.getLinkSearchRequestInfo();
         final Long thresholdValue = tfIdfProcessInfo.getThresholdValue();
         final WordElimination wordElimination = tfIdfProcessInfo.getWordElimination();
-        final List<PatentWordCountDto> patentWordCountDtoList = splitWordInfoService.getPatentWordCount(linkSearchRequestInfo, wordElimination.getWord());
+        final List<PatentWordCountDto> patentWordCountDtoList = splitWordInfoService.getPatentWordCount(linkSearchRequestInfo, wordElimination.getWordInfoId());
 
         for (final PatentWordCountDto patentWordCountDto : patentWordCountDtoList) {
             applicationContext.getBean(TfIdfInfoServiceImpl.class).saveWithNewTransaction(wordElimination, linkSearchRequestInfo, patentWordCountDto, thresholdValue);
         }
 
-        final List<EntityDto> patentInfoIds = patentInfoService.getPatentInfos(linkSearchRequestInfo.getId(), wordElimination.getWord());
+        final List<EntityDto> patentInfoIds = patentInfoService.getPatentInfos(linkSearchRequestInfo.getId(), wordElimination.getWordInfoId());
         applicationContext.getBean(TfIdfInfoServiceImpl.class).saveWithNewTransaction(tfIdfProcessInfo, patentInfoIds);
     }
 
@@ -102,14 +102,14 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
             patentInfo.setVersion(entityDto.getVersion());
 
             final TfIdfInfo tfIdfInfo = new TfIdfInfo();
-            tfIdfInfo.setPatentInfo(patentInfo);
+            tfIdfInfo.setPatentInfoId(patentInfo.getId());
             tfIdfInfo.setDfValue(wordElimination.getDfValue());
-            tfIdfInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
+            tfIdfInfo.setLinkSearchRequestInfoId(linkSearchRequestInfo.getId());
             tfIdfInfo.setLogValue(wordElimination.getLogValue());
             tfIdfInfo.setPatentCount(wordElimination.getPatentCount());
             tfIdfInfo.setThresholdValue(thresholdValue);
-            tfIdfInfo.setWord(wordElimination.getWord());
-            tfIdfInfo.setTfIdfRequestInfo(tfIdfRequestInfo);
+            tfIdfInfo.setWordInfoId(wordElimination.getWordInfoId());
+            tfIdfInfo.setTfIdfRequestInfoId(tfIdfRequestInfo.getId());
 
             tfIdfInfo.setScore(0d);
             tfIdfInfo.setCount(0L);

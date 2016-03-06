@@ -16,12 +16,15 @@ public class WordEliminationRequestInfo extends AbstractEntity {
 
     public static final String JOIN_COLUMN = "C_WORD_ELIMINATION_REQUEST_ID";
     public static final String TABLE_NAME = "T_WORD_ER_INFO";
+
     @ManyToOne(targetEntity = LinkSearchRequestInfo.class, fetch = FetchType.LAZY)
     @JoinColumn(name = LinkSearchRequestInfo.JOIN_COLUMN)
     public LinkSearchRequestInfo linkSearchRequestInfo;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column(name = "C_THRESHOLD_VALUE")
     private Long thresholdValue;
 }

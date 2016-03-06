@@ -18,5 +18,5 @@ public interface PatentInfoService extends BaseService<PatentInfo> {
 
     Long getPatentInfoCountByLinkSearchPageInfo(final LinkSearchRequestInfo linkSearchRequestInfo);
 
-    List<EntityDto> getPatentInfos(Long lsrId, String word);
+    List<EntityDto> getPatentInfos(Long lsrId, Long word);
 }

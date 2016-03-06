@@ -1,13 +1,14 @@
 package com.bilalalp.common.entity.patent;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
+import com.bilalalp.common.entity.tfidf.WordInfo;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = SplitWordInfo.TABLE_NAME, indexes = {@Index(name = "IDX_WORD", columnList = "C_WORD"), @Index(name = "IDX_WORD_PATENT", columnList = "C_WORD,C_PATENT_INFO_ID")})
+@Table(name = SplitWordInfo.TABLE_NAME, indexes = {@Index(name = "IDX_WORD_PATENT", columnList = "C_PATENT_INFO_ID")})
 @Access(AccessType.FIELD)
 @Getter
 @Setter
@@ -20,8 +21,8 @@ public class SplitWordInfo extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "C_WORD")
-    private String word;
+    @Column(name = WordInfo.JOIN_COLUMN)
+    private Long wordInfoId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "C_SPLIT_WORD_TYPE")
