@@ -21,7 +21,7 @@ public class WordElimination extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = WordInfo.JOIN_COLUMN)
+    @Column(name = WordSummaryInfo.JOIN_COLUMN)
     private Long wordInfoId;
 
     @Column(name = "C_SCORE")

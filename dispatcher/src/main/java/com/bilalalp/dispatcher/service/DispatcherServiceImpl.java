@@ -197,7 +197,6 @@ public class DispatcherServiceImpl implements DispatcherService {
     }
 
     private List<String> filteredKeywordInfoList(final List<String> keywordList) {
-        final Set<String> filteredKeywordSet = keywordList.stream().map(k -> k.trim().toLowerCase()).collect(Collectors.toSet());
-        return new ArrayList<>(filteredKeywordSet);
+        return new ArrayList<>(keywordList.stream().map(k -> k.trim().toLowerCase()).collect(Collectors.toSet()));
     }
 }

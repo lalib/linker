@@ -1,7 +1,6 @@
 package com.bilalalp.common.entity.patent;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
-import com.bilalalp.common.entity.tfidf.WordInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,8 +20,8 @@ public class SplitWordInfo extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = WordInfo.JOIN_COLUMN)
-    private Long wordInfoId;
+    @Column(name = "C_WORD")
+    private String word;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "C_SPLIT_WORD_TYPE")

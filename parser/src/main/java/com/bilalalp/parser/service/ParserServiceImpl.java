@@ -4,7 +4,6 @@ import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.patent.SplitWordInfo;
 import com.bilalalp.common.entity.patent.SplitWordType;
 import com.bilalalp.common.service.SplitWordInfoService;
-import com.bilalalp.common.service.WordInfoService;
 import com.bilalalp.parser.config.ParserInitialRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,6 @@ public class ParserServiceImpl implements ParserService {
 
     @Autowired
     private LemmatizerService lemmatizerService;
-
-    @Autowired
-    private WordInfoService wordInfoService;
 
     @Override
     public void parse(final PatentInfo patentInfo) {
@@ -60,11 +56,10 @@ public class ParserServiceImpl implements ParserService {
     }
 
     private SplitWordInfo createSplitWordInfo(final PatentInfo patentInfo, final SplitWordType splitWordType, final String k) {
-        final Long wordId = wordInfoService.insertInfoExists(k);
         final SplitWordInfo splitWordInfo = new SplitWordInfo();
         splitWordInfo.setPatentInfo(patentInfo);
         splitWordInfo.setSplitWordType(splitWordType);
-        splitWordInfo.setWordInfoId(wordId);
+        splitWordInfo.setWord(k);
         return splitWordInfo;
     }
 

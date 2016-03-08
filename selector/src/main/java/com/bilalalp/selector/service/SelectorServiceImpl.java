@@ -46,7 +46,7 @@ public class SelectorServiceImpl implements SelectorService {
         for (final WordSummaryInfo wordSummaryInfo : wordSummaryInfoList) {
 
             final Double result = wordSummaryInfo.getCount() / (keywordSelectionRequest.getRatio() * patentCount);
-            final WordSummaryInfo secondWordSummaryInfo = wordSummaryInfoService.findByLinkSearchRequestInfoAndWord(secondLinkSearchRequestInfo, wordSummaryInfo.getWordInfoId());
+            final WordSummaryInfo secondWordSummaryInfo = wordSummaryInfoService.findByLinkSearchRequestInfoAndWord(secondLinkSearchRequestInfo, wordSummaryInfo.getId());
 
             if (secondWordSummaryInfo == null) {
                 selectedWordSummaryInfoList.add(wordSummaryInfo);

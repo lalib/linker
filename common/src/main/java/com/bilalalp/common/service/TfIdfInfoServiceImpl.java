@@ -24,9 +24,6 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
     private TfIdfInfoRepository repository;
 
     @Autowired
-    private WordInfoService wordInfoService;
-
-    @Autowired
     private ApplicationContext applicationContext;
 
     @Autowired

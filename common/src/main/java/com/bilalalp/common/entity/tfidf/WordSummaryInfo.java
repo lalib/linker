@@ -21,8 +21,8 @@ public class WordSummaryInfo extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = WordInfo.JOIN_COLUMN)
-    private Long wordInfoId;
+    @Column(name = "C_WORD")
+    private String word;
 
     @Column(name = "C_COUNT")
     private Long count;

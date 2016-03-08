@@ -17,10 +17,10 @@ public interface SplitWordInfoRepository extends CrudRepository<SplitWordInfo, L
     @Query("delete from SplitWordInfo s where s.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id= :requestId")
     void deleteByRequestId(@Param("requestId") Long requestId);
 
-    @Query("SELECT COUNT(p.id) FROM SplitWordInfo p WHERE p.patentInfo.id = :patentInfo AND p.wordInfoId = :wordInfoId")
+    @Query("SELECT COUNT(p.id) FROM SplitWordInfo p,WordSummaryInfo w WHERE p.patentInfo.id = :patentInfo AND w.id=:wordInfoId AND p.word = w.word")
     Long getCountByPatentInfoIdAndWord(@Param("patentInfo") Long patentInfoId, @Param("wordInfoId") Long wordInfoId);
 
-    @Query("SELECT COUNT(DISTINCT p.patentInfo.id) FROM SplitWordInfo p " +
-            "WHERE p.patentInfo.linkSearchPageInfo.linkSearchRequestInfo =:linkSearchRequestInfo AND p.wordInfoId = :wordInfoId")
+    @Query("SELECT COUNT(DISTINCT p.patentInfo.id) FROM SplitWordInfo p, WordSummaryInfo w " +
+            "WHERE p.patentInfo.linkSearchPageInfo.linkSearchRequestInfo =:linkSearchRequestInfo AND p.word = w.word AND w.id = :wordInfoId")
     Long getWordCountByLinkSearchRequestInfoAndWord(@Param("linkSearchRequestInfo") LinkSearchRequestInfo linkSearchRequestInfo, @Param("wordInfoId") Long wordInfoId);
 }
