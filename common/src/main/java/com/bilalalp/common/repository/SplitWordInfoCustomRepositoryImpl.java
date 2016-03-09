@@ -2,6 +2,7 @@ package com.bilalalp.common.repository;
 
 import com.bilalalp.common.dto.PatentWordCountDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
+import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -24,6 +25,32 @@ public class SplitWordInfoCustomRepositoryImpl implements SplitWordInfoCustomRep
                         "GROUP BY s.patentInfo.id,s.patentInfo.version")
                 .setParameter("lsrId", linkSearchRequestInfo.getId())
                 .setParameter("word", wordInfoId)
+                .getResultList();
+    }
+
+    @Override
+    public List<PatentWordCountDto> getWordCount(final Long patentId) {
+        return entityManager
+                .createQuery("SELECT new com.bilalalp.common.dto.PatentWordCountDto(w.id,w.version, COUNT(s.word)) " +
+                        "FROM SplitWordInfo s " +
+                        "INNER JOIN WordSummaryInfo w ON w.word = s.word " +
+                        "INNER JOIN AnalyzableWordInfo a ON a.wordId = w.id " +
+                        "WHERE s.patentInfo.id = :patentId " +
+                        "GROUP BY w.id,w.version " +
+                        "ORDER BY COUNT(s.word) DESC")
+                .setParameter("patentId", patentId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Long> getExceptedWordIdList(final TfIdfRequestInfo tfIdfRequestInfo, final List<Long> wordIds) {
+
+        return entityManager
+                .createQuery("SELECT p FROM WordSummaryInfo p " +
+                        "INNER JOIN AnalyzableWordInfo a ON a.wordId = p.id " +
+                        "WHERE p.id NOT in :wordIds AND a.tfIdfRequestInfo = :tfIdfRequestInfo")
+                .setParameter("tfIdfRequestInfo", tfIdfRequestInfo)
+                .setParameter("wordIds", wordIds)
                 .getResultList();
     }
 

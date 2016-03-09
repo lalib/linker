@@ -18,6 +18,8 @@ public interface TfIdfInfoService extends BaseService<TfIdfInfo> {
 
     void processEliminatedWord(TfIdfProcessInfo tfIdfProcessInfo);
 
+    void exportToFile(TfIdfProcessInfo tfIdfProcessInfo);
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void saveWithNewTransaction(TfIdfProcessInfo tfIdfProcessInfo, List<EntityDto> patentInfoIds);
 }

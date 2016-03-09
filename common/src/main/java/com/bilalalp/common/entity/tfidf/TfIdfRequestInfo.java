@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -29,4 +30,6 @@ public class TfIdfRequestInfo extends AbstractEntity {
     @JoinColumn(name = LinkSearchRequestInfo.JOIN_COLUMN)
     private LinkSearchRequestInfo linkSearchRequestInfo;
 
+    @OneToMany(targetEntity = AnalyzableWordInfo.class, fetch = FetchType.LAZY, mappedBy = "tfIdfRequestInfo")
+    private List<AnalyzableWordInfo> analyzableWordInfoList;
 }

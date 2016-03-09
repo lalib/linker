@@ -2,13 +2,14 @@ package com.bilalalp.common.entity.tfidf;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
+import com.bilalalp.common.entity.patent.PatentInfo;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = TfIdfRequestInfo.TABLE_NAME)
+@Table(name = TfIdfProcessInfo.TABLE_NAME)
 @Access(AccessType.FIELD)
 @Getter
 @Setter
@@ -29,9 +30,8 @@ public class TfIdfProcessInfo extends AbstractEntity {
     @JoinColumn(name = LinkSearchRequestInfo.JOIN_COLUMN)
     private LinkSearchRequestInfo linkSearchRequestInfo;
 
-    @ManyToOne(targetEntity = WordElimination.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = WordElimination.JOIN_COLUMN)
-    private WordElimination wordElimination;
+    @Column(name = PatentInfo.JOIN_COLUMN)
+    private Long patentInfoId;
 
     @ManyToOne(targetEntity = TfIdfRequestInfo.class, fetch = FetchType.LAZY)
     @JoinColumn(name = TfIdfRequestInfo.JOIN_COLUMN)

@@ -18,5 +18,5 @@ public class PatentWordCountDto implements Serializable {
 
     private Integer patentVersion;
 
-    private Long wordCount;
+    private Long wordCount = 0L;
 }

@@ -3,12 +3,11 @@ package com.bilalalp.tfidfinitializer.service;
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
+import com.bilalalp.common.entity.tfidf.AnalyzableWordInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfProcessInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.entity.tfidf.WordElimination;
-import com.bilalalp.common.service.TfIdfProcessInfoService;
-import com.bilalalp.common.service.TfIdfRequestInfoService;
-import com.bilalalp.common.service.WordEliminationService;
+import com.bilalalp.common.service.*;
 import com.bilalalp.tfidfinitializer.amqp.MessageSender;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.amqp.core.Message;
@@ -38,6 +37,9 @@ public class TfIdfInitializerService implements MessageListener {
     private ApplicationContext applicationContext;
 
     @Autowired
+    private AnalyzableWordInfoService analyzableWordInfoService;
+
+    @Autowired
     private WordEliminationService wordEliminationService;
 
     @Autowired
@@ -50,12 +52,35 @@ public class TfIdfInitializerService implements MessageListener {
     @Autowired
     private QueueConfigurationDto queueConfigurationDto;
 
+    @Autowired
+    private PatentInfoService patentInfoService;
+
     @Transactional
     public void process(final Long id) {
 
         final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(id);
         final LinkSearchRequestInfo linkSearchRequestInfo = tfIdfRequestInfo.getLinkSearchRequestInfo();
 
+        saveWords(tfIdfRequestInfo, linkSearchRequestInfo);
+
+        arrangePatents(tfIdfRequestInfo, linkSearchRequestInfo);
+    }
+
+    private void arrangePatents(final TfIdfRequestInfo tfIdfRequestInfo, final LinkSearchRequestInfo linkSearchRequestInfo) {
+
+        final List<Long> patentIds = patentInfoService.getPatentIds(linkSearchRequestInfo.getId());
+
+        for (final Long id : patentIds) {
+            final TfIdfProcessInfo tfIdfProcessInfo = new TfIdfProcessInfo();
+            tfIdfProcessInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
+            tfIdfProcessInfo.setPatentInfoId(id);
+            tfIdfProcessInfo.setTfIdfRequestInfo(tfIdfRequestInfo);
+            tfIdfProcessInfo.setThresholdValue(tfIdfRequestInfo.getThresholdValue());
+            applicationContext.getBean(TfIdfInitializerService.class).saveAndSendToQueue(tfIdfProcessInfo);
+        }
+    }
+
+    private void saveWords(TfIdfRequestInfo tfIdfRequestInfo, LinkSearchRequestInfo linkSearchRequestInfo) {
         Long start = 0L;
         Long pageSize = 1000L;
 
@@ -76,13 +101,12 @@ public class TfIdfInitializerService implements MessageListener {
 
             for (final WordElimination wordElimination : wordEliminationList) {
 
+                final AnalyzableWordInfo analyzableWordInfo = new AnalyzableWordInfo();
+                analyzableWordInfo.setTfIdfRequestInfo(tfIdfRequestInfo);
+                analyzableWordInfo.setWordId(wordElimination.getWordInfoId());
+                applicationContext.getBean(TfIdfInitializerService.class).save(analyzableWordInfo);
+
                 thValue++;
-                final TfIdfProcessInfo tfIdfProcessInfo = new TfIdfProcessInfo();
-                tfIdfProcessInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
-                tfIdfProcessInfo.setThresholdValue(tfIdfRequestInfo.getThresholdValue());
-                tfIdfProcessInfo.setWordElimination(wordElimination);
-                tfIdfProcessInfo.setTfIdfRequestInfo(tfIdfRequestInfo);
-                applicationContext.getBean(TfIdfInitializerService.class).saveAndSendToQueue(tfIdfProcessInfo);
 
                 if (thValue.compareTo(tfIdfRequestInfo.getThresholdValue()) == 0) {
                     result = false;
@@ -90,6 +114,11 @@ public class TfIdfInitializerService implements MessageListener {
                 }
             }
         }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void save(final AnalyzableWordInfo analyzableWordInfo) {
+        analyzableWordInfoService.save(analyzableWordInfo);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

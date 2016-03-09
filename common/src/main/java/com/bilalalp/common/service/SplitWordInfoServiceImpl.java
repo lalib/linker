@@ -3,6 +3,7 @@ package com.bilalalp.common.service;
 import com.bilalalp.common.dto.PatentWordCountDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.SplitWordInfo;
+import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.repository.SplitWordInfoCustomRepository;
 import com.bilalalp.common.repository.SplitWordInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
@@ -62,5 +63,17 @@ public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> imp
     @Override
     public Long getSplitWordCount(final LinkSearchRequestInfo linkSearchRequestInfo, final Long wordInfoId) {
         return splitWordInfoCustomRepository.getSplitWordCount(linkSearchRequestInfo, wordInfoId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<PatentWordCountDto> getWordCount(Long patentId) {
+        return splitWordInfoCustomRepository.getWordCount(patentId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<Long> getExceptedWordIdList(TfIdfRequestInfo tfIdfRequestInfo, List<Long> wordIds) {
+        return splitWordInfoCustomRepository.getExceptedWordIdList(tfIdfRequestInfo,wordIds);
     }
 }
