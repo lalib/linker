@@ -17,10 +17,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Service
@@ -83,10 +87,7 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         final Long patentInfoId = tfIdfProcessInfo.getPatentInfoId();
         final List<PatentWordCountDto> wordCount = splitWordInfoService.getWordCount(patentInfoId);
 
-        final List<Long> wordIdList = new ArrayList<>();
-        for (final PatentWordCountDto patentWordCountDto : wordCount) {
-            wordIdList.add(patentWordCountDto.getPatentId());
-        }
+        final List<Long> wordIdList = wordCount.stream().map(PatentWordCountDto::getPatentId).collect(Collectors.toList());
 
         final List<Long> wordIds = getWordIds(tfIdfProcessInfo, wordIdList);
 
@@ -107,15 +108,35 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         }
     }
 
+    private boolean validate(String s) {
+        try {
+            final String[] split = s.split("\\$");
+            double[] values = new double[split.length];
+            for (int i = 0; i < split.length; i++) {
+                values[i] = Double.parseDouble(split[i].split(":")[1]);
+            }
+            return true;
+        } catch (final Exception ex) {
+            System.out.println(ex);
+            return false;
+        }
+    }
+
     private String getFormattedLine(long patentInfoId, List<PatentWordCountDto> patentWordCountDtoList) {
 
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(patentInfoId).append("::");
-        for (PatentWordCountDto patentWordCountDto : patentWordCountDtoList) {
+        int k = 0;
+        for (int i = 0; i < patentWordCountDtoList.size(); i++) {
+            final PatentWordCountDto patentWordCountDto = patentWordCountDtoList.get(i);
             stringBuilder.append(patentWordCountDto.getPatentId()).append(":").append(patentWordCountDto.getWordCount());
+
+            if (k != patentWordCountDtoList.size() - 2) {
+                stringBuilder.append("$");
+            }
         }
 
-        return stringBuilder.append("\n").toString();
+        return stringBuilder.toString();
     }
 
     private List<Long> getWordIds(TfIdfProcessInfo tfIdfProcessInfo, List<Long> wordIdList) {
