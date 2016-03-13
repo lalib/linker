@@ -9,14 +9,14 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = ClusterResultInfo.TABLE_NAME)
+@Table(name = ClusteringResultInfo.TABLE_NAME)
 @Access(AccessType.FIELD)
 @Getter
 @Setter
-public class ClusterResultInfo extends AbstractEntity {
+public class ClusteringResultInfo extends AbstractEntity {
 
-    public static final String TABLE_NAME = "T_CLUSTER_RESULT_INFO";
-    public static final String JOIN_COLUMN = "C_CLUSTER_RESULT_INFO_ID";
+    public static final String TABLE_NAME = "T_CLUSTERING_RESULT_INFO";
+    public static final String JOIN_COLUMN = "C_CLUSTERING_RESULT_INFO_ID";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +29,7 @@ public class ClusterResultInfo extends AbstractEntity {
     private Long patentId;
 
     @Column(name = "C_CLUSTER_NUMBER")
-    private Long clusterNumber;
+    private Long clusteringNumber;
 
     @Column(name = "C_WSSSE")
     private Double wssse;

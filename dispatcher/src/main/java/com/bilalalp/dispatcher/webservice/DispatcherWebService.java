@@ -36,5 +36,9 @@ public interface DispatcherWebService {
     Response calculateTfIdf(@QueryParam("lsrId") Long lsrId, @QueryParam("threshold") Long threshold);
 
     @GET
+    @Path("/generateCluster")
+    Response generateCluster(@QueryParam("clusterNumber") Long clusterNumber, @QueryParam("tfIdfRequestId") Long tfIdfRequestId, @QueryParam("clusterType") String clusterType);
+
+    @GET
     String state();
 }

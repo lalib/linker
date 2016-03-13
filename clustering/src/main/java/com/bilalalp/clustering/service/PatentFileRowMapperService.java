@@ -1,42 +1,47 @@
 package com.bilalalp.clustering.service;
 
+import com.bilalalp.common.entity.cluster.ClusteringRequestInfo;
 import com.bilalalp.common.entity.cluster.PatentRowInfo;
+import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.service.PatentRowInfoService;
+import com.bilalalp.common.service.TfIdfRequestInfoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 
+@Slf4j
 @Service
 public class PatentFileRowMapperService {
 
     @Autowired
     private PatentRowInfoService patentRowInfoService;
 
-    public void insertPatentRowsToDatabase() {
-        final String path = "C:\\patentdoc\\records.txt";
-        final Long tfidfRequestId = 23333068L;
+    @Autowired
+    private TfIdfRequestInfoService tfIdfRequestInfoService;
 
+    public void insertPatentRowsToDatabase(final ClusteringRequestInfo clusteringRequestInfo) {
 
-        try (final BufferedReader br = new BufferedReader(new FileReader(path))) {
+        final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(clusteringRequestInfo.getTfIdfRequestId());
+
+        try (final BufferedReader br = new BufferedReader(new FileReader(tfIdfRequestInfo.getFileName()))) {
 
             int k = 0;
             String sCurrentLine;
 
             while ((sCurrentLine = br.readLine()) != null) {
                 k++;
-                final String val = sCurrentLine.split("::")[0];
 
                 final PatentRowInfo patentRowInfo = new PatentRowInfo();
-                patentRowInfo.setPatentId(Long.valueOf(val));
+                patentRowInfo.setPatentId(Long.valueOf(sCurrentLine.split("::")[0]));
                 patentRowInfo.setRowNumber(k);
-                patentRowInfo.setTfIdfRequestInfoId(tfidfRequestId);
+                patentRowInfo.setTfIdfRequestInfoId(tfIdfRequestInfo.getId());
                 patentRowInfoService.saveInNewTransaction(patentRowInfo);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
 }

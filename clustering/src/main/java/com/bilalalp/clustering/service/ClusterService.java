@@ -1,6 +1,8 @@
 package com.bilalalp.clustering.service;
 
+import com.bilalalp.common.entity.cluster.ClusteringRequestInfo;
+
 public interface ClusterService {
 
-    void cluster();
+    void cluster(ClusteringRequestInfo clusteringRequestInfo);
 }

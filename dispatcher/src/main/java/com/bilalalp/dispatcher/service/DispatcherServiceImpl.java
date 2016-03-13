@@ -2,6 +2,8 @@ package com.bilalalp.dispatcher.service;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
+import com.bilalalp.common.entity.cluster.ClusteringRequestInfo;
+import com.bilalalp.common.entity.cluster.ClusteringType;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestKeywordInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestSiteInfo;
@@ -22,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +47,10 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Qualifier("weriQueueConfiguration")
     @Autowired
     private QueueConfigurationDto weriQueueConfigurationDto;
+
+    @Qualifier("crQueueConfiguration")
+    @Autowired
+    private QueueConfigurationDto crQueueConfigurationDto;
 
     @Autowired
     private Validator<LinkSearchRequest> linkSearchRequestValidator;
@@ -76,6 +81,9 @@ public class DispatcherServiceImpl implements DispatcherService {
 
     @Autowired
     private WordEliminationRequestInfoService wordEliminationRequestInfoService;
+
+    @Autowired
+    private ClusteringRequestInfoService clusteringRequestInfoService;
 
     @Override
     @Transactional
@@ -144,9 +152,30 @@ public class DispatcherServiceImpl implements DispatcherService {
         final TfIdfRequestInfo tfIdfRequestInfo = new TfIdfRequestInfo();
         tfIdfRequestInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
         tfIdfRequestInfo.setThresholdValue(thresholdValue);
+        tfIdfRequestInfo.setFileName("C:\\patentdoc\\" + lsrId.toString() + "-" + thresholdValue.toString() + ".txt");
 
         tfIdfRequestInfoService.save(tfIdfRequestInfo);
         messageSender.sendMessage(tfIdfQueueConfigurationDto, new QueueMessageDto(tfIdfRequestInfo.getId()));
+    }
+
+    @Transactional
+    @Override
+    public void generateCluster(final Long clusterNumber, final Long tfIdfRequestId, final String clusterType) {
+        final ClusteringRequestInfo clusteringRequestInfo = new ClusteringRequestInfo();
+        clusteringRequestInfo.setClusteringType(getClusteringType(clusterType));
+        clusteringRequestInfo.setTfIdfRequestId(tfIdfRequestId);
+        clusteringRequestInfo.setClusterNumber(clusterNumber);
+        clusteringRequestInfoService.save(clusteringRequestInfo);
+        messageSender.sendMessage(crQueueConfigurationDto, new QueueMessageDto(clusteringRequestInfo.getId()));
+    }
+
+    private ClusteringType getClusteringType(final String clusterType) {
+
+        if ("KMEANS".equals(clusterType)) {
+            return ClusteringType.KMEANS;
+        } else {
+            return null;
+        }
     }
 
     private Long persistRequest(final LinkSearchRequest linkSearchRequest) {

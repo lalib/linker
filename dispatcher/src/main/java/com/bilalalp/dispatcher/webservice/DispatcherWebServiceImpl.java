@@ -46,6 +46,12 @@ public class DispatcherWebServiceImpl implements DispatcherWebService {
     }
 
     @Override
+    public Response generateCluster(final Long clusterNumber, final Long tfIdfRequestId, final String clusterType) {
+        dispatcherService.generateCluster(clusterNumber, tfIdfRequestId, clusterType);
+        return Response.ok().build();
+    }
+
+    @Override
     public String state() {
         return "App is up!";
     }

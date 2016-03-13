@@ -26,6 +26,9 @@ public class TfIdfRequestInfo extends AbstractEntity {
     @Column(name = "C_THRESHOLD_VALUE")
     private Long thresholdValue;
 
+    @Column(name = "C_FILE_NAME")
+    private String fileName;
+
     @ManyToOne(targetEntity = LinkSearchRequestInfo.class, fetch = FetchType.LAZY)
     @JoinColumn(name = LinkSearchRequestInfo.JOIN_COLUMN)
     private LinkSearchRequestInfo linkSearchRequestInfo;
