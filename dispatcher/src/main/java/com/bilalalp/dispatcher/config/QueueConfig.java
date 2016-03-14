@@ -44,17 +44,17 @@ public class QueueConfig {
     }
 
     @Bean
-    public MessageConverter messageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
-
-    @Bean
     public AmqpTemplate amqpTemplate() {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate();
         rabbitTemplate.setChannelTransacted(environment.getProperty(QueueConfigConstant.AMQP_CHANNEL_TRANSACTED, Boolean.class));
         rabbitTemplate.setMessageConverter(messageConverter());
         rabbitTemplate.setConnectionFactory(rabbitConnectionFactory());
         return rabbitTemplate;
+    }
+
+    @Bean
+    public MessageConverter messageConverter() {
+        return new Jackson2JsonMessageConverter();
     }
 
     @Bean

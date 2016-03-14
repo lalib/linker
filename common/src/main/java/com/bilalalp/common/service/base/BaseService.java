@@ -1,9 +1,10 @@
 package com.bilalalp.common.service.base;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public interface BaseService<T> {
+public interface BaseService<T> extends Serializable {
 
     void save(T t);
 

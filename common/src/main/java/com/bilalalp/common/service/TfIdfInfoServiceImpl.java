@@ -6,6 +6,7 @@ import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfProcessInfo;
+import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.entity.tfidf.WordElimination;
 import com.bilalalp.common.repository.TfIdfInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
@@ -84,6 +85,7 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
     @Override
     public void processEliminatedWord(final TfIdfProcessInfo tfIdfProcessInfo) {
 
+        final TfIdfRequestInfo tfIdfRequestInfo = tfIdfProcessInfo.getTfIdfRequestInfo();
         final Long patentInfoId = tfIdfProcessInfo.getPatentInfoId();
         final List<PatentWordCountDto> wordCount = splitWordInfoService.getWordCount(patentInfoId);
 
@@ -96,12 +98,12 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
 
         Collections.sort(totalPatentWordCountDtoList, (o1, o2) -> o1.getPatentId().compareTo(o2.getPatentId()));
 
-        writeToFile(patentInfoId, totalPatentWordCountDtoList);
+        writeToFile(patentInfoId, totalPatentWordCountDtoList, tfIdfRequestInfo);
     }
 
-    private void writeToFile(final long patentInfoId, final List<PatentWordCountDto> patentWordCountDtoList) {
+    private void writeToFile(final long patentInfoId, final List<PatentWordCountDto> patentWordCountDtoList, final TfIdfRequestInfo tfIdfRequestInfo) {
 
-        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("C:\\patentdoc\\records.txt", true)))) {
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(tfIdfRequestInfo.getFileName(), true)))) {
             out.println(getFormattedLine(patentInfoId, patentWordCountDtoList));
         } catch (IOException e) {
             System.out.println(e.getMessage());

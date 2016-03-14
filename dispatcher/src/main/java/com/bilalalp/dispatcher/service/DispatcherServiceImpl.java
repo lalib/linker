@@ -152,8 +152,9 @@ public class DispatcherServiceImpl implements DispatcherService {
         final TfIdfRequestInfo tfIdfRequestInfo = new TfIdfRequestInfo();
         tfIdfRequestInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
         tfIdfRequestInfo.setThresholdValue(thresholdValue);
-        tfIdfRequestInfo.setFileName("C:\\patentdoc\\" + lsrId.toString() + "-" + thresholdValue.toString() + ".txt");
 
+        tfIdfRequestInfoService.save(tfIdfRequestInfo);
+        tfIdfRequestInfo.setFileName("C:\\patentdoc\\" + tfIdfRequestInfo.getId() + "-" + thresholdValue.toString() + ".txt");
         tfIdfRequestInfoService.save(tfIdfRequestInfo);
         messageSender.sendMessage(tfIdfQueueConfigurationDto, new QueueMessageDto(tfIdfRequestInfo.getId()));
     }
@@ -171,7 +172,7 @@ public class DispatcherServiceImpl implements DispatcherService {
 
     private ClusteringType getClusteringType(final String clusterType) {
 
-        if ("KMEANS".equals(clusterType)) {
+        if ("kmeans".equalsIgnoreCase(clusterType)) {
             return ClusteringType.KMEANS;
         } else {
             return null;

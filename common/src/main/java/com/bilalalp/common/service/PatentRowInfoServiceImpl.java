@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
+
 @Getter
 @Service
-public class PatentRowInfoServiceImpl extends AbstractService<PatentRowInfo> implements PatentRowInfoService {
+public class PatentRowInfoServiceImpl extends AbstractService<PatentRowInfo> implements PatentRowInfoService, Serializable {
 
     @Autowired
     private PatentRowInfoRepository repository;

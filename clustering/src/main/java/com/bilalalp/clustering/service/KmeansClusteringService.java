@@ -18,12 +18,13 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class KmeansClusterService implements ClusterService {
+public class KmeansClusteringService implements ClusteringService, Serializable {
 
     @Autowired
     private ClusterResultInfoService clusterResultInfoService;
@@ -46,9 +47,16 @@ public class KmeansClusterService implements ClusterService {
         final Map<Integer, Long> patentRowInfoMap = createRowInfoMap(all);
         final SparkConf conf = new SparkConf().setAppName("K-means").setMaster("local[4]").set("spark.executor.memory", "1g");
         final JavaSparkContext sc = new JavaSparkContext(conf);
-
         final JavaRDD<String> data = sc.textFile(path);
-        final JavaRDD<Vector> parsedData = data.map((Function<String, Vector>) s -> Vectors.dense(getVector(s)));
+        final JavaRDD<Vector> parsedData = data.map((Function<String, Vector>) s -> {
+            final String[] split = s.split("::")[1].split("\\$");
+            final double[] values = new double[split.length];
+            for (int i = 0; i < split.length; i++) {
+                values[i] = Double.parseDouble(split[i].split(":")[1]);
+            }
+            return Vectors.dense(values);
+        });
+
         parsedData.cache();
 
         final KMeansModel clusters = KMeans.train(parsedData.rdd(), numClusters, Integer.MAX_VALUE);
@@ -65,15 +73,6 @@ public class KmeansClusterService implements ClusterService {
             clusteringResultInfo.setWssse(wssse);
             clusterResultInfoService.saveInNewTransaction(clusteringResultInfo);
         }
-    }
-
-    private double[] getVector(final String s) {
-        final String[] split = s.split("::")[1].split("\\$");
-        final double[] values = new double[split.length];
-        for (int i = 0; i < split.length; i++) {
-            values[i] = Double.parseDouble(split[i].split(":")[1]);
-        }
-        return values;
     }
 
     private Map<Integer, Long> createRowInfoMap(final List<PatentRowInfo> all) {

@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
+
 @Service
-public class ClusteringConsumer implements MessageListener {
+public class ClusteringConsumer implements MessageListener , Serializable{
 
     @Autowired
     private MessageConverter messageConverter;
@@ -21,7 +23,7 @@ public class ClusteringConsumer implements MessageListener {
     private ClusteringRequestInfoService clusteringRequestInfoService;
 
     @Autowired
-    private KmeansClusterService kmeansClusterService;
+    private KmeansClusteringService kmeansClusterService;
 
     @Autowired
     private PatentFileRowMapperService patentFileRowMapperService;
