@@ -110,20 +110,6 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         }
     }
 
-    private boolean validate(String s) {
-        try {
-            final String[] split = s.split("\\$");
-            double[] values = new double[split.length];
-            for (int i = 0; i < split.length; i++) {
-                values[i] = Double.parseDouble(split[i].split(":")[1]);
-            }
-            return true;
-        } catch (final Exception ex) {
-            System.out.println(ex);
-            return false;
-        }
-    }
-
     private String getFormattedLine(long patentInfoId, List<PatentWordCountDto> patentWordCountDtoList) {
 
         final StringBuilder stringBuilder = new StringBuilder();

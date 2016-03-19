@@ -18,4 +18,10 @@ public interface SplitWordInfoCustomRepository {
     Long getPatentWordCountWithoutZeroCount(LinkSearchRequestInfo linkSearchRequestInfo, Long wordInfoId);
 
     Long getSplitWordCount(LinkSearchRequestInfo linkSearchRequestInfo, Long wordInfoId);
+
+    List<String> getWordIdsByClusterIdAndLimit(Long clusteringRequestId, Long clusterNumber, Long wordLimit);
+
+    Long getWordCountInACluster(Long clusterNumber, Long clusterRequestId, Long wordId);
+
+    Long getTotalPatentCountInOtherClusters(Long clusterNumber, Long clusterRequestId, Long wordId);
 }

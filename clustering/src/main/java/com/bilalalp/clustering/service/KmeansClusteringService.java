@@ -71,6 +71,7 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
             clusteringResultInfo.setPatentId(patentRowInfoMap.get(i + 1));
             clusteringResultInfo.setTfIdfRequestInfoId(tfIdfRequestInfo.getId());
             clusteringResultInfo.setWssse(wssse);
+            clusteringResultInfo.setClusteringRequestId(clusteringRequestInfo.getId());
             clusterResultInfoService.saveInNewTransaction(clusteringResultInfo);
         }
     }

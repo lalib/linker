@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -76,5 +77,43 @@ public class SplitWordInfoCustomRepositoryImpl implements SplitWordInfoCustomRep
                 .setParameter("linkSearchRequestInfo", linkSearchRequestInfo)
                 .setParameter("word", wordInfoId)
                 .getSingleResult();
+    }
+
+    @Override
+    public List<String> getWordIdsByClusterIdAndLimit(final Long clusteringRequestId, final Long clusterNumber, final Long wordLimit) {
+
+        Query query = entityManager
+                .createQuery("SELECT s.word FROM SplitWordInfo s ,PatentInfo p, ClusteringRequestInfo c, ClusteringResultInfo cr " +
+                        "WHERE s.patentInfo.id = p.id AND c.id = cr.clusteringRequestId and cr.patentId = p.id AND c.id = :clusteringRequestId AND cr.clusteringNumber = :clusterNumber " +
+                        "GROUP BY s.word " +
+                        "ORDER BY COUNT(s.word) DESC");
+
+        if (wordLimit != null) {
+            query = query.setMaxResults(wordLimit.intValue());
+        }
+        return query.setParameter("clusteringRequestId", clusteringRequestId).setParameter("clusterNumber", clusterNumber).getResultList();
+    }
+
+    @Override
+    public Long getWordCountInACluster(final Long clusterNumber, final Long clusterRequestId, final Long wordId) {
+
+        return (Long) entityManager.createQuery("SELECT COUNT(s.word) FROM SplitWordInfo s, PatentInfo p, ClusteringRequestInfo c, ClusteringResultInfo cr, WordSummaryInfo w " +
+                "WHERE s.patentInfo.id = p.id AND c.id = cr.clusteringRequestId AND cr.patentId = p.id AND " +
+                "c.id = :clusteringRequestId AND cr.clusteringNumber =:clusteringNumber AND w.id = :wordId AND w.word = s.word")
+                .setParameter("clusteringNumber", clusterNumber)
+                .setParameter("clusteringRequestId", clusterRequestId)
+                .setParameter("wordId", wordId)
+                .getSingleResult();
+    }
+
+    @Override
+    public Long getTotalPatentCountInOtherClusters(final Long clusterNumber, final Long clusterRequestId, final Long wordId) {
+
+        return (Long) entityManager.createQuery("SELECT COUNT(DISTINCT p.id) FROM SplitWordInfo s, PatentInfo p, ClusteringRequestInfo c, ClusteringResultInfo cr, WordSummaryInfo w " +
+                "where s.patentInfo.id = p.id AND c.id = cr.clusteringRequestId AND cr.patentId = p.id AND c.id = :clusteringRequestId " +
+                "AND cr.clusteringNumber != :clusteringNumber AND w.id = :wordId AND w.word = s.word ")
+                .setParameter("clusteringRequestId", clusterRequestId)
+                .setParameter("clusteringNumber", clusterNumber)
+                .setParameter("wordId", wordId).getSingleResult();
     }
 }

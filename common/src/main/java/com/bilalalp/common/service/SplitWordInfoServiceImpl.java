@@ -74,6 +74,22 @@ public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> imp
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<Long> getExceptedWordIdList(TfIdfRequestInfo tfIdfRequestInfo, List<Long> wordIds) {
-        return splitWordInfoCustomRepository.getExceptedWordIdList(tfIdfRequestInfo,wordIds);
+        return splitWordInfoCustomRepository.getExceptedWordIdList(tfIdfRequestInfo, wordIds);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<String> getWordsByClusterIdAndLimit(final Long clusteringRequestId, final Long clusterNumber, final Long wordLimit) {
+        return splitWordInfoCustomRepository.getWordIdsByClusterIdAndLimit(clusteringRequestId, clusterNumber, wordLimit);
+    }
+
+    @Override
+    public Long getWordCountInACluster(Long clusterNumber, Long clusterRequestId, Long wordId) {
+        return splitWordInfoCustomRepository.getWordCountInACluster(clusterNumber, clusterRequestId, wordId);
+    }
+
+    @Override
+    public Long getTotalPatentCountInOtherClusters(final Long clusterNumber, final Long clusterRequestId, final Long wordId) {
+        return splitWordInfoCustomRepository.getTotalPatentCountInOtherClusters(clusterNumber, clusterRequestId, wordId);
     }
 }

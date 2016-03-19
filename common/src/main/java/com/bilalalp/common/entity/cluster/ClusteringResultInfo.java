@@ -33,4 +33,7 @@ public class ClusteringResultInfo extends AbstractEntity {
 
     @Column(name = "C_WSSSE")
     private Double wssse;
+
+    @Column(name = ClusteringRequestInfo.JOIN_COLUMN)
+    private Long clusteringRequestId;
 }

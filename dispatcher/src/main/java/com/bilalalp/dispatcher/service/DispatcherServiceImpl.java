@@ -2,6 +2,7 @@ package com.bilalalp.dispatcher.service;
 
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
+import com.bilalalp.common.entity.cluster.ClusterAnalyzingRequestInfo;
 import com.bilalalp.common.entity.cluster.ClusteringRequestInfo;
 import com.bilalalp.common.entity.cluster.ClusteringType;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
@@ -52,6 +53,10 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Autowired
     private QueueConfigurationDto crQueueConfigurationDto;
 
+    @Qualifier("carQueueConfiguration")
+    @Autowired
+    private QueueConfigurationDto carQueueConfigurationDto;
+
     @Autowired
     private Validator<LinkSearchRequest> linkSearchRequestValidator;
 
@@ -84,6 +89,9 @@ public class DispatcherServiceImpl implements DispatcherService {
 
     @Autowired
     private ClusteringRequestInfoService clusteringRequestInfoService;
+
+    @Autowired
+    private ClusterAnalyzingRequestInfoService clusterAnalyzingRequestInfoService;
 
     @Override
     @Transactional
@@ -168,6 +176,16 @@ public class DispatcherServiceImpl implements DispatcherService {
         clusteringRequestInfo.setClusterNumber(clusterNumber);
         clusteringRequestInfoService.save(clusteringRequestInfo);
         messageSender.sendMessage(crQueueConfigurationDto, new QueueMessageDto(clusteringRequestInfo.getId()));
+    }
+
+    @Transactional
+    @Override
+    public void analyzeCluster(final Long clusteringRequestInfoId, final Long wordLimit) {
+        final ClusterAnalyzingRequestInfo clusterAnalyzingRequestInfo = new ClusterAnalyzingRequestInfo();
+        clusterAnalyzingRequestInfo.setClusteringRequestInfoId(clusteringRequestInfoId);
+        clusterAnalyzingRequestInfo.setWordLimit(wordLimit == null ? 1000L : wordLimit);
+        clusterAnalyzingRequestInfoService.save(clusterAnalyzingRequestInfo);
+        messageSender.sendMessage(carQueueConfigurationDto, new QueueMessageDto(clusterAnalyzingRequestInfo.getId()));
     }
 
     private ClusteringType getClusteringType(final String clusterType) {

@@ -111,6 +111,14 @@ public class QueueConfig {
     }
 
     @Bean
+    public Binding carQueueBinding() {
+        return BindingBuilder.bind(carQueue())
+                .to(amqpDirectExchange())
+                .with(carQueueConfiguration().getQueueKey())
+                .noargs();
+    }
+
+    @Bean
     public Queue linkSearcherQueue() {
         return new Queue(linkSearcherQueueConfiguration().getQueueName());
     }
@@ -136,8 +144,13 @@ public class QueueConfig {
     }
 
     @Bean
-    public Queue crQueue(){
+    public Queue crQueue() {
         return new Queue(crQueueConfiguration().getQueueName());
+    }
+
+    @Bean
+    public Queue carQueue() {
+        return new Queue(carQueueConfiguration().getQueueName());
     }
 
     @Bean
@@ -200,6 +213,16 @@ public class QueueConfig {
         return simpleMessageListenerContainer;
     }
 
+    @Bean
+    public MessageListenerContainer carQueueContainer() {
+        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        simpleMessageListenerContainer.setConcurrentConsumers(1);
+        simpleMessageListenerContainer.setMessageConverter(messageConverter());
+        simpleMessageListenerContainer.setQueueNames(carQueueConfiguration().getQueueName());
+        return simpleMessageListenerContainer;
+    }
+
     @Qualifier(value = "dispatcherRequestQueueConfiguration")
     @Bean
     public QueueConfigurationDto dispatcherRequestQueueConfiguration() {
@@ -252,11 +275,21 @@ public class QueueConfig {
 
     @Qualifier("crQueueConfiguration")
     @Bean
-    public QueueConfigurationDto crQueueConfiguration(){
+    public QueueConfigurationDto crQueueConfiguration() {
         final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
         queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
         queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_CR_QUEUE_KEY));
         queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_CR_QUEUE_NAME));
+        return queueConfigurationDto;
+    }
+
+    @Qualifier("carQueueConfiguration")
+    @Bean
+    public QueueConfigurationDto carQueueConfiguration() {
+        final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
+        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
+        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_CAR_QUEUE_KEY));
+        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_CAR_QUEUE_NAME));
         return queueConfigurationDto;
     }
 }

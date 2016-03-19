@@ -25,4 +25,10 @@ public interface SplitWordInfoService extends BaseService<SplitWordInfo> {
     List<PatentWordCountDto> getWordCount(Long patentId);
 
     List<Long> getExceptedWordIdList(TfIdfRequestInfo tfIdfRequestInfo, List<Long> wordIds);
+
+    List<String> getWordsByClusterIdAndLimit(Long clusteringRequestId, Long clusterNumber, Long wordLimit);
+
+    Long getWordCountInACluster(final Long clusterNumber, final Long clusterRequestId, final Long wordId);
+
+    Long getTotalPatentCountInOtherClusters(Long clusterNumber, Long clusterRequestId, Long wordId);
 }

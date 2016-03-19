@@ -1,6 +1,7 @@
 package com.bilalalp.dispatcher.webservice;
 
 import com.bilalalp.dispatcher.dto.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -38,6 +39,10 @@ public interface DispatcherWebService {
     @GET
     @Path("/generateCluster")
     Response generateCluster(@QueryParam("clusterNumber") Long clusterNumber, @QueryParam("tfIdfRequestId") Long tfIdfRequestId, @QueryParam("clusterType") String clusterType);
+
+    @GET
+    @Path("/analyzeCluster")
+    Response analyzeCluster(@QueryParam("clusteringRequestId") Long clusterId, @QueryParam("wordLimit") Long wordLimit);
 
     @GET
     String state();

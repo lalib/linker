@@ -13,10 +13,15 @@ import java.io.Serializable;
 
 @Getter
 @Service
-public class ClusterResultInfoServiceImpl extends AbstractService<ClusteringResultInfo> implements ClusterResultInfoService ,Serializable{
+public class ClusterResultInfoServiceImpl extends AbstractService<ClusteringResultInfo> implements ClusterResultInfoService, Serializable {
 
     @Autowired
     private ClusterResultInfoRepository repository;
+
+    @Override
+    public Long getPatentCountWithOutClusterNumber(final Long clusterNumber) {
+        return repository.getPatentCountWithOutClusterNumber(clusterNumber);
+    }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override

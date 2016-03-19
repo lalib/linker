@@ -52,6 +52,12 @@ public class DispatcherWebServiceImpl implements DispatcherWebService {
     }
 
     @Override
+    public Response analyzeCluster(final Long clusterId, final Long wordLimit) {
+        dispatcherService.analyzeCluster(clusterId, wordLimit);
+        return Response.ok().build();
+    }
+
+    @Override
     public String state() {
         return "App is up!";
     }

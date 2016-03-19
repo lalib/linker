@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Repository
 public class WordSummaryInfoCustomRepositoryImpl implements WordSummaryInfoCustomRepository {
@@ -32,5 +33,16 @@ public class WordSummaryInfoCustomRepositoryImpl implements WordSummaryInfoCusto
                 .setParameter(1, linkSearchRequestInfo.getId())
                 .setParameter(2, linkSearchRequestInfo.getId())
                 .executeUpdate();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<Long> getWordIds(final Long lsrId, final List<String> wordList) {
+        return entityManager
+                .createQuery("SELECT p.id FROM WordSummaryInfo p " +
+                        "WHERE p.linkSearchRequestInfo.id = :lstId AND p.word IN :wordList")
+                .setParameter("lstId", lsrId)
+                .setParameter("wordList", wordList)
+                .getResultList();
     }
 }
