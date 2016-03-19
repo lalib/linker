@@ -4,8 +4,6 @@ import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.cluster.ClusterAnalyzingProcessInfo;
 import com.bilalalp.common.entity.cluster.ClusterAnalyzingRequestInfo;
 import com.bilalalp.common.entity.cluster.ClusterAnalyzingResultInfo;
-import com.bilalalp.common.entity.cluster.ClusteringRequestInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -76,7 +74,7 @@ public class AnalyzeProcessorConsumer implements MessageListener {
     }
 
     private double getResult(Long wordCountInACluster, Long patentCountWithOutClusterNumber, Long totalPatentCountInOtherClusters) {
-        if(totalPatentCountInOtherClusters == 0L){
+        if (totalPatentCountInOtherClusters == 0L) {
             return 0L;
         }
         return wordCountInACluster * Math.log(patentCountWithOutClusterNumber / totalPatentCountInOtherClusters);

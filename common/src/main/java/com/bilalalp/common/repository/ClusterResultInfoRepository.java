@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.io.Serializable;
 
 @Repository
-public interface ClusterResultInfoRepository extends CrudRepository<ClusteringResultInfo, Long> ,Serializable{
+public interface ClusterResultInfoRepository extends CrudRepository<ClusteringResultInfo, Long>, Serializable {
 
     @Query("SELECT COUNT(p) FROM ClusteringResultInfo p WHERE p.clusteringNumber != :clusterNumber")
     Long getPatentCountWithOutClusterNumber(@Param("clusterNumber") Long clusterNumber);

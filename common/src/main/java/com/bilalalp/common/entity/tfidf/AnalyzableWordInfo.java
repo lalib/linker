@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Access(AccessType.FIELD)
 @Getter
 @Setter
-public class AnalyzableWordInfo extends AbstractEntity{
+public class AnalyzableWordInfo extends AbstractEntity {
 
     public static final String JOIN_COLUMN = "C_ANALYZABLE_WORD_INFO_ID";
 

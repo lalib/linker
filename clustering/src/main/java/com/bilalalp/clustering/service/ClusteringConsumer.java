@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 
 @Service
-public class ClusteringConsumer implements MessageListener , Serializable{
+public class ClusteringConsumer implements MessageListener, Serializable {
 
     @Autowired
     private MessageConverter messageConverter;
@@ -36,7 +36,7 @@ public class ClusteringConsumer implements MessageListener , Serializable{
         final ClusteringRequestInfo clusteringRequestInfo = clusteringRequestInfoService.find(queueMessageDto.getId());
 
         if (ClusteringType.KMEANS.equals(clusteringRequestInfo.getClusteringType())) {
-            patentFileRowMapperService.insertPatentRowsToDatabase(clusteringRequestInfo);
+//            patentFileRowMapperService.insertPatentRowsToDatabase(clusteringRequestInfo);
             kmeansClusterService.cluster(clusteringRequestInfo);
         }
     }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Getter
 @Service
-public class ClusterAnalyzingResultInfoServiceImpl extends AbstractService<ClusterAnalyzingResultInfo> implements ClusterAnalyzingResultInfoService{
+public class ClusterAnalyzingResultInfoServiceImpl extends AbstractService<ClusterAnalyzingResultInfo> implements ClusterAnalyzingResultInfoService {
 
     @Autowired
     private ClusterAnalyzingResultInfoRepository repository;
