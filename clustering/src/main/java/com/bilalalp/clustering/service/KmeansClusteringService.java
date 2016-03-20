@@ -10,18 +10,15 @@ import com.bilalalp.common.service.TfIdfRequestInfoService;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.clustering.KMeans;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
-import org.apache.spark.mllib.linalg.Vectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class KmeansClusteringService implements ClusteringService, Serializable {
@@ -44,18 +41,11 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
         final int numClusters = clusteringRequestInfo.getClusterNumber().intValue();
 
         final List<PatentRowInfo> all = patentRowInfoService.findAll();
-        final Map<Integer, Long> patentRowInfoMap = createRowInfoMap(all);
+        final Map<Integer, Long> patentRowInfoMap = ClusterUtil.createRowInfoMap(all);
         final SparkConf conf = new SparkConf().setAppName("K-means").setMaster("local[4]").set("spark.executor.memory", "1g");
         final JavaSparkContext sc = new JavaSparkContext(conf);
         final JavaRDD<String> data = sc.textFile(path);
-        final JavaRDD<Vector> parsedData = data.map((Function<String, Vector>) s -> {
-            final String[] split = s.split("::")[1].split("\\$");
-            final double[] values = new double[split.length];
-            for (int i = 0; i < split.length; i++) {
-                values[i] = Double.parseDouble(split[i].split(":")[1]);
-            }
-            return Vectors.dense(values);
-        });
+        final JavaRDD<Vector> parsedData = ClusterUtil.getVectorJavaRDD(data);
 
         parsedData.cache();
 
@@ -74,9 +64,5 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
             clusteringResultInfo.setClusteringRequestId(clusteringRequestInfo.getId());
             clusterResultInfoService.saveInNewTransaction(clusteringResultInfo);
         }
-    }
-
-    private Map<Integer, Long> createRowInfoMap(final List<PatentRowInfo> all) {
-        return all.stream().collect(Collectors.toMap(PatentRowInfo::getRowNumber, PatentRowInfo::getPatentId));
     }
 }

@@ -1,7 +1,6 @@
 package com.bilalalp.dispatcher.webservice;
 
 import com.bilalalp.dispatcher.dto.*;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

@@ -192,6 +192,8 @@ public class DispatcherServiceImpl implements DispatcherService {
 
         if ("kmeans".equalsIgnoreCase(clusterType)) {
             return ClusteringType.KMEANS;
+        } else if ("lda".equalsIgnoreCase(clusterType)) {
+            return ClusteringType.LDA;
         } else {
             return null;
         }

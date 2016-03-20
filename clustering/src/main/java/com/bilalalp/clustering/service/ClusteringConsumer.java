@@ -28,6 +28,9 @@ public class ClusteringConsumer implements MessageListener, Serializable {
     @Autowired
     private PatentFileRowMapperService patentFileRowMapperService;
 
+    @Autowired
+    private LatentDirichletAllocationClusteringService latentDirichletAllocationClusteringService;
+
     @Transactional
     @Override
     public void onMessage(final Message message) {
@@ -38,6 +41,8 @@ public class ClusteringConsumer implements MessageListener, Serializable {
         if (ClusteringType.KMEANS.equals(clusteringRequestInfo.getClusteringType())) {
 //            patentFileRowMapperService.insertPatentRowsToDatabase(clusteringRequestInfo);
             kmeansClusterService.cluster(clusteringRequestInfo);
+        } else if (ClusteringType.LDA.equals(clusteringRequestInfo.getClusteringType())) {
+            latentDirichletAllocationClusteringService.cluster(clusteringRequestInfo);
         }
     }
 }

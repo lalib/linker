@@ -18,5 +18,5 @@ public interface DispatcherService {
 
     void generateCluster(Long clusterNumber, Long tfIdfRequestId, String clusterType);
 
-    void analyzeCluster(Long clusterId,Long wordLimit);
+    void analyzeCluster(Long clusterId, Long wordLimit);
 }
