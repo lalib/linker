@@ -103,7 +103,7 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
 
     private void writeToFile(final long patentInfoId, final List<PatentWordCountDto> patentWordCountDtoList, final TfIdfRequestInfo tfIdfRequestInfo) {
 
-        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(tfIdfRequestInfo.getFileName(), true)))) {
+        try (final PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(tfIdfRequestInfo.getFileName(), true)))) {
             out.println(getFormattedLine(patentInfoId, patentWordCountDtoList));
         } catch (IOException e) {
             System.out.println(e.getMessage());

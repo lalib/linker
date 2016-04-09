@@ -34,4 +34,10 @@ public interface PatentInfoRepository extends CrudRepository<PatentInfo, Long> {
             "FROM PatentInfo s WHERE s.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and s.id NOT IN " +
             "(SELECT k.patentInfo.id FROM SplitWordInfo k,WordSummaryInfo w WHERE k.patentInfo.linkSearchPageInfo.linkSearchRequestInfo.id = :lsrId and w.word=k.word AND w.id =:word)")
     List<EntityDto> getPatentInfoIds(@Param("lsrId") Long lsrId, @Param("word") Long word);
+
+    @Query("SELECT DISTINCT p.id FROM SplitWordInfo s, PatentInfo p " +
+            "INNER JOIN p.linkSearchPageInfo l " +
+            "INNER JOIN l.linkSearchRequestInfo r " +
+            "WHERE r.id = :lsrId AND s.patentInfo = p AND s.word = :word")
+    List<Long> getPatentIds(@Param("lsrId") Long lsrId, @Param("word") String word);
 }

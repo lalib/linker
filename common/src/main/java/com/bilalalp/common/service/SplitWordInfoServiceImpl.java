@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -91,5 +92,10 @@ public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> imp
     @Override
     public Long getTotalPatentCountInOtherClusters(final Long clusterNumber, final Long clusterRequestId, final Long wordId) {
         return splitWordInfoCustomRepository.getTotalPatentCountInOtherClusters(clusterNumber, clusterRequestId, wordId);
+    }
+
+    @Override
+    public List<BigInteger> getWords(final Long lsrId) {
+        return splitWordInfoCustomRepository.getWords(lsrId);
     }
 }

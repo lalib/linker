@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -55,15 +56,30 @@ public class TfIdfInitializerService implements MessageListener {
     @Autowired
     private PatentInfoService patentInfoService;
 
+    @Autowired
+    private SplitWordInfoService splitWordInfoService;
+
     @Transactional
     public void process(final Long id) {
 
         final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(id);
         final LinkSearchRequestInfo linkSearchRequestInfo = tfIdfRequestInfo.getLinkSearchRequestInfo();
 
-        saveWords(tfIdfRequestInfo, linkSearchRequestInfo);
+//        saveWords(tfIdfRequestInfo, linkSearchRequestInfo);
+        saveWordsForRange(tfIdfRequestInfo);
 
         arrangePatents(tfIdfRequestInfo, linkSearchRequestInfo);
+    }
+
+    private void saveWordsForRange(final TfIdfRequestInfo tfIdfRequestInfo) {
+        final List<BigInteger> words = splitWordInfoService.getWords(tfIdfRequestInfo.getLinkSearchRequestInfo().getId());
+
+        for (final BigInteger word : words) {
+            final AnalyzableWordInfo analyzableWordInfo = new AnalyzableWordInfo();
+            analyzableWordInfo.setTfIdfRequestInfo(tfIdfRequestInfo);
+            analyzableWordInfo.setWordId(word.longValue());
+            applicationContext.getBean(TfIdfInitializerService.class).save(analyzableWordInfo);
+        }
     }
 
     private void arrangePatents(final TfIdfRequestInfo tfIdfRequestInfo, final LinkSearchRequestInfo linkSearchRequestInfo) {

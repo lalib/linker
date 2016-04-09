@@ -2,6 +2,7 @@ package com.bilalalp.common.entity.tfidf;
 
 import com.bilalalp.common.entity.base.AbstractEntity;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
+import com.bilalalp.common.entity.patent.SplitWordType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +27,10 @@ public class WordSummaryInfo extends AbstractEntity {
 
     @Column(name = "C_COUNT")
     private Long count;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "C_TYPE")
+    private SplitWordType splitWordType;
 
     @ManyToOne(targetEntity = LinkSearchRequestInfo.class, fetch = FetchType.LAZY)
     @JoinColumn(name = LinkSearchRequestInfo.JOIN_COLUMN)

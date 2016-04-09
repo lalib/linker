@@ -5,6 +5,7 @@ import com.bilalalp.common.dto.PatentWordCountDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface SplitWordInfoCustomRepository {
@@ -12,6 +13,8 @@ public interface SplitWordInfoCustomRepository {
     List<PatentWordCountDto> getPatentWordCount(LinkSearchRequestInfo linkSearchRequestInfo, Long wordInfoId);
 
     List<PatentWordCountDto> getWordCount(Long patentId);
+
+    List<BigInteger> getWords(Long lsrId);
 
     List<Long> getExceptedWordIdList(TfIdfRequestInfo tfIdfRequestInfo, List<Long> wordIds);
 

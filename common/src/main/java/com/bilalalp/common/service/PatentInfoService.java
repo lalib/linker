@@ -5,6 +5,7 @@ import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
 import com.bilalalp.common.service.base.BaseService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface PatentInfoService extends BaseService<PatentInfo> {
     Long getPatentInfoCountByLinkSearchPageInfo(final LinkSearchRequestInfo linkSearchRequestInfo);
 
     List<EntityDto> getPatentInfos(Long lsrId, Long word);
+
+    List<Long> getPatentIds(Long requestId, String word);
 }

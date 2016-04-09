@@ -6,6 +6,7 @@ import com.bilalalp.common.entity.patent.SplitWordInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.service.base.BaseService;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface SplitWordInfoService extends BaseService<SplitWordInfo> {
@@ -31,4 +32,6 @@ public interface SplitWordInfoService extends BaseService<SplitWordInfo> {
     Long getWordCountInACluster(final Long clusterNumber, final Long clusterRequestId, final Long wordId);
 
     Long getTotalPatentCountInOtherClusters(Long clusterNumber, Long clusterRequestId, Long wordId);
+
+    List<BigInteger> getWords(Long lsrId);
 }

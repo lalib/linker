@@ -51,4 +51,10 @@ public class PatentInfoServiceImpl extends AbstractService<PatentInfo> implement
     public List<EntityDto> getPatentInfos(final Long lsrId, final Long word) {
         return patentInfoRepository.getPatentInfoIds(lsrId, word);
     }
+
+    @Transactional
+    @Override
+    public List<Long> getPatentIds(final Long requestId, final String word) {
+        return patentInfoRepository.getPatentIds(requestId, word);
+    }
 }

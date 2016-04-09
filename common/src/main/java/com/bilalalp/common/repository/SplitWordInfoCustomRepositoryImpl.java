@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -41,6 +42,19 @@ public class SplitWordInfoCustomRepositoryImpl implements SplitWordInfoCustomRep
                         "ORDER BY COUNT(s.word) DESC")
                 .setParameter("patentId", patentId)
                 .getResultList();
+    }
+
+    @Override
+    public List<BigInteger> getWords(Long lsrId) {
+        return entityManager.createNativeQuery("select w.id from t_split_word s " +
+                "inner join t_patent_info  p on p.id = s.c_patent_info_id " +
+                "inner join t_lsp_info lp on lp.id = p.c_lsp_id " +
+                "inner join t_lsr_info r on r.id = lp.c_lsr_id " +
+                "inner join t_word_summary_info w on w.c_word = s.c_word " +
+                "where r.id = :lsrId " +
+                "group by w.id " +
+                "having count(s.c_word) >20 and count(s.c_word)<2000 " +
+                "order by count(s.c_word) desc").setParameter("lsrId", lsrId).getResultList();
     }
 
     @Override
