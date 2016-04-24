@@ -58,6 +58,18 @@ public class DispatcherWebServiceImpl implements DispatcherWebService {
     }
 
     @Override
+    public Response completeTvCalculation() {
+        dispatcherService.completeTvCalculation();
+        return Response.ok().build();
+    }
+
+    @Override
+    public Response calculateTv() {
+        dispatcherService.calculateTv();
+        return Response.ok().build();
+    }
+
+    @Override
     public String state() {
         return "App is up!";
     }

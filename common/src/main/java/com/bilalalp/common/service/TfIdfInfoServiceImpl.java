@@ -4,10 +4,7 @@ import com.bilalalp.common.dto.EntityDto;
 import com.bilalalp.common.dto.PatentWordCountDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfProcessInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
-import com.bilalalp.common.entity.tfidf.WordElimination;
+import com.bilalalp.common.entity.tfidf.*;
 import com.bilalalp.common.repository.TfIdfInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
 import lombok.Getter;
@@ -58,6 +55,9 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
     @Autowired
     private AnalyzableWordInfoService analyzableWordInfoService;
 
+    @Autowired
+    private TvProcessInfoService tvProcessInfoService;
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void saveWithNewTransaction(final WordElimination wordElimination, final LinkSearchRequestInfo linkSearchRequestInfo, final PatentWordCountDto patentWordCountDto, final Long thresholdValue) {
@@ -85,9 +85,20 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
     @Override
     public void processEliminatedWord(final TfIdfProcessInfo tfIdfProcessInfo) {
 
+        final List<TvProcessInfo> byLimit = tvProcessInfoService.findByLimit(tfIdfProcessInfo.getThresholdValue().intValue());
+
+        final List<Long> collectedIds = byLimit.stream().map(TvProcessInfo::getWordId).collect(Collectors.toList());
+
         final TfIdfRequestInfo tfIdfRequestInfo = tfIdfProcessInfo.getTfIdfRequestInfo();
         final Long patentInfoId = tfIdfProcessInfo.getPatentInfoId();
-        final List<PatentWordCountDto> wordCount = splitWordInfoService.getWordCount(patentInfoId);
+
+        final List<PatentWordCountDto> wordCount = splitWordInfoService.getWordCount(patentInfoId, collectedIds, tfIdfRequestInfo.getId());
+
+        if (wordCount != null && !wordCount.isEmpty()) {
+            System.out.println("geldi..");
+        }
+
+//        final List<PatentWordCountDto> wordCount = splitWordInfoService.getWordCount(patentInfoId);
 
         final List<Long> wordIdList = wordCount.stream().map(PatentWordCountDto::getPatentId).collect(Collectors.toList());
 

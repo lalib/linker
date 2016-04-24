@@ -119,6 +119,22 @@ public class QueueConfig {
     }
 
     @Bean
+    public Binding tvQueueBinding() {
+        return BindingBuilder.bind(tvQueue())
+                .to(amqpDirectExchange())
+                .with(tvQueueConfiguration().getQueueKey())
+                .noargs();
+    }
+
+    @Bean
+    public Binding tvCalcQueueBinding() {
+        return BindingBuilder.bind(tvCalcQueue())
+                .to(amqpDirectExchange())
+                .with(tvCalcQueueConfiguration().getQueueKey())
+                .noargs();
+    }
+
+    @Bean
     public Queue linkSearcherQueue() {
         return new Queue(linkSearcherQueueConfiguration().getQueueName());
     }
@@ -151,6 +167,36 @@ public class QueueConfig {
     @Bean
     public Queue carQueue() {
         return new Queue(carQueueConfiguration().getQueueName());
+    }
+
+    @Bean
+    public Queue tvQueue() {
+        return new Queue(tvQueueConfiguration().getQueueName());
+    }
+
+    @Bean
+    public Queue tvCalcQueue() {
+        return new Queue(tvCalcQueueConfiguration().getQueueName());
+    }
+
+    @Bean
+    public MessageListenerContainer tvCalcQueueContainer() {
+        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        simpleMessageListenerContainer.setConcurrentConsumers(1);
+        simpleMessageListenerContainer.setMessageConverter(messageConverter());
+        simpleMessageListenerContainer.setQueueNames(tvCalcQueueConfiguration().getQueueName());
+        return simpleMessageListenerContainer;
+    }
+
+    @Bean
+    public MessageListenerContainer tvQueueContainer() {
+        final SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer(rabbitConnectionFactory());
+        simpleMessageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        simpleMessageListenerContainer.setConcurrentConsumers(1);
+        simpleMessageListenerContainer.setMessageConverter(messageConverter());
+        simpleMessageListenerContainer.setQueueNames(tvQueueConfiguration().getQueueName());
+        return simpleMessageListenerContainer;
     }
 
     @Bean
@@ -290,6 +336,27 @@ public class QueueConfig {
         queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
         queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_CAR_QUEUE_KEY));
         queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_CAR_QUEUE_NAME));
+        return queueConfigurationDto;
+    }
+
+
+    @Qualifier(value = "tvQueueConfiguration")
+    @Bean
+    public QueueConfigurationDto tvQueueConfiguration() {
+        final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
+        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
+        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_TV_QUEUE_KEY));
+        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_TV_QUEUE_NAME));
+        return queueConfigurationDto;
+    }
+
+    @Qualifier(value = "tvCalcQueueConfiguration")
+    @Bean
+    public QueueConfigurationDto tvCalcQueueConfiguration() {
+        final QueueConfigurationDto queueConfigurationDto = new QueueConfigurationDto();
+        queueConfigurationDto.setExchangeName(environment.getProperty(QueueConfigConstant.AMQP_DIRECT_NAME));
+        queueConfigurationDto.setQueueKey(environment.getProperty(QueueConfigConstant.AMQP_TV_CALC_QUEUE_KEY));
+        queueConfigurationDto.setQueueName(environment.getProperty(QueueConfigConstant.AMQP_TV_CALC_QUEUE_NAME));
         return queueConfigurationDto;
     }
 }

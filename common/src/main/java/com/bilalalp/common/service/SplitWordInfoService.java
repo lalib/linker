@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface SplitWordInfoService extends BaseService<SplitWordInfo> {
 
+    List<PatentWordCountDto> getWordCount(Long patentId, List<Long> wordIds,Long tfIdfRequestId);
+
     void deleteByRequestId(Long requestId);
 
     Long getCountByPatentInfoIdAndWord(Long patentInfoId, Long word);

@@ -13,6 +13,7 @@ import com.bilalalp.common.entity.patent.StopWordInfo;
 import com.bilalalp.common.entity.site.SiteInfo;
 import com.bilalalp.common.entity.site.SiteInfoType;
 import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
+import com.bilalalp.common.entity.tfidf.TvResultInfo;
 import com.bilalalp.common.entity.tfidf.WordEliminationRequestInfo;
 import com.bilalalp.common.service.*;
 import com.bilalalp.dispatcher.amqp.MessageSender;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +58,14 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Qualifier("carQueueConfiguration")
     @Autowired
     private QueueConfigurationDto carQueueConfigurationDto;
+
+    @Qualifier("tvQueueConfiguration")
+    @Autowired
+    private QueueConfigurationDto tvQueueConfigurationDto;
+
+    @Qualifier("tvCalcQueueConfiguration")
+    @Autowired
+    private QueueConfigurationDto tvCalcQueueConfigurationDto;
 
     @Autowired
     private Validator<LinkSearchRequest> linkSearchRequestValidator;
@@ -92,6 +102,12 @@ public class DispatcherServiceImpl implements DispatcherService {
 
     @Autowired
     private ClusterAnalyzingRequestInfoService clusterAnalyzingRequestInfoService;
+
+    @Autowired
+    private PatentInfoService patentInfoService;
+
+    @Autowired
+    private TvResultInfoService tvResultInfoService;
 
     @Override
     @Transactional
@@ -186,6 +202,29 @@ public class DispatcherServiceImpl implements DispatcherService {
         clusterAnalyzingRequestInfo.setWordLimit(wordLimit == null ? 1000L : wordLimit);
         clusterAnalyzingRequestInfoService.save(clusterAnalyzingRequestInfo);
         messageSender.sendMessage(carQueueConfigurationDto, new QueueMessageDto(clusterAnalyzingRequestInfo.getId()));
+    }
+
+    @Transactional
+    @Override
+    public void calculateTv() {
+        messageSender.sendMessage(tvQueueConfigurationDto, createQueueMessageDto(patentInfoService.getPatentIds(574L)));
+    }
+
+    @Override
+    public void completeTvCalculation() {
+        final List<BigDecimal> tvWordIds = wordSummaryInfoService.getTvWordIds();
+
+        for (final BigDecimal value : tvWordIds) {
+            final TvResultInfo tvResultInfo = tvResultInfoService.getByWordId(value.longValue());
+
+            if(tvResultInfo == null){
+                messageSender.sendMessage(tvCalcQueueConfigurationDto, new QueueMessageDto(value.longValue()));
+            }
+        }
+    }
+
+    private List<QueueMessageDto> createQueueMessageDto(final List<Long> idList) {
+        return idList.stream().map(QueueMessageDto::new).collect(Collectors.toList());
     }
 
     private ClusteringType getClusteringType(final String clusterType) {

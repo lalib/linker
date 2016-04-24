@@ -7,8 +7,8 @@ import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.repository.SplitWordInfoCustomRepository;
 import com.bilalalp.common.repository.SplitWordInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,30 +16,31 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigInteger;
 import java.util.List;
 
+@Getter
 @Service
 public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> implements SplitWordInfoService {
 
     @Autowired
-    private SplitWordInfoRepository splitWordInfoRepository;
+    private SplitWordInfoRepository repository;
 
     @Autowired
     private SplitWordInfoCustomRepository splitWordInfoCustomRepository;
 
     @Override
-    protected CrudRepository<SplitWordInfo, Long> getRepository() {
-        return splitWordInfoRepository;
+    public List<PatentWordCountDto> getWordCount(final Long patentId, final List<Long> wordIds,final Long tfIdfRequestId) {
+        return splitWordInfoCustomRepository.getWordCount(patentId, wordIds,tfIdfRequestId);
     }
 
     @Transactional
     @Override
     public void deleteByRequestId(final Long requestId) {
-        splitWordInfoRepository.deleteByRequestId(requestId);
+        repository.deleteByRequestId(requestId);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public Long getCountByPatentInfoIdAndWord(final Long patentInfoId, final Long wordInfoId) {
-        return splitWordInfoRepository.getCountByPatentInfoIdAndWord(patentInfoId, wordInfoId);
+        return repository.getCountByPatentInfoIdAndWord(patentInfoId, wordInfoId);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -51,7 +52,7 @@ public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> imp
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public Long getWordCountByLinkSearchRequestInfoAndWord(final LinkSearchRequestInfo linkSearchRequestInfo, final Long wordInfoId) {
-        return splitWordInfoRepository.getWordCountByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, wordInfoId);
+        return repository.getWordCountByLinkSearchRequestInfoAndWord(linkSearchRequestInfo, wordInfoId);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)

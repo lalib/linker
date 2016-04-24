@@ -3,10 +3,7 @@ package com.bilalalp.tfidfinitializer.service;
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
-import com.bilalalp.common.entity.tfidf.AnalyzableWordInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfProcessInfo;
-import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
-import com.bilalalp.common.entity.tfidf.WordElimination;
+import com.bilalalp.common.entity.tfidf.*;
 import com.bilalalp.common.service.*;
 import com.bilalalp.tfidfinitializer.amqp.MessageSender;
 import org.apache.commons.collections4.CollectionUtils;
@@ -59,6 +56,9 @@ public class TfIdfInitializerService implements MessageListener {
     @Autowired
     private SplitWordInfoService splitWordInfoService;
 
+    @Autowired
+    private TvProcessInfoService tvProcessInfoService;
+
     @Transactional
     public void process(final Long id) {
 
@@ -72,12 +72,14 @@ public class TfIdfInitializerService implements MessageListener {
     }
 
     private void saveWordsForRange(final TfIdfRequestInfo tfIdfRequestInfo) {
-        final List<BigInteger> words = splitWordInfoService.getWords(tfIdfRequestInfo.getLinkSearchRequestInfo().getId());
 
-        for (final BigInteger word : words) {
+        final List<TvProcessInfo> tvProcessInfoList = tvProcessInfoService.findByLimit(tfIdfRequestInfo.getThresholdValue().intValue());
+//        final List<BigInteger> words = splitWordInfoService.getWords(tfIdfRequestInfo.getLinkSearchRequestInfo().getId());
+
+        for (final TvProcessInfo tvProcessInfo : tvProcessInfoList) {
             final AnalyzableWordInfo analyzableWordInfo = new AnalyzableWordInfo();
             analyzableWordInfo.setTfIdfRequestInfo(tfIdfRequestInfo);
-            analyzableWordInfo.setWordId(word.longValue());
+            analyzableWordInfo.setWordId(tvProcessInfo.getWordId());
             applicationContext.getBean(TfIdfInitializerService.class).save(analyzableWordInfo);
         }
     }

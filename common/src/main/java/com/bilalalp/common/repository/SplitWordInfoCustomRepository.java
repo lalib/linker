@@ -14,6 +14,8 @@ public interface SplitWordInfoCustomRepository {
 
     List<PatentWordCountDto> getWordCount(Long patentId);
 
+    List<PatentWordCountDto> getWordCount(Long patentId, List<Long> wordIds,Long tfIdfRequestId);
+
     List<BigInteger> getWords(Long lsrId);
 
     List<Long> getExceptedWordIdList(TfIdfRequestInfo tfIdfRequestInfo, List<Long> wordIds);

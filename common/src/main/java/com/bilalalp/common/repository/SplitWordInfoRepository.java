@@ -2,6 +2,7 @@ package com.bilalalp.common.repository;
 
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.SplitWordInfo;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface SplitWordInfoRepository extends CrudRepository<SplitWordInfo, Long> {
+public interface SplitWordInfoRepository extends JpaRepository<SplitWordInfo, Long> {
 
     @Transactional
     @Modifying

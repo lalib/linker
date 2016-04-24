@@ -45,6 +45,22 @@ public class SplitWordInfoCustomRepositoryImpl implements SplitWordInfoCustomRep
     }
 
     @Override
+    public List<PatentWordCountDto> getWordCount(final Long patentId, final List<Long> wordIds, final Long tfIdfRequestId) {
+        return entityManager
+                .createQuery("SELECT new com.bilalalp.common.dto.PatentWordCountDto(w.id,w.version, COUNT(s.word)) " +
+                        "FROM SplitWordInfo s " +
+                        "INNER JOIN WordSummaryInfo w ON w.word = s.word " +
+                        "INNER JOIN AnalyzableWordInfo a ON a.wordId = w.id " +
+                        "WHERE s.patentInfo.id = :patentId AND a.wordId IN (:wordIds) AND a.tfIdfRequestInfo.id = :tfIdfRequestId " +
+                        "GROUP BY w.id,w.version " +
+                        "ORDER BY COUNT(s.word) DESC")
+                .setParameter("patentId", patentId)
+                .setParameter("wordIds", wordIds)
+                .setParameter("tfIdfRequestId", tfIdfRequestId)
+                .getResultList();
+    }
+
+    @Override
     public List<BigInteger> getWords(Long lsrId) {
         return entityManager.createNativeQuery("select w.id from t_split_word s " +
                 "inner join t_patent_info  p on p.id = s.c_patent_info_id " +

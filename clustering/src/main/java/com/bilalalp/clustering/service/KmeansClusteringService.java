@@ -32,8 +32,12 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
     @Autowired
     private TfIdfRequestInfoService tfIdfRequestInfoService;
 
+    final SparkConf conf = new SparkConf().setAppName("K-gdfgdfg").setMaster("local[*]")
+            .set("spark.executor.memory", "6g");
+    final JavaSparkContext sc = new JavaSparkContext(conf);
+
     @Override
-    public void cluster(ClusteringRequestInfo clusteringRequestInfo) {
+    public void cluster(final ClusteringRequestInfo clusteringRequestInfo) {
 
         final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(clusteringRequestInfo.getTfIdfRequestId());
 
@@ -42,8 +46,7 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
 
         final List<PatentRowInfo> all = patentRowInfoService.findAll();
         final Map<Integer, Long> patentRowInfoMap = ClusterUtil.createRowInfoMap(all);
-        final SparkConf conf = new SparkConf().setAppName("K-means").setMaster("local[4]").set("spark.executor.memory", "1g");
-        final JavaSparkContext sc = new JavaSparkContext(conf);
+
         final JavaRDD<String> data = sc.textFile(path);
         final JavaRDD<Vector> parsedData = ClusterUtil.getVectorJavaRDD(data);
 

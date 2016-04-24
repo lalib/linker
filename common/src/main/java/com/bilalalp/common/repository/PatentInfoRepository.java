@@ -4,6 +4,7 @@ import com.bilalalp.common.dto.EntityDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface PatentInfoRepository extends CrudRepository<PatentInfo, Long> {
+public interface PatentInfoRepository extends JpaRepository<PatentInfo, Long> {
 
     @Transactional
     List<PatentInfo> getPatentListBylinkSearchPageInfo(LinkSearchPageInfo linkSearchPageInfo);

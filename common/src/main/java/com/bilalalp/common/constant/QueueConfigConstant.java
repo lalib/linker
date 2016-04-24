@@ -49,6 +49,12 @@ public final class QueueConfigConstant {
     public static final String AMQP_CPR_QUEUE_NAME = "amqp.cpr.queue.name";
     public static final String AMQP_CPR_QUEUE_KEY = "amqp.cpr.queue.key";
 
+    public static final String AMQP_TV_QUEUE_NAME ="amqp.tv.queue.name";
+    public static final String AMQP_TV_QUEUE_KEY = "amqp.tv.queue.key";
+
+    public static final String AMQP_TV_CALC_QUEUE_NAME ="amqp.tv.calc.queue.name";
+    public static final String AMQP_TV_CALC_QUEUE_KEY = "amqp.tv.calc.queue.key";
+
     private QueueConfigConstant() {
         // Constant Class
     }

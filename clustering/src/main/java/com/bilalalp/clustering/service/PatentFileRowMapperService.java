@@ -11,10 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.Serializable;
 
 @Slf4j
 @Service
-public class PatentFileRowMapperService {
+public class PatentFileRowMapperService implements Serializable{
 
     @Autowired
     private PatentRowInfoService patentRowInfoService;

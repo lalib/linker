@@ -44,5 +44,13 @@ public interface DispatcherWebService {
     Response analyzeCluster(@QueryParam("clusteringRequestId") Long clusterId, @QueryParam("wordLimit") Long wordLimit);
 
     @GET
+    @Path("/completeTvCalculation")
+    Response completeTvCalculation();
+
+    @GET
+    @Path("/calculateTv")
+    Response calculateTv();
+
+    @GET
     String state();
 }

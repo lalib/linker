@@ -6,11 +6,12 @@ import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public final class ClusterUtil {
+public final class ClusterUtil implements Serializable{
 
     public static JavaRDD<Vector> getVectorJavaRDD(JavaRDD<String> data) {
         return data.map((Function<String, Vector>) s -> {

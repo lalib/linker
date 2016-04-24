@@ -2,6 +2,7 @@ package com.bilalalp.common.service.base;
 
 import lombok.Setter;
 import org.apache.commons.collections4.IteratorUtils;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Setter
 public abstract class AbstractService<T> implements BaseService<T> {
 
-    protected abstract CrudRepository<T, Long> getRepository();
+    protected abstract JpaRepository<T, Long> getRepository();
 
     @Transactional
     @Override
