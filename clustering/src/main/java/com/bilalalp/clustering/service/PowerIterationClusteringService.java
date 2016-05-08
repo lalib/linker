@@ -2,38 +2,33 @@ package com.bilalalp.clustering.service;
 
 import com.bilalalp.common.entity.cluster.ClusteringRequestInfo;
 import com.bilalalp.common.entity.cluster.ClusteringResultInfo;
-import com.bilalalp.common.entity.cluster.PatentRowInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.service.ClusterResultInfoService;
-import com.bilalalp.common.service.PatentRowInfoService;
 import com.bilalalp.common.service.TfIdfRequestInfoService;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.clustering.KMeans;
-import org.apache.spark.mllib.clustering.KMeansModel;
-import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.mllib.clustering.PowerIterationClustering;
+import org.apache.spark.mllib.clustering.PowerIterationClusteringModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import scala.Tuple3;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 @Service
-public class KmeansClusteringService implements ClusteringService, Serializable {
-
-    @Autowired
-    private ClusterResultInfoService clusterResultInfoService;
-
-    @Autowired
-    private PatentRowInfoService patentRowInfoService;
+public class PowerIterationClusteringService implements ClusteringService, Serializable {
 
     @Autowired
     private TfIdfRequestInfoService tfIdfRequestInfoService;
 
+    @Autowired
+    private ClusterResultInfoService clusterResultInfoService;
+
     @Override
-    public void cluster(final ClusteringRequestInfo clusteringRequestInfo) {
+    public void cluster(ClusteringRequestInfo clusteringRequestInfo) {
 
         final SparkConf conf = new SparkConf().setAppName("K-gdfgdfg").setMaster("local[*]")
                 .set("spark.executor.memory", "6g");
@@ -44,28 +39,37 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
         final String path = tfIdfRequestInfo.getFileName();
         final int numClusters = clusteringRequestInfo.getClusterNumber().intValue();
 
-        final List<PatentRowInfo> all = patentRowInfoService.findAll();
-        final Map<Integer, Long> patentRowInfoMap = ClusterUtil.createRowInfoMap(all);
-
         final JavaRDD<String> data = sc.textFile(path);
-        final JavaRDD<Vector> parsedData = ClusterUtil.getVectorJavaRDD(data);
+        final JavaRDD<Tuple3<Long, Long, Double>> similarities = data.map(
+                (Function<String, Tuple3<Long, Long, Double>>) line -> {
+                    String[] parts = line.split(" ");
+                    return new Tuple3<>(new Long(parts[0]), new Long(parts[1]), new Double(parts[2]));
+                }
+        );
 
-        parsedData.cache();
+        final PowerIterationClustering pic = new PowerIterationClustering()
+                .setK(numClusters)
+                .setMaxIterations(20);
+        final PowerIterationClusteringModel model = pic.run(similarities);
 
-        final KMeansModel clusters = KMeans.train(parsedData.rdd(), numClusters, Integer.MAX_VALUE);
-        final double wssse = clusters.computeCost(parsedData.rdd());
+        final List<PowerIterationClustering.Assignment> clusterResults = model.assignments().toJavaRDD().collect();
 
-        final JavaRDD<Integer> predict = clusters.predict(parsedData);
-        final List<Integer> clusterResults = predict.collect();
 
         for (int i = 0; i < clusterResults.size(); i++) {
             final ClusteringResultInfo clusteringResultInfo = new ClusteringResultInfo();
-            clusteringResultInfo.setClusteringNumber((long) (clusterResults.get(i) + 1));
-            clusteringResultInfo.setPatentId(patentRowInfoMap.get(i + 1));
+            clusteringResultInfo.setClusteringNumber(Long.valueOf(clusterResults.get(i).cluster()));
+            clusteringResultInfo.setPatentId((clusterResults.get(i).id()));
             clusteringResultInfo.setTfIdfRequestInfoId(tfIdfRequestInfo.getId());
-            clusteringResultInfo.setWssse(wssse);
             clusteringResultInfo.setClusteringRequestId(clusteringRequestInfo.getId());
             clusterResultInfoService.saveInNewTransaction(clusteringResultInfo);
         }
+
+//
+//        for (PowerIterationClustering.Assignment a: collect) {
+//            System.out.println(a.id() + " -> " + a.cluster());
+//        }
+
+        System.out.println("geldi.");
     }
 }
+

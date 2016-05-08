@@ -13,9 +13,9 @@ import java.util.List;
 @Repository
 public interface AnalyzableWordInfoRepository extends JpaRepository<AnalyzableWordInfo, Long> {
 
-    @Query("SELECT a.id FROM AnalyzableWordInfo a WHERE a.tfIdfRequestInfo = :tfIdfRequestInfo AND a.wordId NOT IN :idList")
+    @Query("SELECT a.wordId FROM AnalyzableWordInfo a WHERE a.tfIdfRequestInfo = :tfIdfRequestInfo AND a.wordId NOT IN :idList")
     List<Long> getWordIds(@Param("tfIdfRequestInfo") TfIdfRequestInfo tfIdfRequestInfo, @Param("idList") List<Long> idList);
 
-    @Query("SELECT a.id FROM AnalyzableWordInfo a WHERE a.tfIdfRequestInfo =:tfIdfRequestInfo")
+    @Query("SELECT a.wordId FROM AnalyzableWordInfo a WHERE a.tfIdfRequestInfo =:tfIdfRequestInfo")
     List<Long> getWordIds(@Param("tfIdfRequestInfo") TfIdfRequestInfo tfIdfRequestInfo);
 }

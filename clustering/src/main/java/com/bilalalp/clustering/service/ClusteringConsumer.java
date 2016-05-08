@@ -29,7 +29,16 @@ public class ClusteringConsumer implements MessageListener, Serializable {
     private PatentFileRowMapperService patentFileRowMapperService;
 
     @Autowired
+    private GaussianMixtureClusteringService gaussianMixtureClusteringService;
+
+    @Autowired
     private LatentDirichletAllocationClusteringService latentDirichletAllocationClusteringService;
+
+    @Autowired
+    private PowerIterationClusteringService powerIterationClusteringService;
+
+    @Autowired
+    private DBScanClusteringService dbScanClusteringService;
 
     @Transactional
     @Override
@@ -40,7 +49,11 @@ public class ClusteringConsumer implements MessageListener, Serializable {
 
         if (ClusteringType.KMEANS.equals(clusteringRequestInfo.getClusteringType())) {
 //            patentFileRowMapperService.insertPatentRowsToDatabase(clusteringRequestInfo);
-            kmeansClusterService.cluster(clusteringRequestInfo);
+//            kmeansClusterService.cluster(clusteringRequestInfo);
+            dbScanClusteringService.cluster(clusteringRequestInfo);
+//            powerIterationClusteringService.cluster(clusteringRequestInfo);
+//            latentDirichletAllocationClusteringService.cluster(clusteringRequestInfo);
+//            gaussianMixtureClusteringService.cluster(clusteringRequestInfo);
         } else if (ClusteringType.LDA.equals(clusteringRequestInfo.getClusteringType())) {
             latentDirichletAllocationClusteringService.cluster(clusteringRequestInfo);
         }

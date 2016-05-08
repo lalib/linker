@@ -14,6 +14,21 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-mr</artifactId>
+            <version>0.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>de.jungblut.math</groupId>
+            <artifactId>tjungblut-math</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>de.jungblut.common</groupId>
+            <artifactId>thomasjungblut-common</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.11</artifactId>
             <version>${spark.version}</version>

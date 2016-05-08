@@ -2,8 +2,6 @@ package com.bilalalp.clustering.service;
 
 import com.bilalalp.common.entity.cluster.ClusteringRequestInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
-import com.bilalalp.common.service.ClusterResultInfoService;
-import com.bilalalp.common.service.PatentRowInfoService;
 import com.bilalalp.common.service.TfIdfRequestInfoService;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -26,27 +24,24 @@ import java.io.Serializable;
 public class LatentDirichletAllocationClusteringService implements ClusteringService, Serializable {
 
     @Autowired
-    private ClusterResultInfoService clusterResultInfoService;
-
-    @Autowired
-    private PatentRowInfoService patentRowInfoService;
-
-    @Autowired
     private TfIdfRequestInfoService tfIdfRequestInfoService;
 
     @Override
     public void cluster(ClusteringRequestInfo clusteringRequestInfo) {
+
+//        final List<PatentRowInfo> all = patentRowInfoService.findAll();
+//        final Map<Integer, Long> patentRowInfoMap = ClusterUtil.createRowInfoMap(all);
+
+        final SparkConf conf = new SparkConf().setAppName("K-gdfgdfg").setMaster("local[*]")
+                .set("spark.executor.memory", "6g");
+        final JavaSparkContext sc = new JavaSparkContext(conf);
 
         final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(clusteringRequestInfo.getTfIdfRequestId());
 
         final String path = tfIdfRequestInfo.getFileName();
         final int numClusters = clusteringRequestInfo.getClusterNumber().intValue();
 
-//        final List<PatentRowInfo> all = patentRowInfoService.findAll();
-//        final Map<Integer, Long> patentRowInfoMap = ClusterUtil.createRowInfoMap(all);
 
-        final SparkConf conf = new SparkConf().setAppName("LDA").setMaster("local[4]").set("spark.executor.memory", "1g");
-        final JavaSparkContext sc = new JavaSparkContext(conf);
         final JavaRDD<String> data = sc.textFile(path);
         final JavaRDD<Vector> parsedData = ClusterUtil.getVectorJavaRDD(data);
 
@@ -62,13 +57,26 @@ public class LatentDirichletAllocationClusteringService implements ClusteringSer
 
         System.out.println("Learned topics (as distributions over vocab of " + ldaModel.vocabSize() + " words):");
         final Matrix topics = ldaModel.topicsMatrix();
-        for (int topic = 0; topic < numClusters; topic++) {
-            System.out.print("Topic " + topic + ":");
-            for (int word = 0; word < ldaModel.vocabSize(); word++) {
-                System.out.print(" " + topics.apply(word, topic));
+
+        for (int word = 0; word < ldaModel.vocabSize(); word++) {
+
+            int clusterNumber = 0;
+            double clusterValue = 0d;
+
+            for (int topic = 0; topic < numClusters; topic++) {
+                System.out.print("Topic " + topic + ":");
+                final double apply = topics.apply(word, topic);
+                System.out.print(" " + apply);
+                if (clusterValue < apply) {
+                    clusterNumber = topic;
+                    clusterValue = apply;
+                }
             }
-            System.out.println();
+
+            System.out.println("\n\nCluster Number : " + clusterNumber);
         }
+
+        System.out.println("geldi..");
     }
 
 }

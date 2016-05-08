@@ -107,6 +107,20 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         final List<PatentWordCountDto> totalPatentWordCountDtoList = createEmptyList(wordIds);
         totalPatentWordCountDtoList.addAll(wordCount);
 
+        if(patentInfoId.equals(1252L) ){
+            System.out.println(" --------------- ");
+            System.out.println(wordIdList);
+            System.out.println(" --------------- ");
+            System.out.println(wordIds);
+        }
+
+        if(patentInfoId.equals(1257L)){
+            System.out.println(" --------------- ");
+            System.out.println(wordIdList);
+            System.out.println(" --------------- ");
+            System.out.println(wordIds);
+        }
+
         Collections.sort(totalPatentWordCountDtoList, (o1, o2) -> o1.getPatentId().compareTo(o2.getPatentId()));
 
         writeToFile(patentInfoId, totalPatentWordCountDtoList, tfIdfRequestInfo);

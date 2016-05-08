@@ -16,7 +16,7 @@
         <target.java.version>1.8</target.java.version>
 
         <hadoop-client.version>2.7.2</hadoop-client.version>
-        <spark.version>1.6.0</spark.version>
+        <spark.version>1.6.1</spark.version>
         <spring.version>4.2.5.RELEASE</spring.version>
         <spring-amqp.version>1.5.5.RELEASE</spring-amqp.version>
         <spring-data.version>1.10.1.RELEASE</spring-data.version>
@@ -29,7 +29,7 @@
         <jta.version>1.1</jta.version>
         <c3p0.version>0.9.5.2</c3p0.version>
         <h2.version>1.4.191</h2.version>
-        <mysql.version>5.1.38</mysql.version>
+        <mysql.version>6.0.2</mysql.version>
         <postgresql.version>9.4.1208.jre7</postgresql.version>
 
         <stanford-nlp.version>3.6.0</stanford-nlp.version>
@@ -38,7 +38,7 @@
         <opencsv.version>3.7</opencsv.version>
 
         <lombok.version>1.16.8</lombok.version>
-        <jsoup.version>1.8.3</jsoup.version>
+        <jsoup.version>1.9.1</jsoup.version>
 
         <common.version>1.0-SNAPSHOT</common.version>
         <junit.version>4.12</junit.version>

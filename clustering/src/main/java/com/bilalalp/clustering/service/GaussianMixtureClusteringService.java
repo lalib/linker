@@ -10,18 +10,21 @@ import com.bilalalp.common.service.TfIdfRequestInfoService;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.clustering.KMeans;
-import org.apache.spark.mllib.clustering.KMeansModel;
+import org.apache.spark.mllib.clustering.GaussianMixture;
+import org.apache.spark.mllib.clustering.GaussianMixtureModel;
 import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.mllib.stat.distribution.MultivariateGaussian;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class KmeansClusteringService implements ClusteringService, Serializable {
+public class GaussianMixtureClusteringService implements ClusteringService {
+
+    @Autowired
+    private TfIdfRequestInfoService tfIdfRequestInfoService;
 
     @Autowired
     private ClusterResultInfoService clusterResultInfoService;
@@ -29,11 +32,8 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
     @Autowired
     private PatentRowInfoService patentRowInfoService;
 
-    @Autowired
-    private TfIdfRequestInfoService tfIdfRequestInfoService;
-
     @Override
-    public void cluster(final ClusteringRequestInfo clusteringRequestInfo) {
+    public void cluster(ClusteringRequestInfo clusteringRequestInfo) {
 
         final SparkConf conf = new SparkConf().setAppName("K-gdfgdfg").setMaster("local[*]")
                 .set("spark.executor.memory", "6g");
@@ -52,10 +52,12 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
 
         parsedData.cache();
 
-        final KMeansModel clusters = KMeans.train(parsedData.rdd(), numClusters, Integer.MAX_VALUE);
-        final double wssse = clusters.computeCost(parsedData.rdd());
+        final GaussianMixtureModel gmm = new GaussianMixture().setK(numClusters).run(parsedData.rdd());
 
-        final JavaRDD<Integer> predict = clusters.predict(parsedData);
+        final MultivariateGaussian[] gaussians = gmm.gaussians();
+        final double[] weights = gmm.weights();
+
+        final JavaRDD<Integer> predict = gmm.predict(parsedData);
         final List<Integer> clusterResults = predict.collect();
 
         for (int i = 0; i < clusterResults.size(); i++) {
@@ -63,7 +65,6 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
             clusteringResultInfo.setClusteringNumber((long) (clusterResults.get(i) + 1));
             clusteringResultInfo.setPatentId(patentRowInfoMap.get(i + 1));
             clusteringResultInfo.setTfIdfRequestInfoId(tfIdfRequestInfo.getId());
-            clusteringResultInfo.setWssse(wssse);
             clusteringResultInfo.setClusteringRequestId(clusteringRequestInfo.getId());
             clusterResultInfoService.saveInNewTransaction(clusteringResultInfo);
         }
