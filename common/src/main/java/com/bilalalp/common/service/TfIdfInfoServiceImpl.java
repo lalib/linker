@@ -19,6 +19,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -82,8 +84,21 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         save(tfIdfInfo);
     }
 
+    private List<Long> getPatentIds() {
+        final List<Long> patentIds = new ArrayList<>();
+        try {
+            final List<String> collect = Files.lines(Paths.get("C:\\patentdoc\\random-patents.txt")).collect(Collectors.toList());
+            patentIds.addAll(collect.stream().map(Long::valueOf).collect(Collectors.toList()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return patentIds;
+    }
+
     @Override
     public void processEliminatedWord(final TfIdfProcessInfo tfIdfProcessInfo) {
+
+//        List<Long> patentIds = getPatentIds();
 
         final List<TvProcessInfo> byLimit = tvProcessInfoService.findByLimit(tfIdfProcessInfo.getThresholdValue().intValue());
 
@@ -107,19 +122,7 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         final List<PatentWordCountDto> totalPatentWordCountDtoList = createEmptyList(wordIds);
         totalPatentWordCountDtoList.addAll(wordCount);
 
-        if(patentInfoId.equals(1252L) ){
-            System.out.println(" --------------- ");
-            System.out.println(wordIdList);
-            System.out.println(" --------------- ");
-            System.out.println(wordIds);
-        }
 
-        if(patentInfoId.equals(1257L)){
-            System.out.println(" --------------- ");
-            System.out.println(wordIdList);
-            System.out.println(" --------------- ");
-            System.out.println(wordIds);
-        }
 
         Collections.sort(totalPatentWordCountDtoList, (o1, o2) -> o1.getPatentId().compareTo(o2.getPatentId()));
 

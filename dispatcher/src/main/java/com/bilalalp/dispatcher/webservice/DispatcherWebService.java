@@ -53,4 +53,8 @@ public interface DispatcherWebService {
 
     @GET
     String state();
+
+    @GET
+    @Path("/createRandomPatentList")
+    Response createRandomPatentList(@QueryParam("patentcount") Long patentCount);
 }

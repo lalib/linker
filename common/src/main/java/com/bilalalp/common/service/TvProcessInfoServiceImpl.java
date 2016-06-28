@@ -1,5 +1,6 @@
 package com.bilalalp.common.service;
 
+import com.bilalalp.common.entity.patent.SplitWordType;
 import com.bilalalp.common.entity.tfidf.TvProcessInfo;
 import com.bilalalp.common.repository.TvProcessInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
@@ -28,5 +29,15 @@ public class TvProcessInfoServiceImpl extends AbstractService<TvProcessInfo> imp
     @Override
     public List<TvProcessInfo> findByLimit(final int limitCount) {
         return repository.findByLimit(new PageRequest(0, limitCount));
+    }
+
+    @Override
+    public List<TvProcessInfo> findByLimit(final int limitCount, final List<Long> patentIds) {
+        return repository.findByLimit(new PageRequest(0, limitCount), patentIds);
+    }
+
+    @Override
+    public List<TvProcessInfo> findByLimit(final int limitCount, final SplitWordType splitWordType,final List<Long> patentIds) {
+        return repository.findByLimit(new PageRequest(0, limitCount), splitWordType,patentIds);
     }
 }

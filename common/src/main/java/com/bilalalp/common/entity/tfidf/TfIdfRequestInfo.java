@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Access(AccessType.FIELD)
 @Getter
 @Setter
-public class TfIdfRequestInfo extends AbstractEntity {
+public class TfIdfRequestInfo extends AbstractEntity implements Serializable {
 
     public static final String JOIN_COLUMN = "C_TF_IDF_REQUEST_INFO_ID";
     public static final String TABLE_NAME = "T_TF_IDF_REQUEST_INFO";

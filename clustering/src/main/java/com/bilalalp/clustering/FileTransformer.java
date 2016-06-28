@@ -15,7 +15,7 @@ public class FileTransformer {
 
     public static void main(final String[] args) throws IOException {
 
-        final Stream<String> lines = Files.lines(Paths.get("C:\\patentdoc\\1066082657-1000.txt"));
+        final Stream<String> lines = Files.lines(Paths.get("C:\\patentdoc\\1068295060-1000.txt"));
 
         lines.parallel().map(k -> k.split("::")).forEach(p -> Arrays.stream(p[1].split("\\$")).parallel().map(d -> d.split(":"))
                 .collect(Collectors.toMap(e -> Long.valueOf(e[0]), e -> Double.parseDouble(e[1])))

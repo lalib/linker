@@ -24,9 +24,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -217,10 +221,37 @@ public class DispatcherServiceImpl implements DispatcherService {
         for (final BigDecimal value : tvWordIds) {
             final TvResultInfo tvResultInfo = tvResultInfoService.getByWordId(value.longValue());
 
-            if(tvResultInfo == null){
+            if (tvResultInfo == null) {
                 messageSender.sendMessage(tvCalcQueueConfigurationDto, new QueueMessageDto(value.longValue()));
             }
         }
+    }
+
+    @Override
+    public void createRandomPatentList(final Long patentCount) {
+        final List<Long> patentIds = patentInfoService.getPatentIds(574L);
+        writeToAppend(getUniquePatentSet(patentIds, patentCount));
+    }
+
+    private void writeToAppend(final Set<String> patentSet) {
+        try {
+            Files.write(Paths.get("C:\\patentdoc\\random-patents.txt"), patentSet, Charset.forName("UTF-8"), StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private Set<String> getUniquePatentSet(final List<Long> patentIds, final Long patentCount) {
+
+        final Set<String> patentSet = new HashSet<>();
+
+        while (patentSet.size() != patentCount.intValue()) {
+            final int index = new Random().nextInt(patentIds.size());
+            final Long patentId = patentIds.get(index);
+            patentSet.add(patentId.toString());
+        }
+
+        return patentSet;
     }
 
     private List<QueueMessageDto> createQueueMessageDto(final List<Long> idList) {

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -124,7 +125,7 @@ public class TeamVarianceService implements Serializable, MessageListener {
         final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
         System.out.println(queueMessageDto.getId());
 
-        final List<TvProcessInfo> tfResult = wordSummaryInfoService.getTfResult(queueMessageDto.getId(), 574L, 65868L);
+        final List<TvProcessInfo> tfResult = wordSummaryInfoService.getTfResult(queueMessageDto.getId(), 574L, 34179L);
         final List<TfIdfProcessInfo> collect = tfResult.stream().map(k -> {
             final TfIdfProcessInfo tfIdfProcessInfo = new TfIdfProcessInfo();
             tfIdfProcessInfo.setWordId(k.getWordId());

@@ -36,7 +36,8 @@ public class PowerIterationClusteringService implements ClusteringService, Seria
 
         final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(clusteringRequestInfo.getTfIdfRequestId());
 
-        final String path = tfIdfRequestInfo.getFileName();
+//        final String path = tfIdfRequestInfo.getFileName();
+        final String path = "D:\\patentdoc\\bilal-son.txt";
         final int numClusters = clusteringRequestInfo.getClusterNumber().intValue();
 
         final JavaRDD<String> data = sc.textFile(path);
@@ -49,15 +50,14 @@ public class PowerIterationClusteringService implements ClusteringService, Seria
 
         final PowerIterationClustering pic = new PowerIterationClustering()
                 .setK(numClusters)
-                .setMaxIterations(20);
+                .setMaxIterations(Integer.MAX_VALUE);
         final PowerIterationClusteringModel model = pic.run(similarities);
 
         final List<PowerIterationClustering.Assignment> clusterResults = model.assignments().toJavaRDD().collect();
 
-
         for (int i = 0; i < clusterResults.size(); i++) {
             final ClusteringResultInfo clusteringResultInfo = new ClusteringResultInfo();
-            clusteringResultInfo.setClusteringNumber(Long.valueOf(clusterResults.get(i).cluster()));
+            clusteringResultInfo.setClusteringNumber((long) clusterResults.get(i).cluster() + 1);
             clusteringResultInfo.setPatentId((clusterResults.get(i).id()));
             clusteringResultInfo.setTfIdfRequestInfoId(tfIdfRequestInfo.getId());
             clusteringResultInfo.setClusteringRequestId(clusteringRequestInfo.getId());
@@ -72,4 +72,3 @@ public class PowerIterationClusteringService implements ClusteringService, Seria
         System.out.println("geldi.");
     }
 }
-

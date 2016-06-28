@@ -3,6 +3,7 @@ package com.bilalalp.tfidfinitializer.service;
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
+import com.bilalalp.common.entity.patent.SplitWordType;
 import com.bilalalp.common.entity.tfidf.*;
 import com.bilalalp.common.service.*;
 import com.bilalalp.tfidfinitializer.amqp.MessageSender;
@@ -19,8 +20,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TfIdfInitializerService implements MessageListener {
@@ -62,18 +67,32 @@ public class TfIdfInitializerService implements MessageListener {
     @Transactional
     public void process(final Long id) {
 
-        final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(id);
-        final LinkSearchRequestInfo linkSearchRequestInfo = tfIdfRequestInfo.getLinkSearchRequestInfo();
+        try {
+            final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(id);
+            final LinkSearchRequestInfo linkSearchRequestInfo = tfIdfRequestInfo.getLinkSearchRequestInfo();
 
 //        saveWords(tfIdfRequestInfo, linkSearchRequestInfo);
-        saveWordsForRange(tfIdfRequestInfo);
+            saveWordsForRange(tfIdfRequestInfo);
 
-        arrangePatents(tfIdfRequestInfo, linkSearchRequestInfo);
+            arrangePatents(tfIdfRequestInfo, linkSearchRequestInfo);
+
+        } catch (final Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     private void saveWordsForRange(final TfIdfRequestInfo tfIdfRequestInfo) {
 
+//        final List<Long> patentIds = getPatentIds();
+
         final List<TvProcessInfo> tvProcessInfoList = tvProcessInfoService.findByLimit(tfIdfRequestInfo.getThresholdValue().intValue());
+
+//        List<TvProcessInfo> byLimit = tvProcessInfoService.findByLimit(tfIdfRequestInfo.getThresholdValue().intValue(), SplitWordType.TWO, patentIds);
+//        List<TvProcessInfo> byLimit1 = tvProcessInfoService.findByLimit(tfIdfRequestInfo.getThresholdValue().intValue(), SplitWordType.ONE, patentIds);
+//        final List<TvProcessInfo> tvProcessInfoList = new ArrayList<>();
+//        tvProcessInfoList.addAll(tvProcessInfoList);
+//        tvProcessInfoList.addAll(tvProcessInfoList);
+
 //        final List<BigInteger> words = splitWordInfoService.getWords(tfIdfRequestInfo.getLinkSearchRequestInfo().getId());
 
         for (final TvProcessInfo tvProcessInfo : tvProcessInfoList) {
@@ -84,9 +103,11 @@ public class TfIdfInitializerService implements MessageListener {
         }
     }
 
-    private void arrangePatents(final TfIdfRequestInfo tfIdfRequestInfo, final LinkSearchRequestInfo linkSearchRequestInfo) {
+    private List<Long> arrangePatents(final TfIdfRequestInfo tfIdfRequestInfo, final LinkSearchRequestInfo linkSearchRequestInfo) {
 
         final List<Long> patentIds = patentInfoService.getPatentIds(linkSearchRequestInfo.getId());
+
+//        final List<Long> patentIds = getPatentIds();
 
         for (final Long id : patentIds) {
             final TfIdfProcessInfo tfIdfProcessInfo = new TfIdfProcessInfo();
@@ -96,11 +117,24 @@ public class TfIdfInitializerService implements MessageListener {
             tfIdfProcessInfo.setThresholdValue(tfIdfRequestInfo.getThresholdValue());
             applicationContext.getBean(TfIdfInitializerService.class).saveAndSendToQueue(tfIdfProcessInfo);
         }
+
+        return patentIds;
+    }
+
+    private List<Long> getPatentIds() {
+        final List<Long> patentIds = new ArrayList<>();
+        try {
+            final List<String> collect = Files.lines(Paths.get("C:\\patentdoc\\random-patents.txt")).collect(Collectors.toList());
+            patentIds.addAll(collect.stream().map(Long::valueOf).collect(Collectors.toList()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return patentIds;
     }
 
     private void saveWords(TfIdfRequestInfo tfIdfRequestInfo, LinkSearchRequestInfo linkSearchRequestInfo) {
         Long start = 0L;
-        Long pageSize = 1000L;
+        Long pageSize = 10000L;
 
         Long thValue = 0L;
 

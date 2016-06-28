@@ -73,4 +73,10 @@ public class DispatcherWebServiceImpl implements DispatcherWebService {
     public String state() {
         return "App is up!";
     }
+
+    @Override
+    public Response createRandomPatentList(final Long patentCount) {
+        dispatcherService.createRandomPatentList(patentCount);
+        return Response.ok().build();
+    }
 }

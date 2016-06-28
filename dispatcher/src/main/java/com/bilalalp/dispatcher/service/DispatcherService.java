@@ -24,4 +24,5 @@ public interface DispatcherService {
 
     void completeTvCalculation();
 
+    void createRandomPatentList(Long patentCount);
 }
