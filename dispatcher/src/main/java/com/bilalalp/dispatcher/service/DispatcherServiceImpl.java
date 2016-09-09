@@ -235,7 +235,7 @@ public class DispatcherServiceImpl implements DispatcherService {
 
     private void writeToAppend(final Set<String> patentSet) {
         try {
-            Files.write(Paths.get("C:\\patentdoc\\random-patents.txt"), patentSet, Charset.forName("UTF-8"), StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+            Files.write(Paths.get("C:\\patentdoc\\random-patents.txt"), patentSet, Charset.forName("UTF-8"), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -264,6 +264,8 @@ public class DispatcherServiceImpl implements DispatcherService {
             return ClusteringType.KMEANS;
         } else if ("lda".equalsIgnoreCase(clusterType)) {
             return ClusteringType.LDA;
+        } else if ("bisecting".equalsIgnoreCase(clusterType)) {
+            return ClusteringType.BISECTING;
         } else {
             return null;
         }

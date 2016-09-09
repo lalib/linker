@@ -21,12 +21,17 @@ public class AnalyzableWordInfoServiceImpl extends AbstractService<AnalyzableWor
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public List<Long> getWordIds(TfIdfRequestInfo tfIdfRequestInfo, List<Long> idList) {
-        return repository.getWordIds(tfIdfRequestInfo, idList);
+    public List<Long> getWordIds(TfIdfRequestInfo tfIdfRequestInfo, List<Long> idList,List<Long> inList) {
+        return repository.getWordIds(tfIdfRequestInfo, idList,inList);
     }
 
     @Override
     public List<Long> getWordIds(TfIdfRequestInfo tfIdfRequestInfo) {
         return repository.getWordIds(tfIdfRequestInfo);
+    }
+
+    @Override
+    public List<Long> getWordIds(TfIdfRequestInfo tfIdfRequestInfo,List<Long> idList) {
+        return repository.getWordIds(tfIdfRequestInfo,idList);
     }
 }

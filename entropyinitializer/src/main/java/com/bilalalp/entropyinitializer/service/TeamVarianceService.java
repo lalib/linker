@@ -125,7 +125,7 @@ public class TeamVarianceService implements Serializable, MessageListener {
         final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
         System.out.println(queueMessageDto.getId());
 
-        final List<TvProcessInfo> tfResult = wordSummaryInfoService.getTfResult(queueMessageDto.getId(), 574L, 34179L);
+        final List<TvProcessInfo> tfResult = wordSummaryInfoService.getTfResult(queueMessageDto.getId(), 574L, 44334L);
         final List<TfIdfProcessInfo> collect = tfResult.stream().map(k -> {
             final TfIdfProcessInfo tfIdfProcessInfo = new TfIdfProcessInfo();
             tfIdfProcessInfo.setWordId(k.getWordId());

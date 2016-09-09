@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface TvProcessInfoService extends BaseService<TvProcessInfo> {
+    List<TvProcessInfo> findByLimitWithoutAdditionalWords(Long count);
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void saveInNewTransaction(List<TvProcessInfo> tvProcessInfoList);
 

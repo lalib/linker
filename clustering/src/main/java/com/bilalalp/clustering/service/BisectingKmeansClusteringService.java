@@ -10,8 +10,8 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.broadcast.Broadcast;
-import org.apache.spark.mllib.clustering.KMeans;
-import org.apache.spark.mllib.clustering.KMeansModel;
+import org.apache.spark.mllib.clustering.BisectingKMeans;
+import org.apache.spark.mllib.clustering.BisectingKMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.rdd.RDD;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Service
-public class KmeansClusteringService implements ClusteringService, Serializable {
+public class BisectingKmeansClusteringService implements ClusteringService, Serializable {
 
     @Autowired
     private ClusterResultInfoService clusterResultInfoService;
@@ -33,14 +33,13 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
     @Override
     public void cluster(final ClusteringRequestInfo clusteringRequestInfo) {
 
-        final SparkConf conf = new SparkConf().setAppName("K-gdfgdfg").setMaster("local[*]")
+        final SparkConf conf = new SparkConf().setAppName("Bisecting-kmeans").setMaster("local[*]")
                 .set("spark.executor.memory", "10g");
         final JavaSparkContext sc = new JavaSparkContext(conf);
 
         final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(clusteringRequestInfo.getTfIdfRequestId());
 
         final String path = tfIdfRequestInfo.getFileName();
-//        final String path = "C:\\patentdoc\\1068405328-10000.txt";
         final int numClusters = clusteringRequestInfo.getClusterNumber().intValue();
 
         final JavaRDD<String> data = sc.textFile(path);
@@ -50,10 +49,12 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
 
         final RDD<Vector> rdd = javaPaidRDD.values().rdd();
 
-        final KMeansModel clusters = KMeans.train(rdd, numClusters, Integer.MAX_VALUE);
-        final double wssse = clusters.computeCost(rdd);
+        BisectingKMeans bkm = new BisectingKMeans();
+        BisectingKMeansModel model = bkm.setK(numClusters).run(rdd);
 
-        final JavaRDD<Tuple2<Long, Integer>> map = javaPaidRDD.map(t -> new Tuple2<>(t._1(), clusters.predict(t._2())));
+        final double wssse = model.computeCost(rdd);
+
+        final JavaRDD<Tuple2<Long, Integer>> map = javaPaidRDD.map(t -> new Tuple2<>(t._1(), model.predict(t._2())));
 
         final Broadcast<TfIdfRequestInfo> tfIdfRequestInfoBroadcast = sc.broadcast(tfIdfRequestInfo);
         final Broadcast<ClusteringRequestInfo> clusteringRequestInfoBroadcast = sc.broadcast(clusteringRequestInfo);
@@ -69,11 +70,10 @@ public class KmeansClusteringService implements ClusteringService, Serializable 
             return clusteringResultInfo;
         });
 
-        List<ClusteringResultInfo> collect = requestInfoJavaRDD.collect();
-        System.out.println("geldi.");
+        final List<ClusteringResultInfo> collect = requestInfoJavaRDD.collect();
         for (final ClusteringResultInfo clusteringResultInfo : collect) {
             clusterResultInfoService.saveInNewTransaction(clusteringResultInfo);
         }
-
+        System.out.println("geldi..");
     }
 }

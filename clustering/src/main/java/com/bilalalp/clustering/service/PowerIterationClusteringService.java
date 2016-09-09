@@ -37,21 +37,26 @@ public class PowerIterationClusteringService implements ClusteringService, Seria
         final TfIdfRequestInfo tfIdfRequestInfo = tfIdfRequestInfoService.find(clusteringRequestInfo.getTfIdfRequestId());
 
 //        final String path = tfIdfRequestInfo.getFileName();
-        final String path = "D:\\patentdoc\\bilal-son.txt";
+        final String path = "D:\\patentdoc\\bilal-son24.txt";
         final int numClusters = clusteringRequestInfo.getClusterNumber().intValue();
 
         final JavaRDD<String> data = sc.textFile(path);
         final JavaRDD<Tuple3<Long, Long, Double>> similarities = data.map(
                 (Function<String, Tuple3<Long, Long, Double>>) line -> {
-                    String[] parts = line.split(" ");
-                    return new Tuple3<>(new Long(parts[0]), new Long(parts[1]), new Double(parts[2]));
+                    try {
+                        String[] parts = line.split(" ");
+                        return new Tuple3<>(new Long(parts[0]), new Long(parts[1]), new Double(parts[2]));
+                    }catch (final Exception ex){
+                        System.out.println(ex.getCause());
+                        return null;
+                    }
                 }
         );
 
         final PowerIterationClustering pic = new PowerIterationClustering()
-                .setK(numClusters)
-                .setMaxIterations(Integer.MAX_VALUE);
+                .setK(numClusters);
         final PowerIterationClusteringModel model = pic.run(similarities);
+
 
         final List<PowerIterationClustering.Assignment> clusterResults = model.assignments().toJavaRDD().collect();
 
@@ -63,11 +68,6 @@ public class PowerIterationClusteringService implements ClusteringService, Seria
             clusteringResultInfo.setClusteringRequestId(clusteringRequestInfo.getId());
             clusterResultInfoService.saveInNewTransaction(clusteringResultInfo);
         }
-
-//
-//        for (PowerIterationClustering.Assignment a: collect) {
-//            System.out.println(a.id() + " -> " + a.cluster());
-//        }
 
         System.out.println("geldi.");
     }

@@ -52,7 +52,7 @@ public class WordSummaryInfoCustomRepositoryImpl implements WordSummaryInfoCusto
 
     @Override
     public List<BigDecimal> getTvWordIds() {
-        return entityManager.createNativeQuery("select word_id from t_tv_info where result > 0.01").getResultList();
+        return entityManager.createNativeQuery("select word_id from t_tv_info where result > 0.004").getResultList();
     }
 
     @Override

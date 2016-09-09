@@ -5,9 +5,12 @@ import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.SplitWordInfo;
 import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 import com.bilalalp.common.service.base.BaseService;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 public interface SplitWordInfoService extends BaseService<SplitWordInfo> {
 
@@ -36,4 +39,16 @@ public interface SplitWordInfoService extends BaseService<SplitWordInfo> {
     Long getTotalPatentCountInOtherClusters(Long clusterNumber, Long clusterRequestId, Long wordId);
 
     List<BigInteger> getWords(Long lsrId);
+
+    Map<BigInteger, BigInteger> getPatentWordCounts(final Long tvId);
+
+    BigInteger getMutualWordCount(final String firstWord,final String secondWord);
+
+    Map<String, BigInteger> getExcludedMutualWordCountMap(String word, Long limitCount);
+
+    Map<BigInteger, BigInteger> getExcludedMutualPatentCountMap(final Long patentId);
+
+    Map<BigInteger, BigInteger> getPatentValues(Long patentId, long patentCount);
+
+    List<String> getTopWords(Long patentId);
 }

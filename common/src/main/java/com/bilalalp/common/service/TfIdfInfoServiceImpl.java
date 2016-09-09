@@ -109,15 +109,11 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
 
         final List<PatentWordCountDto> wordCount = splitWordInfoService.getWordCount(patentInfoId, collectedIds, tfIdfRequestInfo.getId());
 
-        if (wordCount != null && !wordCount.isEmpty()) {
-            System.out.println("geldi..");
-        }
-
 //        final List<PatentWordCountDto> wordCount = splitWordInfoService.getWordCount(patentInfoId);
 
         final List<Long> wordIdList = wordCount.stream().map(PatentWordCountDto::getPatentId).collect(Collectors.toList());
 
-        final List<Long> wordIds = getWordIds(tfIdfProcessInfo, wordIdList);
+        final List<Long> wordIds = getWordIds(tfIdfProcessInfo, collectedIds,wordIdList);
 
         final List<PatentWordCountDto> totalPatentWordCountDtoList = createEmptyList(wordIds);
         totalPatentWordCountDtoList.addAll(wordCount);
@@ -155,11 +151,11 @@ public class TfIdfInfoServiceImpl extends AbstractService<TfIdfInfo> implements 
         return stringBuilder.toString();
     }
 
-    private List<Long> getWordIds(TfIdfProcessInfo tfIdfProcessInfo, List<Long> wordIdList) {
-        if (CollectionUtils.isNotEmpty(wordIdList)) {
-            return analyzableWordInfoService.getWordIds(tfIdfProcessInfo.getTfIdfRequestInfo(), wordIdList);
+    private List<Long> getWordIds(TfIdfProcessInfo tfIdfProcessInfo, List<Long> wordIdList, List<Long> idList) {
+        if (CollectionUtils.isNotEmpty(idList)) {
+            return analyzableWordInfoService.getWordIds(tfIdfProcessInfo.getTfIdfRequestInfo(), wordIdList,idList);
         } else {
-            return analyzableWordInfoService.getWordIds(tfIdfProcessInfo.getTfIdfRequestInfo());
+            return analyzableWordInfoService.getWordIds(tfIdfProcessInfo.getTfIdfRequestInfo(),wordIdList);
         }
     }
 

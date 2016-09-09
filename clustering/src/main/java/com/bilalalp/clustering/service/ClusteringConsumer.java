@@ -41,13 +41,16 @@ public class ClusteringConsumer implements MessageListener, Serializable {
     @Autowired
     private DBScanClusteringService dbScanClusteringService;
 
+    @Autowired
+    private BisectingKmeansClusteringService bisectingKmeansClusteringService;
+
     @Override
     public void onMessage(final Message message) {
 
         try {
             final QueueMessageDto queueMessageDto = (QueueMessageDto) messageConverter.fromMessage(message);
             final ClusteringRequestInfo clusteringRequestInfo = clusteringRequestInfoService.find(queueMessageDto.getId());
-
+            powerIterationClusteringService.cluster(clusteringRequestInfo);
             if (ClusteringType.KMEANS.equals(clusteringRequestInfo.getClusteringType())) {
 //            patentFileRowMapperService.insertPatentRowsToDatabase(clusteringRequestInfo);
                 kmeansClusterService.cluster(clusteringRequestInfo);
@@ -57,6 +60,8 @@ public class ClusteringConsumer implements MessageListener, Serializable {
 //                gaussianMixtureClusteringService.cluster(clusteringRequestInfo);
             } else if (ClusteringType.LDA.equals(clusteringRequestInfo.getClusteringType())) {
                 latentDirichletAllocationClusteringService.cluster(clusteringRequestInfo);
+            }else if(ClusteringType.BISECTING.equals(clusteringRequestInfo.getClusteringType())){
+//                bisectingKmeansClusteringService.cluster(clusteringRequestInfo);
             }
         } catch (final Exception ex) {
             log.error(ex.getMessage(), ex);

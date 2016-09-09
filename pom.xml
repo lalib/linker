@@ -37,7 +37,7 @@
         <commons-lang.version>3.4</commons-lang.version>
         <opencsv.version>3.7</opencsv.version>
 
-        <lombok.version>1.16.8</lombok.version>
+        <lombok.version>1.16.10</lombok.version>
         <jsoup.version>1.9.1</jsoup.version>
 
         <common.version>1.0-SNAPSHOT</common.version>

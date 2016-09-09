@@ -154,7 +154,7 @@ public class SpectralClusteringService implements ClusteringService {
 
     public static void main(String[] args) throws Exception {
 
-        final String filePath = "C:\\patentdoc\\1068405328-10000.txt";
+        final String filePath = "C:\\patentdoc\\1070645540-300.txt";
 
         final Map<Long, Map<Long, Long>> longMapMap = getFileContent(filePath);
 
@@ -185,7 +185,7 @@ public class SpectralClusteringService implements ClusteringService {
 
         try {
 
-            String myPath = "D:\\patentdoc\\bilal-son.txt";
+            String myPath = "D:\\patentdoc\\bilal-son24.txt";
             File file = new File(myPath);
 //            file.createNewFile();
 

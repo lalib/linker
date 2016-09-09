@@ -4,14 +4,15 @@ import com.bilalalp.common.dto.EntityDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchPageInfo;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
 import com.bilalalp.common.entity.patent.PatentInfo;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -41,4 +42,11 @@ public interface PatentInfoRepository extends JpaRepository<PatentInfo, Long> {
             "INNER JOIN l.linkSearchRequestInfo r " +
             "WHERE r.id = :lsrId AND s.patentInfo = p AND s.word = :word")
     List<Long> getPatentIds(@Param("lsrId") Long lsrId, @Param("word") String word);
+
+    @Query("select p FROM PatentInfo p")
+    List<Long> getPatentIds(Pageable pageable);
+
+
+    @Query("select p.id from PatentInfo p where p.fillingDate is not null and p.fillingDate > :fillingDate")
+    List<Long> getPatentIdsByDate(@Param("fillingDate") Date date);
 }

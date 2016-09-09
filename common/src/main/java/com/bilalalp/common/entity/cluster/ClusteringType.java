@@ -4,5 +4,7 @@ public enum ClusteringType {
 
     KMEANS,
 
-    LDA
+    LDA,
+
+    BISECTING
 }

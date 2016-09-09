@@ -17,8 +17,8 @@ public interface TvProcessInfoRepository extends JpaRepository<TvProcessInfo, Lo
     @Query("select p from TvProcessInfo p order by p.tfIdfValue desc")
     List<TvProcessInfo> findByLimit(Pageable pageable);
 
-    @Query("SELECT DISTINCT p FROM TvProcessInfo p, WordSummaryInfo w, PatentInfo i, SplitWordInfo s " +
-            "WHERE w.id = p.wordId AND i.id in (:patentIds) AND s.patentInfo.id = i.id " +
+    @Query("SELECT DISTINCT p FROM TvProcessInfo p, WordSummaryInfo w, PatentInfo i, SplitWordInfo s, AdditionalWordInfo aw " +
+            "WHERE w.id = p.wordId AND i.id in (:patentIds) AND s.patentInfo.id = i.id and w.word <> aw.word " +
             "order by p.tfIdfValue desc")
     List<TvProcessInfo> findByLimit(Pageable pageRequest, @Param("patentIds") List<Long> patentIds);
 

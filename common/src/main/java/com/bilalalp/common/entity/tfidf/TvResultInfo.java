@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 public class TvResultInfo extends AbstractEntity{
 
-    public static final String TABLE_NAME = "T_TV_PROCESS_INF";
+    public static final String TABLE_NAME = "T_TV_RESULT_INF";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

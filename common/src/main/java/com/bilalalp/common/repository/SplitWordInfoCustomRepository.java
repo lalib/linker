@@ -7,6 +7,7 @@ import com.bilalalp.common.entity.tfidf.TfIdfRequestInfo;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 public interface SplitWordInfoCustomRepository {
 
@@ -29,4 +30,16 @@ public interface SplitWordInfoCustomRepository {
     Long getWordCountInACluster(Long clusterNumber, Long clusterRequestId, Long wordId);
 
     Long getTotalPatentCountInOtherClusters(Long clusterNumber, Long clusterRequestId, Long wordId);
+
+    Map<BigInteger, BigInteger> getPatentWordCounts(Long tvId);
+
+    BigInteger getMutualWordCount(String firstWord, String secondWord);
+
+    Map<String, BigInteger> getExcludedMutualWordCountMap(String word, Long limitCount);
+
+    Map<BigInteger, BigInteger> getExcludedMutualPatentCountMap(Long patentId);
+
+    Map<BigInteger, BigInteger> getPatentValues(Long patentId, Long patentCount);
+
+    List<String> getTopWords(Long patentId);
 }

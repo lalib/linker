@@ -2,6 +2,7 @@ package com.bilalalp.common.service;
 
 import com.bilalalp.common.entity.patent.SplitWordType;
 import com.bilalalp.common.entity.tfidf.TvProcessInfo;
+import com.bilalalp.common.repository.TvProcessInfoCustomRepository;
 import com.bilalalp.common.repository.TvProcessInfoRepository;
 import com.bilalalp.common.service.base.AbstractService;
 import lombok.Getter;
@@ -19,6 +20,15 @@ public class TvProcessInfoServiceImpl extends AbstractService<TvProcessInfo> imp
 
     @Autowired
     private TvProcessInfoRepository repository;
+
+    @Autowired
+    private TvProcessInfoCustomRepository tvProcessInfoCustomRepository;
+
+
+    @Override
+    public List<TvProcessInfo> findByLimitWithoutAdditionalWords(final Long count){
+        return tvProcessInfoCustomRepository.findByLimitWithoutAdditionalWords(count);
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)

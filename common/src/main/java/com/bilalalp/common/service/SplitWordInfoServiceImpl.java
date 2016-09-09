@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Service
@@ -27,8 +28,8 @@ public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> imp
     private SplitWordInfoCustomRepository splitWordInfoCustomRepository;
 
     @Override
-    public List<PatentWordCountDto> getWordCount(final Long patentId, final List<Long> wordIds,final Long tfIdfRequestId) {
-        return splitWordInfoCustomRepository.getWordCount(patentId, wordIds,tfIdfRequestId);
+    public List<PatentWordCountDto> getWordCount(final Long patentId, final List<Long> wordIds, final Long tfIdfRequestId) {
+        return splitWordInfoCustomRepository.getWordCount(patentId, wordIds, tfIdfRequestId);
     }
 
     @Transactional
@@ -98,5 +99,39 @@ public class SplitWordInfoServiceImpl extends AbstractService<SplitWordInfo> imp
     @Override
     public List<BigInteger> getWords(final Long lsrId) {
         return splitWordInfoCustomRepository.getWords(lsrId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Map<BigInteger, BigInteger> getPatentWordCounts(Long tvId) {
+        return splitWordInfoCustomRepository.getPatentWordCounts(tvId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public BigInteger getMutualWordCount(String firstWord, String secondWord) {
+        return splitWordInfoCustomRepository.getMutualWordCount(firstWord, secondWord);
+    }
+
+    @Override
+    public Map<String, BigInteger> getExcludedMutualWordCountMap(String word, Long limitCount) {
+        return splitWordInfoCustomRepository.getExcludedMutualWordCountMap(word, limitCount);
+    }
+
+    @Override
+    public Map<BigInteger, BigInteger> getExcludedMutualPatentCountMap(Long patentId) {
+        return splitWordInfoCustomRepository.getExcludedMutualPatentCountMap(patentId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Map<BigInteger, BigInteger> getPatentValues(Long patentId,long patentCount) {
+        return splitWordInfoCustomRepository.getPatentValues(patentId,patentCount);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<String> getTopWords(final Long patentId) {
+        return splitWordInfoCustomRepository.getTopWords(patentId);
     }
 }

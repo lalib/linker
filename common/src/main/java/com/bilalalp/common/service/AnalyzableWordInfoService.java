@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface AnalyzableWordInfoService extends BaseService<AnalyzableWordInfo> {
 
-    List<Long> getWordIds(TfIdfRequestInfo tfIdfRequestInfo, List<Long> idList);
+    List<Long> getWordIds(TfIdfRequestInfo tfIdfRequestInfo, List<Long> idList,List<Long> inList);
 
     List<Long> getWordIds(TfIdfRequestInfo tfIdfRequestInfo);
+
+    List<Long> getWordIds(TfIdfRequestInfo tfIdfRequestInfo,List<Long> idList);
 }

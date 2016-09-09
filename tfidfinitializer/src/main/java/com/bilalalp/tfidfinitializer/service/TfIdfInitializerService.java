@@ -3,7 +3,6 @@ package com.bilalalp.tfidfinitializer.service;
 import com.bilalalp.common.dto.QueueConfigurationDto;
 import com.bilalalp.common.dto.QueueMessageDto;
 import com.bilalalp.common.entity.linksearch.LinkSearchRequestInfo;
-import com.bilalalp.common.entity.patent.SplitWordType;
 import com.bilalalp.common.entity.tfidf.*;
 import com.bilalalp.common.service.*;
 import com.bilalalp.tfidfinitializer.amqp.MessageSender;
@@ -24,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,18 +105,27 @@ public class TfIdfInitializerService implements MessageListener {
 
     private List<Long> arrangePatents(final TfIdfRequestInfo tfIdfRequestInfo, final LinkSearchRequestInfo linkSearchRequestInfo) {
 
-        final List<Long> patentIds = patentInfoService.getPatentIds(linkSearchRequestInfo.getId());
+//        final List<Long> patentIds = patentInfoService.getPatentIds(linkSearchRequestInfo.getId());
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.MONTH, 0);
+        calendar.set(Calendar.YEAR, 2015);
+
+        final List<Long> patentIds = patentInfoService.getPatentIdsByDate(calendar.getTime());
+
+        final List<Long> germanPatentIds = getGermanPatentIds();
 
 //        final List<Long> patentIds = getPatentIds();
 
-        for (final Long id : patentIds) {
+        patentIds.stream().filter(id -> !germanPatentIds.contains(id)).forEach(id -> {
             final TfIdfProcessInfo tfIdfProcessInfo = new TfIdfProcessInfo();
             tfIdfProcessInfo.setLinkSearchRequestInfo(linkSearchRequestInfo);
             tfIdfProcessInfo.setPatentInfoId(id);
             tfIdfProcessInfo.setTfIdfRequestInfo(tfIdfRequestInfo);
             tfIdfProcessInfo.setThresholdValue(tfIdfRequestInfo.getThresholdValue());
             applicationContext.getBean(TfIdfInitializerService.class).saveAndSendToQueue(tfIdfProcessInfo);
-        }
+        });
 
         return patentIds;
     }
@@ -125,6 +134,17 @@ public class TfIdfInitializerService implements MessageListener {
         final List<Long> patentIds = new ArrayList<>();
         try {
             final List<String> collect = Files.lines(Paths.get("C:\\patentdoc\\random-patents.txt")).collect(Collectors.toList());
+            patentIds.addAll(collect.stream().map(Long::valueOf).collect(Collectors.toList()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return patentIds;
+    }
+
+    private List<Long> getGermanPatentIds() {
+        final List<Long> patentIds = new ArrayList<>();
+        try {
+            final List<String> collect = Files.lines(Paths.get("C:\\patentdoc\\german-patents.txt")).collect(Collectors.toList());
             patentIds.addAll(collect.stream().map(Long::valueOf).collect(Collectors.toList()));
         } catch (IOException e) {
             e.printStackTrace();
